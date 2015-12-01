@@ -1,7 +1,7 @@
 library tekartik_io_tools.pub_utils;
 
-import 'package:cmdo/dartbin.dart' as _dartbin;
-import 'package:cmdo/cmdo.dart';
+import 'package:process_run/process_run.dart';
+import 'package:process_run/dartbin.dart' as _dartbin;
 import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
@@ -33,16 +33,22 @@ class PubPackage {
 
   PubPackage(this._path);
 
-  CommandInput pubCmd(List<String> args) =>
-      _dartbin.pubCmd(args)..workingDirectory = _path;
+  Future<ProcessResult> pubRun(List<String> args) {
+    return run(_dartbin.dartExecutable, _dartbin.pubArguments(args),
+        workingDirectory: _path);
+  }
+  /*
+  List<String> pubCmd(List<String> args) =>
+      pubArguments(args), workingDirectory: _path
+      */
 
-  CommandInput upgradeCmd(List<String> args) {
-    args = new List.from(args);
-    args.insertAll(0, ['upgrade']);
-    return pubCmd(args);
+  List<String> upgradeCmdArgs() {
+    //args = new List.from(args);
+    //args.insertAll(0, ['upgrade']);
+    return ['upgrade'];
   }
 
-  CommandInput runTestCmd(List<String> args,
+  List<String> runTestCmdArgs(List<String> args,
       {TestReporter reporter,
       bool color,
       int concurrency,
@@ -71,7 +77,7 @@ class PubPackage {
         args.addAll(['-p', platform]);
       }
     }
-    return pubCmd(args);
+    return args;
   }
 
   // same package is same path

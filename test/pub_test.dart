@@ -3,8 +3,8 @@ library tekartik_pub.test.pub_test;
 
 import 'dart:mirrors';
 import 'package:path/path.dart';
-import 'package:cmdo/cmdo_io.dart';
-import 'package:cmdo/dartbin.dart';
+import 'package:process_run/process_run.dart';
+import 'package:process_run/dartbin.dart';
 import 'package:dev_test/test.dart';
 import 'package:tekartik_pub/pub.dart';
 import 'dart:async';
@@ -25,8 +25,9 @@ void defineTests() {
   //useVMConfiguration();
   group('pub', () {
     test('version', () async {
-      CommandResult result = await io.runCmd(pubCmd(['--version']));
-      expect(result.out.startsWith("Pub"), isTrue);
+      ProcessResult result =
+          await run(dartExecutable, pubArguments(['--version']));
+      expect(result.stdout.startsWith("Pub"), isTrue);
     });
 
     _testIsPubPackageRoot(String path, bool expected) async {
@@ -48,7 +49,7 @@ void defineTests() {
     group('pub_package', () {
       test('runTest', () async {
         PubPackage pkg = new PubPackage(await _pubPackageRoot);
-        CommandResult result = await io.runCmd(pkg.runTestCmd(
+        ProcessResult result = await pkg.pubRun(pkg.runTestCmdArgs(
             ['test/data/success_test_.dart'],
             platforms: ["vm"],
             reporter: TestReporter.EXPANDED,
@@ -58,7 +59,8 @@ void defineTests() {
         if (!Platform.isWindows) {
           expect(result.exitCode, 0);
         }
-        result = await io.runCmd(pkg.runTestCmd(['test/data/fail_test_.dart']));
+        result =
+            await pkg.pubRun(pkg.runTestCmdArgs(['test/data/fail_test_.dart']));
         if (!Platform.isWindows) {
           expect(result.exitCode, 1);
         }
