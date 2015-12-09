@@ -1,3 +1,4 @@
+@TestOn("vm")
 library tekartik_pub.test.example_simple_test.dart;
 
 import 'package:dev_test/test.dart';

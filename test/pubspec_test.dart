@@ -1,6 +1,6 @@
+@TestOn("vm")
 library tekartik_pub.test.pubspec_test;
 
-@TestOn("vm")
 import 'package:dev_test/test.dart';
 
 import 'package:tekartik_pub/pubspec.dart';
