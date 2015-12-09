@@ -61,8 +61,7 @@ void defineTests() {
         if (!Platform.isWindows) {
           expect(result.exitCode, 0);
         }
-        result =
-            await runCmd(pkg.testCmd(['test/data/fail_test_.dart']));
+        result = await runCmd(pkg.testCmd(['test/data/fail_test_.dart']));
         if (!Platform.isWindows) {
           expect(result.exitCode, 1);
         }

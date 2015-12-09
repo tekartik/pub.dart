@@ -10,6 +10,6 @@ dev_dependencies:
   dev_test: any
   test: any
 dependency_overrides:
-  process_run:
-    git: git://github.com/tekartik/process_run.dart
+#  process_run:
+#    git: git://github.com/tekartik/process_run.dart
 
