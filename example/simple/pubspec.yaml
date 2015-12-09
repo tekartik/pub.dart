@@ -1,0 +1,5 @@
+name: tekartik_pub_example_simple
+dependencies:
+dev_dependencies:
+  test: any
+  dev_test: any

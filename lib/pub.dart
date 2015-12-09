@@ -2,6 +2,8 @@ library tekartik_io_tools.pub_utils;
 
 import 'package:process_run/process_run.dart';
 import 'package:process_run/dartbin.dart' as _dartbin;
+import 'package:process_run/cmd/dartbin_cmd.dart';
+import 'package:process_run/cmd/process_cmd.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
@@ -48,7 +50,7 @@ class PubPackage {
     return ['upgrade'];
   }
 
-  List<String> runTestCmdArgs(List<String> args,
+  ProcessCmd testCmd(List<String> args,
       {TestReporter reporter,
       bool color,
       int concurrency,
@@ -77,7 +79,33 @@ class PubPackage {
         args.addAll(['-p', platform]);
       }
     }
-    return args;
+    return _pubCmd(args);
+  }
+
+  ProcessCmd _pubCmd(List<String> args) {
+    return pubCmd(args)..workingDirectory = path;
+  }
+
+  ProcessCmd upgradeCmd({bool offline, bool dryRun}) {
+    List<String> args = ['upgrade'];
+    if (offline == true) {
+      args.add('--offline');
+    }
+    if (dryRun == true) {
+      args.add('--dry-run');
+    }
+    return _pubCmd(args);
+  }
+
+  ProcessCmd getCmd({bool offline, bool dryRun}) {
+    List<String> args = ['get'];
+    if (offline == true) {
+      args.add('--offline');
+    }
+    if (dryRun == true) {
+      args.add('--dry-run');
+    }
+    return _pubCmd(args);
   }
 
   // same package is same path

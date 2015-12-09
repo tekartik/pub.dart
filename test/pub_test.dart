@@ -4,6 +4,8 @@ library tekartik_pub.test.pub_test;
 import 'dart:mirrors';
 import 'package:path/path.dart';
 import 'package:process_run/process_run.dart';
+//import 'package:process_run/src/process_cmd.dart';
+import 'package:process_run/cmd_run.dart';
 import 'package:process_run/dartbin.dart';
 import 'package:dev_test/test.dart';
 import 'package:tekartik_pub/pub.dart';
@@ -49,7 +51,7 @@ void defineTests() {
     group('pub_package', () {
       test('runTest', () async {
         PubPackage pkg = new PubPackage(await _pubPackageRoot);
-        ProcessResult result = await pkg.pubRun(pkg.runTestCmdArgs(
+        ProcessResult result = await runCmd(pkg.testCmd(
             ['test/data/success_test_.dart'],
             platforms: ["vm"],
             reporter: TestReporter.EXPANDED,
@@ -60,7 +62,7 @@ void defineTests() {
           expect(result.exitCode, 0);
         }
         result =
-            await pkg.pubRun(pkg.runTestCmdArgs(['test/data/fail_test_.dart']));
+            await runCmd(pkg.testCmd(['test/data/fail_test_.dart']));
         if (!Platform.isWindows) {
           expect(result.exitCode, 1);
         }
