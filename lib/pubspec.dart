@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:yaml/yaml.dart';
 import 'dart:async';
+import 'src/rpubpath.dart';
+import 'pub.dart';
 
 // packages:
 //   pubglobalupdate:
@@ -16,7 +18,7 @@ Future<Version> extractPubspecLockVersion(String packageRoot) async {
   // get the package name from the base directory
   // ~/.pub-cache/global_packages/pubglobalupdate/
   String packageName = basename(packageRoot);
-  return extractPackagePubspecLockVersion(packageName, packageRoot);
+  return await extractPackagePubspecLockVersion(packageName, packageRoot);
 }
 
 Future<Version> extractPackagePubspecLockVersion(
@@ -32,9 +34,17 @@ Future<Version> extractPackagePubspecLockVersion(
 // in dev tree
 Future<Version> extractPubspecYamlVersion(String packageRoot) async {
   try {
-    Map pubspecYaml = loadYaml(
-        await new File(join(packageRoot, 'pubspec.yaml')).readAsString());
+    Map pubspecYaml = await getPackageYaml(packageRoot);
     return new Version.parse(pubspecYaml['version']);
+  } catch (_) {}
+  return null;
+}
+
+// in dev tree
+String extractPubspecYamlNameSync(String packageRoot) {
+  try {
+    Map pubspecYaml = getPackageYamlSync(packageRoot);
+    return pubspecYaml['name'];
   } catch (_) {}
   return null;
 }
@@ -45,4 +55,30 @@ Future<Version> extractPackageVersion(String packageRoot) async {
     version = await extractPubspecYamlVersion(packageRoot);
   }
   return version;
+}
+
+// return as package name
+Future<Iterable<String>> extractPubspecDependencies(String packageRoot) async {
+  Map yaml = await getPackageYaml(packageRoot);
+  Iterable<String> list = await pubspecYamlGetTestDependenciesPackageName(yaml);
+  if (list == null) {
+    list = pubspecYamlGetDependenciesPackageName(yaml);
+  }
+  return list;
+}
+
+Future<PubPackage> extractPackage(
+    String packageName, String fromPackageRoot) async {
+  try {
+    Map yaml = await getDotPackagesYaml(fromPackageRoot);
+    String libPath = dotPackagesGetLibUri(yaml, packageName).toFilePath();
+    if (basename(libPath) == 'lib') {
+      String path = dirname(libPath);
+      if (isRelative(path)) {
+        path = normalize(join(fromPackageRoot, path));
+      }
+      return new PubPackage(path);
+    }
+  } catch (_) {}
+  return null;
 }

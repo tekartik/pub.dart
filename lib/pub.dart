@@ -2,11 +2,11 @@ library tekartik_io_tools.pub_utils;
 
 import 'package:process_run/process_run.dart';
 import 'package:process_run/dartbin.dart' as _dartbin;
-import 'package:process_run/cmd/dartbin_cmd.dart';
-import 'package:process_run/cmd/process_cmd.dart';
+import 'package:process_run/cmd_run.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
+import 'pubspec.dart';
 
 bool _DEBUG = false;
 
@@ -30,6 +30,16 @@ TestReporter testReporterFromString(String reporterString) =>
 ///
 class PubPackage {
   String _path;
+
+  String _name;
+  String get name {
+    if (_name == null) {
+      _name = extractPubspecYamlNameSync(_path);
+    }
+    return _name;
+  }
+
+  set name(String name) => _name = name;
 
   String get path => _path;
 

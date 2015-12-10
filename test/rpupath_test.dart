@@ -14,6 +14,7 @@ class _TestUtils {
 }
 
 String get testScriptPath => _TestUtils.scriptPath;
+String get packageRoot => dirname(dirname(testScriptPath));
 
 void main() => defineTests();
 
@@ -51,5 +52,13 @@ void defineTests() {
       failed = true;
     }
     expect(failed, isTrue);
+  });
+
+  test('extract', () async {
+    Map yaml = getPackageYamlSync(packageRoot);
+    expect(await pubspecYamlGetDependenciesPackageName(yaml),
+        unorderedEquals(['process_run', 'yaml']));
+    expect(
+        await pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
   });
 }

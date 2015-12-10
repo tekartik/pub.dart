@@ -5,12 +5,57 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:tekartik_pub/pub.dart';
 import 'package:yaml/yaml.dart';
+import 'dart:convert';
 
-Map getPackageYaml(String packageRoot) {
+//String _pubspecYamlPath(String packageRoot) =>
+//    join(packageRoot, 'pubspec.yaml');
+String _pubspecDotPackagesPath(String packageRoot) =>
+    join(packageRoot, '.packages');
+
+Map getPackageYamlSync(String packageRoot) {
   String pubspecYaml = "pubspec.yaml";
   String pubspecYamlPath = join(packageRoot, pubspecYaml);
   String content = new File(pubspecYamlPath).readAsStringSync();
   return loadYaml(content);
+}
+
+Future<Map> getPackageYaml(String packageRoot) =>
+    _getYaml(packageRoot, "pubspec.yaml");
+
+Future<Map> _getYaml(String packageRoot, String name) async {
+  String yamlPath = join(packageRoot, name);
+  String content = await new File(yamlPath).readAsString();
+  return loadYaml(content);
+}
+
+Future<Map> getDotPackagesYaml(String packageRoot) async {
+  String yamlPath = _pubspecDotPackagesPath(packageRoot);
+  String content = await new File(yamlPath).readAsString();
+
+  Map map = {};
+  Iterable<String> lines = LineSplitter.split(content);
+  for (String line in lines) {
+    line = line.trim();
+    if (!line.startsWith('#')) {
+      int separator = line.indexOf(":");
+      if (separator != -1) {
+        map[line.substring(0, separator)] = line.substring(separator + 1);
+      }
+    }
+  }
+  return map;
+}
+
+Uri dotPackagesGetLibUri(Map yaml, String packageName) {
+  return Uri.parse(yaml[packageName]);
+}
+
+Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
+  return (yaml['dependencies'] as Map).keys as Iterable<String>;
+}
+
+Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
+  return (yaml['test_dependencies'] as Iterable<String>);
 }
 
 bool yamlHasAnyDependencies(Map yaml, List<String> dependencies) {
@@ -53,7 +98,7 @@ Stream<String> recursivePubPath(List<String> dirs,
     if (!_isToBeIgnored(basename(dir))) {
       if (await isPubPackageRoot(dir)) {
         if (dependencies is List && !dependencies.isEmpty) {
-          Map yaml = getPackageYaml(dir);
+          Map yaml = getPackageYamlSync(dir);
           if (yamlHasAnyDependencies(yaml, dependencies)) {
             ctlr.add(dir);
           }
@@ -74,7 +119,7 @@ Stream<String> recursivePubPath(List<String> dirs,
     }
   }
 
-  List futures = [];
+  List<Future> futures = [];
   for (String dir in dirs) {
     if (FileSystemEntity.isDirectorySync(dir)) {
       Future _handle = _handleDir(dir);

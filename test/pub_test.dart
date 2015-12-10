@@ -18,6 +18,7 @@ class _TestUtils {
 }
 
 String get testScriptPath => _TestUtils.scriptPath;
+String get packageRoot => dirname(dirname(testScriptPath));
 
 void main() => defineTests();
 
@@ -49,6 +50,13 @@ void defineTests() {
     });
 
     group('pub_package', () {
+      test('equals', () {
+        PubPackage pkg1 = new PubPackage(packageRoot);
+        expect(pkg1, pkg1);
+        PubPackage pkg2 = new PubPackage(packageRoot);
+        expect(pkg1.hashCode, pkg2.hashCode);
+        expect(pkg1, pkg2);
+      });
       test('runTest', () async {
         PubPackage pkg = new PubPackage(await _pubPackageRoot);
         ProcessResult result = await runCmd(pkg.testCmd(
@@ -65,6 +73,11 @@ void defineTests() {
         if (!Platform.isWindows) {
           expect(result.exitCode, 1);
         }
+      });
+
+      test('name', () async {
+        PubPackage pkg = new PubPackage(await _pubPackageRoot);
+        expect(pkg.name, 'tekartik_pub');
       });
     });
   });

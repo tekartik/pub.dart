@@ -6,9 +6,12 @@ environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
   process_run: any
+  yaml: any
 dev_dependencies:
   dev_test: any
   test: any
+test_dependencies:
+- process_run
 dependency_overrides:
 #  process_run:
 #    git: git://github.com/tekartik/process_run.dart
