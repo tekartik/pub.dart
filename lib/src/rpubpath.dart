@@ -55,7 +55,14 @@ Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
 }
 
 Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
-  return (yaml['test_dependencies'] as Iterable<String>);
+  if (yaml.containsKey('test_dependencies')) {
+    Iterable<String> list = yaml['test_dependencies'] as Iterable<String>;
+    if (list == null) {
+      list = [];
+    }
+    return list;
+  }
+  return null;
 }
 
 bool yamlHasAnyDependencies(Map yaml, List<String> dependencies) {

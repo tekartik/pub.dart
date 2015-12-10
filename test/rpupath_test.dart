@@ -60,5 +60,22 @@ void defineTests() {
         unorderedEquals(['process_run', 'yaml']));
     expect(
         await pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
+
+    yaml = {};
+    expect(await pubspecYamlGetTestDependenciesPackageName(yaml), isNull);
+    yaml = {'test_dependencies': null};
+    expect(await pubspecYamlGetTestDependenciesPackageName(yaml), []);
+    yaml = {'test_dependencies': []};
+    expect(await pubspecYamlGetTestDependenciesPackageName(yaml), []);
+    yaml = {
+      'test_dependencies': ['process_run']
+    };
+    expect(
+        await pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
+
+    yaml = {
+      'dependencies': {'process_run': 'any'}
+    };
+    expect(await pubspecYamlGetDependenciesPackageName(yaml), ['process_run']);
   });
 }
