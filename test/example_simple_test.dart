@@ -5,7 +5,7 @@ import 'package:dev_test/test.dart';
 import 'dart:mirrors';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
-import 'package:tekartik_pub/pub.dart';
+import 'package:tekartik_pub/pub_io.dart';
 import 'dart:io';
 
 class _TestUtils {
@@ -20,20 +20,20 @@ String get simpleProjectTop => join(projectTop, 'example', 'simple');
 main() {
   group('example_simple', () {
     test('get', () async {
-      PubPackage pkg = new PubPackage(simpleProjectTop);
-      ProcessResult result =
-          await runCmd(pkg.getCmd(offline: true)..connectStderr = true);
+      IoPubPackage pkg = new IoPubPackage(simpleProjectTop);
+      ProcessResult result = await runCmd(
+          pkg.pubCmd(pubGetArgs(offline: true))..connectStderr = true);
       expect(result.exitCode, 0);
     });
     test('upgrade', () async {
-      PubPackage pkg = new PubPackage(simpleProjectTop);
+      IoPubPackage pkg = new IoPubPackage(simpleProjectTop);
       ProcessResult result =
-          await runCmd(pkg.upgradeCmd(offline: true, dryRun: true));
+          await runCmd(pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)));
       expect(result.exitCode, 0);
     });
     test('test', () async {
-      PubPackage pkg = new PubPackage(simpleProjectTop);
-      ProcessResult result = await runCmd(pkg.testCmd([]));
+      IoPubPackage pkg = new IoPubPackage(simpleProjectTop);
+      ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs()));
       // on 1.13, current windows is failing
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);

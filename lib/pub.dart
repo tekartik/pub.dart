@@ -25,6 +25,93 @@ List<String> testReporterStrings = new List.from(_testReporterStringMap.values);
 TestReporter testReporterFromString(String reporterString) =>
     _testReporterMap[reporterString];
 
+const String pubBuildFormatRelease = "release";
+const String pubBuildFormatDebug = "debug";
+
+/// list of argument for pubCmd
+Iterable<String> pubBuildArgs(
+    {Iterable<String> args, String mode, String format, String output}) {
+  List<String> buildArgs = ['build'];
+  // --mode      Mode to run transformers in.
+  //    (defaults to "release")
+  if (mode != null) {
+    buildArgs.addAll(['--mode', mode]);
+  }
+  // --format    How output should be displayed.
+  // [text (default), json]
+  if (format != null) {
+    buildArgs.addAll(['--format', format]);
+  }
+  // -o, --output    Directory to write build outputs to.
+  // (defaults to "build")
+  if (output != null) {
+    buildArgs.addAll(['--output', output]);
+  }
+  if (args != null) {
+    buildArgs.addAll(args);
+  }
+
+  return buildArgs;
+}
+
+Iterable<String> pubGetArgs({bool offline, bool dryRun}) {
+  List<String> args = ['get'];
+  if (offline == true) {
+    args.add('--offline');
+  }
+  if (dryRun == true) {
+    args.add('--dry-run');
+  }
+  return args;
+}
+
+Iterable<String> pubUpgradeArgs({bool offline, bool dryRun}) {
+  List<String> args = ['upgrade'];
+  if (offline == true) {
+    args.add('--offline');
+  }
+  if (dryRun == true) {
+    args.add('--dry-run');
+  }
+  return args;
+}
+
+/// list of argument for pubCmd
+Iterable<String> pubRunTestArgs(
+    {Iterable<String> args,
+    TestReporter reporter,
+    bool color,
+    int concurrency,
+    List<String> platforms,
+    String name}) {
+  List<String> testArgs = ['run', 'test'];
+  if (reporter != null) {
+    testArgs.addAll(['-r', testReporterString(reporter)]);
+  }
+  if (concurrency != null) {
+    testArgs.addAll(['-j', concurrency.toString()]);
+  }
+  if (name != null) {
+    testArgs.addAll(['-n', name]);
+  }
+  if (color != null) {
+    if (color) {
+      testArgs.add('--color');
+    } else {
+      testArgs.add('--no-color');
+    }
+  }
+  if (platforms != null) {
+    for (String platform in platforms) {
+      testArgs.addAll(['-p', platform]);
+    }
+  }
+  if (args != null) {
+    testArgs.addAll(args);
+  }
+  return (testArgs);
+}
+
 ///
 /// A local pub package
 ///
@@ -32,6 +119,7 @@ class PubPackage {
   String _path;
 
   String _name;
+  @deprecated
   String get name {
     if (_name == null) {
       _name = extractPubspecYamlNameSync(_path);
@@ -45,6 +133,7 @@ class PubPackage {
 
   PubPackage(this._path);
 
+  @deprecated
   Future<ProcessResult> pubRun(List<String> args) {
     return run(_dartbin.dartExecutable, _dartbin.pubArguments(args),
         workingDirectory: _path);
@@ -60,63 +149,34 @@ class PubPackage {
     return ['upgrade'];
   }
 
+  @deprecated
   ProcessCmd testCmd(List<String> args,
-      {TestReporter reporter,
-      bool color,
-      int concurrency,
-      List<String> platforms,
-      String name}) {
-    args = new List.from(args);
-    args.insertAll(0, ['run', 'test']);
-    if (reporter != null) {
-      args.addAll(['-r', testReporterString(reporter)]);
-    }
-    if (concurrency != null) {
-      args.addAll(['-j', concurrency.toString()]);
-    }
-    if (name != null) {
-      args.addAll(['-n', name]);
-    }
-    if (color != null) {
-      if (color) {
-        args.add('--color');
-      } else {
-        args.add('--no-color');
-      }
-    }
-    if (platforms != null) {
-      for (String platform in platforms) {
-        args.addAll(['-p', platform]);
-      }
-    }
-    return _pubCmd(args);
-  }
+          {TestReporter reporter,
+          bool color,
+          int concurrency,
+          List<String> platforms,
+          String name}) =>
+      _pubCmd(pubRunTestArgs(
+          args: args,
+          reporter: reporter,
+          color: color,
+          concurrency: concurrency,
+          platforms: platforms,
+          name: name));
 
   ProcessCmd _pubCmd(List<String> args) {
     return pubCmd(args)..workingDirectory = path;
   }
 
-  ProcessCmd upgradeCmd({bool offline, bool dryRun}) {
-    List<String> args = ['upgrade'];
-    if (offline == true) {
-      args.add('--offline');
-    }
-    if (dryRun == true) {
-      args.add('--dry-run');
-    }
-    return _pubCmd(args);
-  }
+  @deprecated
+  ProcessCmd buildCmd({String format}) => _pubCmd(pubBuildArgs(format: format));
 
-  ProcessCmd getCmd({bool offline, bool dryRun}) {
-    List<String> args = ['get'];
-    if (offline == true) {
-      args.add('--offline');
-    }
-    if (dryRun == true) {
-      args.add('--dry-run');
-    }
-    return _pubCmd(args);
-  }
+  @deprecated
+  ProcessCmd upgradeCmd({bool offline, bool dryRun}) =>
+      _pubCmd(pubUpgradeArgs(offline: offline, dryRun: dryRun));
+  @deprecated
+  ProcessCmd getCmd({bool offline, bool dryRun}) =>
+      _pubCmd(pubGetArgs(offline: offline, dryRun: dryRun));
 
   // same package is same path
 
