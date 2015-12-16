@@ -73,11 +73,19 @@ Future<PubPackage> extractPackage(
   try {
     Map yaml = await getDotPackagesYaml(fromPackageRoot);
     String libPath = dotPackagesGetLibUri(yaml, packageName).toFilePath();
+    // On windows we have lib/ resolved to lib/.
+    // dirname on lib/ is not giving the expected result on windows
+    // so build the path first
+    // and linux/mac lib/ resolve to lib
     if (basename(libPath) == 'lib') {
-      String path = dirname(libPath);
+      String path = libPath;
       if (isRelative(path)) {
+        // use dirname to remove the ending separator
         path = normalize(join(fromPackageRoot, path));
       }
+      // use dirname to remove the ending lib
+      path = dirname(path);
+
       return new PubPackage(path);
     }
   } catch (_) {}
