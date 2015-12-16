@@ -1,4 +1,4 @@
-library tekartik_io_tools.pub_utils;
+library tekartik_io_tools.pub_io;
 
 import 'package:process_run/cmd_run.dart';
 import 'pub.dart';
@@ -6,6 +6,7 @@ export 'pub.dart';
 import 'pub_package.dart';
 import 'pubspec.dart';
 import 'package:fs_shim/fs_io.dart';
+export 'pub_args.dart';
 
 _pubCmd(Iterable<String> args) {
   return pubCmd(args);

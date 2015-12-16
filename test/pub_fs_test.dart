@@ -8,9 +8,11 @@ import 'package:process_run/process_run.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:process_run/dartbin.dart';
 import 'package:dev_test/test.dart';
-import 'package:tekartik_pub/pub_io.dart';
+import 'package:fs_shim/fs_io.dart';
+import 'package:tekartik_pub/pub.dart' show pubRunTestArgs, TestReporter;
 import 'dart:async';
-import 'dart:io';
+import 'package:tekartik_pub/pub_fs.dart';
+import 'package:tekartik_pub/pub_fs_io.dart';
 
 class _TestUtils {
   static final String scriptPath =
@@ -18,11 +20,12 @@ class _TestUtils {
 }
 
 String get testScriptPath => _TestUtils.scriptPath;
-String get packageRoot => dirname(dirname(testScriptPath));
+//String get packageRoot => dirname(dirname(testScriptPath));
 
 void main() => defineTests();
 
-Future<String> get _pubPackageRoot => getPubPackageRoot(testScriptPath);
+Future<Directory> get _pubPackageDir =>
+    getPubPackageDir(new Directory(testScriptPath));
 
 void defineTests() {
   //useVMConfiguration();
@@ -34,8 +37,7 @@ void defineTests() {
     });
 
     _testIsPubPackageRoot(String path, bool expected) async {
-      expect(await isPubPackageRoot(path), expected);
-      expect(isPubPackageRootSync(path), expected);
+      expect(await isPubPackageDir(new Directory(path)), expected);
     }
 
     test('root', () async {
@@ -43,36 +45,39 @@ void defineTests() {
       await _testIsPubPackageRoot(
           dirname(dirname(dirname(testScriptPath))), false);
       await _testIsPubPackageRoot(dirname(dirname(testScriptPath)), true);
-      expect(await _pubPackageRoot, dirname(dirname(testScriptPath)));
+      expect((await _pubPackageDir).path, dirname(dirname(testScriptPath)));
       try {
-        await getPubPackageRoot(join('/', 'dummy', 'path'));
+        await getPubPackageDir(new Directory(join('/', 'dummy', 'path')));
         fail('no');
       } catch (e) {}
     });
 
     group('pub_package', () {
       test('runTest', () async {
-        IoPubPackage pkg = new IoPubPackage(await _pubPackageRoot);
-        ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
-            args: ['test/data/success_test_.dart'],
-            platforms: ["vm"],
-            reporter: TestReporter.EXPANDED,
-            concurrency: 1)));
+        FsPubPackage pkg = new FsPubPackage(await _pubPackageDir);
+        ProcessResult result = await runCmd(pkg.prepareCmd(pubCmd(
+            pubRunTestArgs(
+                args: ['test/data/success_test_.dart'],
+                platforms: ["vm"],
+                reporter: TestReporter.EXPANDED,
+                concurrency: 1))));
 
         // on 1.13, current windows is failing
         if (!Platform.isWindows) {
           expect(result.exitCode, 0);
         }
+
+        IoFsPubPackage ioPkg = new IoFsPubPackage(await _pubPackageDir);
         result = await runCmd(
-            pkg.pubCmd(pubRunTestArgs(args: ['test/data/fail_test_.dart'])));
+            ioPkg.pubCmd(pubRunTestArgs(args: ['test/data/fail_test_.dart'])));
         if (!Platform.isWindows) {
           expect(result.exitCode, 1);
         }
       });
 
       test('name', () async {
-        IoPubPackage pkg = new IoPubPackage(await _pubPackageRoot);
-        expect(pkg.name, 'tekartik_pub');
+        FsPubPackage pkg = new FsPubPackage(await _pubPackageDir);
+        expect(await pkg.extractPackageName(), 'tekartik_pub');
       });
     });
   });

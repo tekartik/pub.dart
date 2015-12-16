@@ -41,6 +41,9 @@ Uri dotPackagesGetLibUri(Map yaml, String packageName) {
   return Uri.parse(yaml[packageName]);
 }
 
+// in dev tree
+String pubspecYamlGetPackageName(Map yaml) => yaml['name'];
+
 Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
   return (yaml['dependencies'] as Map).keys as Iterable<String>;
 }

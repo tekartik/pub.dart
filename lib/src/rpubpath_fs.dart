@@ -23,7 +23,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
     // Ignore folder starting with .
     // don't event go below
     if (!_isToBeIgnored(basename(dir.path))) {
-      if (await isPubPackageRoot(dir)) {
+      if (await isPubPackageDir(dir)) {
         if (dependencies is List && !dependencies.isEmpty) {
           Map yaml = await getPackageYaml(dir);
           if (pubspecYamlHasAnyDependencies(yaml, dependencies)) {

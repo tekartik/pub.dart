@@ -7,7 +7,7 @@ import 'package:yaml/yaml.dart';
 import 'dart:async';
 import 'src/rpubpath.dart';
 import 'pub.dart';
-//import 'src/import.dart';
+import 'src/pubutils_fs.dart' show pubspecYamlGetPackageName;
 
 // packages:
 //   pubglobalupdate:
@@ -45,7 +45,7 @@ Future<Version> extractPubspecYamlVersion(String packageRoot) async {
 String extractPubspecYamlNameSync(String packageRoot) {
   try {
     Map pubspecYaml = getPackageYamlSync(packageRoot);
-    return pubspecYaml['name'];
+    return pubspecYamlGetPackageName(pubspecYaml);
   } catch (_) {}
   return null;
 }
