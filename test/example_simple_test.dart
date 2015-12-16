@@ -39,5 +39,10 @@ main() {
         expect(result.exitCode, 0);
       }
     });
+    test('build', () async {
+      IoPubPackage pkg = new IoPubPackage(simpleProjectTop);
+      ProcessResult result = await runCmd(pkg.pubCmd(pubBuildArgs()));
+      expect(result.exitCode, 0);
+    });
   });
 }

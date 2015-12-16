@@ -16,3 +16,6 @@ pubspec.lock
 
 # webstorm
 .idea/
+
+# out
+test/out/

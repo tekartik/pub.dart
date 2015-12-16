@@ -3,13 +3,16 @@ library tekartik_io_tools.pub_utils;
 import 'package:process_run/cmd_run.dart';
 import 'pub.dart';
 export 'pub.dart';
+import 'pub_package.dart';
 import 'pubspec.dart';
+import 'package:fs_shim/fs_io.dart';
 
 _pubCmd(Iterable<String> args) {
   return pubCmd(args);
 }
 
-class IoPubPackage extends PubPackage {
+class IoPubPackage extends PubPackage implements PubPackageDir, PubPackageName {
+  Directory get dir => new Directory(path);
   IoPubPackage(String path) : super(path);
 
   ProcessCmd pubCmd(Iterable<String> args) {

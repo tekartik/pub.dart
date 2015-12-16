@@ -7,7 +7,10 @@ environment:
 dependencies:
   process_run: any
   yaml: any
+  fs_shim: any
 dev_dependencies:
+  fs_shim_test:
+    git: git://github.com/tekartik/fs_shim_test.dart
   dev_test: any
   test: any
 test_dependencies:

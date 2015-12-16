@@ -39,6 +39,14 @@ void defineTests() {
       test('pubRunTestArgs', () {
         expect(pubRunTestArgs(), ['run', "test"]);
       });
+
+      test('pubGetArgs', () {
+        expect(pubGetArgs(), ['get']);
+      });
+
+      test('pubUpgradeArgs', () {
+        expect(pubUpgradeArgs(), ['upgrade']);
+      });
     });
   });
 }

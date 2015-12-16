@@ -119,6 +119,7 @@ class PubPackage {
   String _path;
 
   String _name;
+
   @deprecated
   String get name {
     if (_name == null) {
@@ -127,6 +128,7 @@ class PubPackage {
     return _name;
   }
 
+  @deprecated
   set name(String name) => _name = name;
 
   String get path => _path;
@@ -143,6 +145,7 @@ class PubPackage {
       pubArguments(args), workingDirectory: _path
       */
 
+  @deprecated
   List<String> upgradeCmdArgs() {
     //args = new List.from(args);
     //args.insertAll(0, ['upgrade']);
@@ -193,6 +196,8 @@ class PubPackage {
 final String _pubspecYaml = "pubspec.yaml";
 
 /// return true if root package
+
+/// @deprecated
 Future<bool> isPubPackageRoot(String dirPath) async {
   String pubspecYamlPath = join(dirPath, _pubspecYaml);
   return await FileSystemEntity.isFile(pubspecYamlPath);
