@@ -18,4 +18,8 @@ test_dependencies:
 dependency_overrides:
 #  process_run:
 #    git: git://github.com/tekartik/process_run.dart
-
+dependency_overrides:
+#  fs_shim:
+#    git: git://github.com/tekartik/fs_shim.dart
+#  fs_shim:
+#    path: /media/ssd/devx/git/github.com/tekartik/fs_shim.dart

@@ -7,16 +7,33 @@ import 'pub_package.dart';
 //import 'pubspec.dart';
 import 'package:fs_shim/fs.dart';
 import 'package:fs_shim/utils/entity.dart';
+import 'package:fs_shim/utils/copy.dart';
 import 'dart:async';
 import 'src/import.dart';
 import 'src/import.dart' as pub;
 
+typedef FsPubPackage FsPubPackageFactoryCreate(Directory dir, [String name]);
+
+class FsPubPackageFactory {
+  FsPubPackageFactoryCreate create;
+
+  FsPubPackageFactory(this.create);
+}
+
+final FsPubPackageFactory defaultFsPubPackageFactory = new FsPubPackageFactory(
+    (Directory dir, [String name]) => new FsPubPackage(dir, name));
+
+// abstract?
 class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
+  final FsPubPackageFactory factory;
+
   FileSystem get fs => dir.fs;
   @override
   Directory dir;
-  FsPubPackage(Directory dir, [this.name]) : dir = dir;
+  FsPubPackage(Directory dir, [String name])
+      : this.created(defaultFsPubPackageFactory, dir, name);
 
+  FsPubPackage.created(this.factory, Directory dir, [this.name]) : dir = dir;
   @override
   String name;
 
@@ -42,6 +59,31 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
       }
     } catch (_) {}
     return null;
+  }
+
+  /// Clone a package content
+  ///
+  /// if [delete] is true, content will be deleted first
+  Future<FsPubPackage> clone(Directory toDir, {bool delete: false}) async {
+    Directory src = dir;
+    Directory dst = toDir;
+    if (await isPubPackageDir(src)) {
+      await copyDirectory(
+          src, dst,
+          options: new CopyOptions(
+              recursive: true,
+          delete: delete, // delete before copying
+              exclude: [
+                'packages',
+                '.packages',
+                '.pub',
+                'pubspec.lock',
+                'build'
+              ]));
+    } else {
+      throw new ArgumentError('not a pub directory');
+    }
+    return factory.create(dst);
   }
 }
 

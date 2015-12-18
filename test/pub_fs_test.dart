@@ -1,84 +1,76 @@
 @TestOn("vm")
 library tekartik_pub.test.pub_test;
 
-import 'dart:mirrors';
-import 'package:path/path.dart';
-import 'package:process_run/process_run.dart';
-//import 'package:process_run/src/process_cmd.dart';
-import 'package:process_run/cmd_run.dart';
-import 'package:process_run/dartbin.dart';
 import 'package:dev_test/test.dart';
-import 'package:fs_shim/fs_io.dart';
-import 'package:tekartik_pub/pub.dart' show pubRunTestArgs, TestReporter;
-import 'dart:async';
+import 'package:fs_shim/fs.dart';
+import 'package:fs_shim/utils/entity.dart';
+import 'package:fs_shim_test/context.dart';
 import 'package:tekartik_pub/pub_fs.dart';
-import 'package:tekartik_pub/pub_fs_io.dart';
+import 'package:tekartik_pub/src/pubutils_fs.dart';
 
-class _TestUtils {
-  static final String scriptPath =
-      (reflectClass(_TestUtils).owner as LibraryMirror).uri.toFilePath();
-}
+void main() => defineTests(memoryFileSystemTestContext);
 
-String get testScriptPath => _TestUtils.scriptPath;
-//String get packageRoot => dirname(dirname(testScriptPath));
-
-void main() => defineTests();
-
-Future<Directory> get _pubPackageDir =>
-    getPubPackageDir(new Directory(testScriptPath));
-
-void defineTests() {
+void defineTests(FileSystemTestContext ctx) {
   //useVMConfiguration();
-  group('pub_io', () {
-    test('version', () async {
-      ProcessResult result =
-          await run(dartExecutable, pubArguments(['--version']));
-      expect(result.stdout.startsWith("Pub"), isTrue);
-    });
 
-    _testIsPubPackageRoot(String path, bool expected) async {
-      expect(await isPubPackageDir(new Directory(path)), expected);
-    }
+  group('pub_fs', () {
+    FsPubPackage pkg;
 
-    test('root', () async {
-      await _testIsPubPackageRoot(dirname(testScriptPath), false);
-      await _testIsPubPackageRoot(
-          dirname(dirname(dirname(testScriptPath))), false);
-      await _testIsPubPackageRoot(dirname(dirname(testScriptPath)), true);
-      expect((await _pubPackageDir).path, dirname(dirname(testScriptPath)));
+    test('clone', () async {
+      Directory top = await ctx.prepare();
+      Directory src = childDirectory(top, 'src');
+      Directory dst = childDirectory(top, 'dst');
+      pkg = new FsPubPackage(src);
+
       try {
-        await getPubPackageDir(new Directory(join('/', 'dummy', 'path')));
-        fail('no');
-      } catch (e) {}
-    });
+        await pkg.clone(dst);
+        fail('should fail no pubspec.yaml');
+      } on ArgumentError catch (_) {
+        //print(_);
+      }
 
-    group('pub_package', () {
-      test('runTest', () async {
-        FsPubPackage pkg = new FsPubPackage(await _pubPackageDir);
-        ProcessResult result = await runCmd(pkg.prepareCmd(pubCmd(
-            pubRunTestArgs(
-                args: ['test/data/success_test_.dart'],
-                platforms: ["vm"],
-                reporter: TestReporter.EXPANDED,
-                concurrency: 1))));
+      await src.create();
+      try {
+        await pkg.clone(dst);
+        fail('should fail no pubspec.yaml');
+      } on ArgumentError catch (_) {
+        //print(_);
+      }
 
-        // on 1.13, current windows is failing
-        if (!Platform.isWindows) {
-          expect(result.exitCode, 0);
-        }
+      await childFile(src, pubspecYamlBasename).create();
 
-        IoFsPubPackage ioPkg = new IoFsPubPackage(await _pubPackageDir);
-        result = await runCmd(
-            ioPkg.pubCmd(pubRunTestArgs(args: ['test/data/fail_test_.dart'])));
-        if (!Platform.isWindows) {
-          expect(result.exitCode, 1);
-        }
-      });
+      File dstPubspecYamlFile = childFile(dst, pubspecYamlBasename);
+      expect(await dstPubspecYamlFile.exists(), isFalse);
+      await pkg.clone(dst);
+      expect(await dstPubspecYamlFile.exists(), isTrue);
 
-      test('name', () async {
-        FsPubPackage pkg = new FsPubPackage(await _pubPackageDir);
-        expect(await pkg.extractPackageName(), 'tekartik_pub');
-      });
+      Directory srcWebDir = childDirectory(src, 'web');
+      Directory dstWebDir = childDirectory(dst, 'web');
+
+      await srcWebDir.create();
+      expect(await dstWebDir.exists(), isFalse);
+      await pkg.clone(dst);
+      expect(await dstWebDir.exists(), isTrue);
+      await srcWebDir.delete();
+      await pkg.clone(dst);
+      // not deleted
+      expect(await dstWebDir.exists(), isTrue);
+      await pkg.clone(dst, delete: true);
+      // not deleted
+      expect(await dstWebDir.exists(), isFalse);
+
+      await childDirectory(src, 'build').create();
+      await childDirectory(src, 'packages').create();
+      await childFile(src, '.packages').create();
+      await childFile(src, 'pubspec.lock').create();
+      await childFile(src, '.pub').create();
+
+      await pkg.clone(dst, delete: true);
+
+      List<FileSystemEntity> list = await dst.list(recursive: true).toList();
+      expect(list.length, 1);
+      expect(list.first.path, dstPubspecYamlFile.path);
+      expect(await dstPubspecYamlFile.exists(), isTrue);
     });
   });
-}
+  }

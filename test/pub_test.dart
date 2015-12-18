@@ -27,26 +27,6 @@ void defineTests() {
         expect(pkg1.hashCode, pkg2.hashCode);
         expect(pkg1, pkg2);
       });
-
-      test('pubBuildArgs', () {
-        expect(pubBuildArgs(), ['build']);
-        expect(pubBuildArgs(output: 'out'), ['build', '--output', 'out']);
-        expect(pubBuildArgs(mode: 'debug'), ['build', '--mode', 'debug']);
-        expect(pubBuildArgs(format: 'json'), ['build', '--format', 'json']);
-        expect(pubBuildArgs(args: ['web']), ['build', 'web']);
-      });
-
-      test('pubRunTestArgs', () {
-        expect(pubRunTestArgs(), ['run', "test"]);
-      });
-
-      test('pubGetArgs', () {
-        expect(pubGetArgs(), ['get']);
-      });
-
-      test('pubUpgradeArgs', () {
-        expect(pubUpgradeArgs(), ['upgrade']);
-      });
     });
   });
 }

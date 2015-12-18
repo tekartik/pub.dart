@@ -18,6 +18,29 @@ TestReporter testReporterFromString(String reporterString) =>
 const String pubBuildFormatRelease = "release";
 const String pubBuildFormatDebug = "debug";
 
+Iterable<String> pubArgs(
+    {Iterable<String> args, bool version, bool help, bool verbose}) {
+  List<String> pubArgs = [];
+  // --version          Print pub version.
+
+  if (version == true) {
+    pubArgs.add('--version');
+  }
+  // --help             Print this usage information.
+  if (help == true) {
+    pubArgs.add('--help');
+  }
+  // --verbose          Shortcut for "--verbosity=all".
+  if (verbose == true) {
+    pubArgs.add('--verbose');
+  }
+  if (args != null) {
+    pubArgs.addAll(args);
+  }
+
+  return pubArgs;
+}
+
 /// list of argument for pubCmd
 Iterable<String> pubBuildArgs(
     {Iterable<String> args, String mode, String format, String output}) {
@@ -64,6 +87,21 @@ Iterable<String> pubUpgradeArgs({bool offline, bool dryRun}) {
     args.add('--dry-run');
   }
   return args;
+}
+
+const pubDepsStyleCompact = "compact";
+const pubDepsStyleTree = "tree";
+const pubDepsStyleList = "list";
+
+Iterable<String> pubDepsArgs({Iterable<String> args, String style}) {
+  List<String> depsArgs = ['deps'];
+  if (style != null) {
+    depsArgs.addAll(['--style', style]);
+  }
+  if (args != null) {
+    depsArgs.addAll(args);
+  }
+  return (depsArgs);
 }
 
 /// list of argument for pubCmd
