@@ -19,14 +19,15 @@ void main() => defineTests();
 void defineTests() {
   //useVMConfiguration();
   group('pub_fs_io', () {
-    pub_fs_test.defineTests(newIoFileSystemContext(join(pkgDir.path, 'test', 'out')));
+    pub_fs_test
+        .defineTests(newIoFileSystemContext(join(pkgDir.path, 'test', 'out')));
 
     IoFsPubPackage pkg = new IoFsPubPackage(pkgDir);
 
     test('version', () async {
       IoFsPubPackage pkg = new IoFsPubPackage(pkgDir);
-      ProcessResult result =
-          await pkg.runPub(pubArgs(version: true), connectIo: false);
+      ProcessResult result = await pkg.runPub(pubArgs(version: true),
+          connectStderr: false, connectStdout: false, connectStdin: false);
       await run(dartExecutable, pubArguments(['--version']));
       expect(result.stdout.startsWith("Pub"), isTrue);
     });
@@ -37,19 +38,20 @@ void defineTests() {
       ProcessResult result = await pkg.runCmd(pubCmd(pubRunTestArgs(
           args: ['test/data/success_test_.dart'],
           platforms: ["vm"],
-          reporter: TestReporter.EXPANDED,
+          reporter: pubRunTestReporterJson,
           concurrency: 1)));
 
       // on 1.13, current windows is failing
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
       }
+      expect(pubRunTestJsonProcessResultIsSuccess(result), isTrue);
 
       // pubCmd
       result = await runCmd(pkg.pubCmd(pubRunTestArgs(
           args: ['test/data/success_test_.dart'],
           platforms: ["vm"],
-          reporter: TestReporter.EXPANDED,
+          reporter: pubRunTestReporterExpanded,
           concurrency: 1)));
 
       // on 1.13, current windows is failing
@@ -57,17 +59,19 @@ void defineTests() {
         expect(result.exitCode, 0);
       }
 
-      result = await runCmd(
-          pkg.pubCmd(pubRunTestArgs(args: ['test/data/fail_test_.dart'])));
+      result = await runCmd(pkg.pubCmd(pubRunTestArgs(
+          args: ['test/data/fail_test_.dart'],
+          reporter: pubRunTestReporterJson)));
       if (!Platform.isWindows) {
         expect(result.exitCode, 1);
       }
+      expect(pubRunTestJsonProcessResultIsSuccess(result), isFalse);
 
       // runPub
       result = await pkg.runPub(pubRunTestArgs(
           args: ['test/data/success_test_.dart'],
           platforms: ["vm"],
-          reporter: TestReporter.EXPANDED,
+          reporter: pubRunTestReporterExpanded,
           concurrency: 1));
 
       // on 1.13, current windows is failing

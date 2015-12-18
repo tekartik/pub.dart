@@ -61,7 +61,7 @@ class PubPackage {
           String name}) =>
       _pubCmd(pubRunTestArgs(
           args: args,
-          reporter: reporter,
+          reporter: reporter.toString(),
           color: color,
           concurrency: concurrency,
           platforms: platforms,

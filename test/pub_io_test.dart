@@ -11,6 +11,7 @@ import 'package:dev_test/test.dart';
 import 'package:tekartik_pub/pub_io.dart';
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
 
 class _TestUtils {
   static final String scriptPath =
@@ -56,18 +57,24 @@ void defineTests() {
         ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
             args: ['test/data/success_test_.dart'],
             platforms: ["vm"],
-            reporter: TestReporter.EXPANDED,
+            reporter: pubRunTestReporterJson,
             concurrency: 1)));
 
         // on 1.13, current windows is failing
         if (!Platform.isWindows) {
           expect(result.exitCode, 0);
         }
-        result = await runCmd(
-            pkg.pubCmd(pubRunTestArgs(args: ['test/data/fail_test_.dart'])));
+        Map testResult = JSON.decode(LineSplitter.split(result.stdout).last);
+        expect(testResult['success'], isTrue);
+
+        result = await runCmd(pkg.pubCmd(pubRunTestArgs(
+            args: ['test/data/fail_test_.dart'],
+            reporter: pubRunTestReporterJson)));
         if (!Platform.isWindows) {
           expect(result.exitCode, 1);
         }
+        testResult = JSON.decode(LineSplitter.split(result.stdout).last);
+        expect(testResult['success'], isFalse);
       });
 
       test('name', () async {

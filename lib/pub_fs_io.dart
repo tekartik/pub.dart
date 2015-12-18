@@ -11,6 +11,7 @@ export 'package:fs_shim/fs_io.dart';
 export 'pub_args.dart';
 export 'pub_fs.dart';
 import 'dart:async';
+import 'dart:convert';
 
 final FsPubPackageFactory ioFactory = new FsPubPackageFactory(
     (fs.Directory dir, [String name]) => new IoFsPubPackage(dir, name));
@@ -27,19 +28,36 @@ class IoFsPubPackage extends FsPubPackage
 
   /// main entry point
   Future<ProcessResult> runPub(Iterable<String> args,
-          {bool connectIo: false}) =>
-      runCmd(pubCmd(args), connectIo: connectIo);
+          {bool connectStdin: false,
+          bool connectStdout: false,
+          bool connectStderr: false}) =>
+      runCmd(pubCmd(args),
+          connectStdin: connectStdin,
+          connectStderr: connectStderr,
+          connectStdout: connectStdout);
 
   /// main entry point
-  Future<ProcessResult> runCmd(ProcessCmd cmd, {bool connectIo: false}) {
-    if (cmd.workingDirectory != dir.path || connectIo) {
+  Future<ProcessResult> runCmd(ProcessCmd cmd,
+      {bool connectStdin: false,
+      bool connectStdout: false,
+      bool connectStderr: false}) {
+    if (cmd.workingDirectory != dir.path ||
+        connectStdin ||
+        connectStdout ||
+        connectStderr) {
       return _cmd.runCmd(cmd.clone()
         ..workingDirectory = dir.path
-        ..connectStdin = connectIo
-        ..connectStderr = connectIo
-        ..connectStdout = connectIo);
+        ..connectStdin = connectStdin
+        ..connectStderr = connectStderr
+        ..connectStdout = connectStdout);
     } else {
       return _cmd.runCmd(cmd);
     }
   }
+}
+
+/// result must be run with reporter:json
+bool pubRunTestJsonProcessResultIsSuccess(ProcessResult result) {
+  Map map = JSON.decode(LineSplitter.split(result.stdout).last);
+  return map['success'];
 }

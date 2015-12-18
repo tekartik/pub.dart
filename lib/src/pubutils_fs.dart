@@ -28,8 +28,11 @@ Future<Map> getDotPackagesYaml(Directory packageDir) async {
 String _pubspecDotPackagesPath(String packageRoot) =>
     join(packageRoot, '.packages');
 
-Future<Map> getPackageYaml(Directory packageDirt) =>
-    _getYaml(packageDirt, "pubspec.yaml");
+@deprecated
+Future<Map> getPackageYaml(Directory packageDir) => getPubspecYaml(packageDir);
+
+Future<Map> getPubspecYaml(Directory packageDir) =>
+    _getYaml(packageDir, "pubspec.yaml");
 
 Future<Map> _getYaml(Directory packageDir, String name) async {
   String yamlPath = join(packageDir.path, name);
@@ -47,6 +50,9 @@ String pubspecYamlGetPackageName(Map yaml) => yaml['name'];
 Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
   return (yaml['dependencies'] as Map).keys as Iterable<String>;
 }
+
+// in dev tree
+Version pubspecYamlGetVersion(Map yaml) => new Version.parse(yaml['version']);
 
 Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   if (yaml.containsKey('test_dependencies')) {

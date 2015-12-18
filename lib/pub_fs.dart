@@ -11,6 +11,12 @@ import 'package:fs_shim/utils/copy.dart';
 import 'dart:async';
 import 'src/import.dart';
 import 'src/import.dart' as pub;
+export 'src/pubutils_fs.dart'
+    show
+        getPubspecYaml,
+        pubspecYamlBasename,
+        pubspecYamlHasAnyDependencies,
+        pubspecYamlGetVersion;
 
 typedef FsPubPackage FsPubPackageFactoryCreate(Directory dir, [String name]);
 
@@ -39,10 +45,12 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
 
   ProcessCmd prepareCmd(ProcessCmd cmd) => cmd..workingDirectory = dir.path;
 
-  Future<Map> getPackageYaml() => pub.getPackageYaml(dir);
+  @deprecated
+  Future<Map> getPackageYaml() => pub.getPubspecYaml(dir);
+  Future<Map> getPubspecYaml() => pub.getPubspecYaml(dir);
 
   Future<String> extractPackageName() async {
-    return pubspecYamlGetPackageName(await getPackageYaml());
+    return pubspecYamlGetPackageName(await getPubspecYaml());
   }
 
   // Extract a package (dependency)
@@ -68,11 +76,10 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
     Directory src = dir;
     Directory dst = toDir;
     if (await isPubPackageDir(src)) {
-      await copyDirectory(
-          src, dst,
+      await copyDirectory(src, dst,
           options: new CopyOptions(
               recursive: true,
-          delete: delete, // delete before copying
+              delete: delete, // delete before copying
               exclude: [
                 'packages',
                 '.packages',
@@ -85,6 +92,9 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
     }
     return factory.create(dst);
   }
+
+  @override
+  String toString() => dir.toString();
 }
 
 /// return true if root package

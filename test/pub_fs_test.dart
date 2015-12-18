@@ -3,10 +3,11 @@ library tekartik_pub.test.pub_test;
 
 import 'package:dev_test/test.dart';
 import 'package:fs_shim/fs.dart';
+import 'package:fs_shim/utils/copy.dart';
 import 'package:fs_shim/utils/entity.dart';
 import 'package:fs_shim_test/context.dart';
 import 'package:tekartik_pub/pub_fs.dart';
-import 'package:tekartik_pub/src/pubutils_fs.dart';
+//import 'package:tekartik_pub/src/pubutils_fs.dart';
 
 void main() => defineTests(memoryFileSystemTestContext);
 
@@ -16,6 +17,20 @@ void defineTests(FileSystemTestContext ctx) {
   group('pub_fs', () {
     FsPubPackage pkg;
 
+    test('pubspec', () async {
+      Directory top = await ctx.prepare();
+
+      expect(await isPubPackageDir(top), isFalse);
+
+      await createFile(childFile(top, pubspecYamlBasename));
+
+      expect(await isPubPackageDir(top), isTrue);
+      expect(await isPubPackageDir(childDirectory(top, 'sub')), isFalse);
+
+      expect(
+          (await getPubPackageDir(childDirectory(top, 'sub'))).path, top.path);
+      expect((await getPubPackageDir(top)).path, top.path);
+    });
     test('clone', () async {
       Directory top = await ctx.prepare();
       Directory src = childDirectory(top, 'src');
@@ -73,4 +88,4 @@ void defineTests(FileSystemTestContext ctx) {
       expect(await dstPubspecYamlFile.exists(), isTrue);
     });
   });
-  }
+}

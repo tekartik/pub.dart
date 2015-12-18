@@ -104,17 +104,27 @@ Iterable<String> pubDepsArgs({Iterable<String> args, String style}) {
   return (depsArgs);
 }
 
+const pubRunTestReporterJson = "json";
+const pubRunTestReporterExpanded = "expanded";
+const pubRunTestReporterCompact = "compact";
+
+List<String> pubRunTestReporters = [
+  pubRunTestReporterCompact,
+  pubRunTestReporterExpanded,
+  pubRunTestReporterJson
+];
+
 /// list of argument for pubCmd
 Iterable<String> pubRunTestArgs(
     {Iterable<String> args,
-    TestReporter reporter,
+    String reporter,
     bool color,
     int concurrency,
     List<String> platforms,
     String name}) {
   List<String> testArgs = ['run', 'test'];
   if (reporter != null) {
-    testArgs.addAll(['-r', testReporterString(reporter)]);
+    testArgs.addAll(['-r', reporter]);
   }
   if (concurrency != null) {
     testArgs.addAll(['-j', concurrency.toString()]);

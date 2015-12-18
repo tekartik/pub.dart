@@ -25,7 +25,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
     if (!_isToBeIgnored(basename(dir.path))) {
       if (await isPubPackageDir(dir)) {
         if (dependencies is List && !dependencies.isEmpty) {
-          Map yaml = await getPackageYaml(dir);
+          Map yaml = await getPubspecYaml(dir);
           if (pubspecYamlHasAnyDependencies(yaml, dependencies)) {
             ctlr.add(dir);
           }

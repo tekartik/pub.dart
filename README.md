@@ -13,7 +13,7 @@ main() async {
   IoFsPubPackage pkg = new IoFsPubPackage(Directory.current);
 
   // Run all tests
-  ProcessResult result = await pkg.runPub(pubRunTestArgs(), connectIo: true);
+  ProcessResult result = await pkg.runPub(pubRunTestArgs());
   print('exitCode: ${result.exitCode}');
 }
 ````
