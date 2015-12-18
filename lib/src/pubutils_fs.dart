@@ -47,11 +47,6 @@ Uri dotPackagesGetLibUri(Map yaml, String packageName) {
 // in dev tree
 String pubspecYamlGetPackageName(Map yaml) => yaml['name'];
 
-Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
-  return (yaml['dependencies'] as Map).keys as Iterable<String>;
-}
-
-// in dev tree
 Version pubspecYamlGetVersion(Map yaml) => new Version.parse(yaml['version']);
 
 Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
@@ -63,6 +58,10 @@ Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
     return list;
   }
   return null;
+}
+
+Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
+  return (yaml['dependencies'] as Map).keys as Iterable<String>;
 }
 
 Version pubspecLockGetVersion(Map yaml, String packageName) =>

@@ -26,13 +26,16 @@ main() {
       // clone the package in a temp output location
 
       pkg = await simplePkg.clone(outDir, delete: true);
+
+      ProcessResult result = await pkg.runPub(pubGetArgs(offline: true));
+      expect(result.stdout, contains('Changed '));
     });
 
     // fastest test
     test('get_offline', () async {
       ProcessResult result = await pkg.runPub(pubGetArgs(offline: true));
       // Called first to depedencies have changed
-      expect(result.stdout, contains('Changed '));
+      expect(result.stdout, contains('Got dependencies'));
     });
 
     test('get', () async {
@@ -64,11 +67,14 @@ main() {
     });
 
     test('test', () async {
-      ProcessResult result = await pkg.runPub(pubRunTestArgs());
+      ProcessResult result =
+          await pkg.runPub(pubRunTestArgs(reporter: pubRunTestReporterJson));
       // on 1.13, current windows is failing
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
       }
+      expect(pubRunTestJsonProcessResultIsSuccess(result), isTrue);
+      expect(pubRunTestJsonProcessResultSuccessCount(result), 1);
     });
 
     test('build', () async {
