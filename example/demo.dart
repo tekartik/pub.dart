@@ -5,4 +5,5 @@ main() async {
 
   // Run all tests
   ProcessResult result = await pkg.runPub(pubRunTestArgs(), connectIo: true);
+  print('exitCode: ${result.exitCode}');
 }
