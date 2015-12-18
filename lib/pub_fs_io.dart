@@ -85,12 +85,13 @@ class IoFsPubPackage extends FsPubPackage
 
   Future<ProcessResult> _devRunCmd(ProcessCmd cmd,
       {bool connectStdin: false, bool connectStdout, bool connectStderr}) {
-    print(processCmdToDebugString(cmd));
-    return _cmd.runCmd(cmd.clone()
+    cmd = cmd.clone()
       ..workingDirectory = dir.path
       ..connectStdin = connectStdin
       ..connectStderr = true
-      ..connectStdout = true);
+      ..connectStdout = true;
+    print(processCmdToDebugString(cmd));
+    return _cmd.runCmd(cmd);
   }
 }
 

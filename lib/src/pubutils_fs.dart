@@ -61,7 +61,11 @@ Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
 }
 
 Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
-  return (yaml['dependencies'] as Map).keys as Iterable<String>;
+  Map map = yaml['dependencies'];
+  if (map != null) {
+    return map.keys as Iterable<String>;
+  }
+  return null;
 }
 
 Version pubspecLockGetVersion(Map yaml, String packageName) =>
