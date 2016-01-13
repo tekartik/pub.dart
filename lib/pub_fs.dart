@@ -14,9 +14,12 @@ import 'src/import.dart' as pub;
 export 'src/pubutils_fs.dart'
     show
         getPubspecYaml,
+        dotPackagesBasename,
         pubspecYamlBasename,
         pubspecYamlHasAnyDependencies,
         pubspecYamlGetVersion;
+
+bool _debug = false;
 
 typedef FsPubPackage FsPubPackageFactoryCreate(Directory dir, [String name]);
 
@@ -74,9 +77,13 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
         if (isRelative(path)) {
           path = normalize(join(dir.path, path));
         }
-        return factory.create(fs.newDirectory(path));
+        return factory.create(fs.newDirectory(path), packageName);
       }
-    } catch (_) {}
+    } catch (_e) {
+      if (_debug) {
+        print(_e);
+      }
+    }
     return null;
   }
 

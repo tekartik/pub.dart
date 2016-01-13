@@ -13,6 +13,7 @@ void main() => defineTests(memoryFileSystemTestContext);
 
 void defineTests(FileSystemTestContext ctx) {
   //useVMConfiguration();
+  //factory = new FsPubPackageFactory();
 
   group('pub_fs', () {
     FsPubPackage pkg;
@@ -91,6 +92,22 @@ void defineTests(FileSystemTestContext ctx) {
       expect(list.length, 1);
       expect(list.first.path, dstPubspecYamlFile.path);
       expect(await dstPubspecYamlFile.exists(), isTrue);
+    });
+
+    test('extractPackage', () async {
+      // extractPackage
+      Directory top = await ctx.prepare();
+      pkg = new FsPubPackage(top);
+      expect(await pkg.extractPackage(null), isNull);
+      expect(await pkg.extractPackage("test"), isNull);
+      await childFile(pkg.dir, dotPackagesBasename).writeAsString('''
+test:file:///home/alex/.pub-cache/hosted/pub.dartlang.org/test-0.12.7/lib/
+''');
+      expect(await pkg.extractPackage(null), isNull);
+      FsPubPackage testPackages = await pkg.extractPackage("test");
+      expect(testPackages.name, "test");
+      expect(top.fs.pathContext.split(testPackages.dir.path),
+          contains('pub.dartlang.org'));
     });
   });
 }

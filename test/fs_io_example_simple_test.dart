@@ -7,13 +7,15 @@ import 'package:tekartik_pub/pub_fs_io.dart';
 import 'package:fs_shim/fs_io.dart';
 import 'package:fs_shim/utils/entity.dart';
 import 'package:tekartik_pub/script.dart';
+import 'package:tekartik_pub/pub_io.dart';
+import 'test_common.dart';
 
 class TestScript extends Script {}
 
 Directory get pkgDir => new File(getScriptPath(TestScript)).parent.parent;
 Directory get simplePkgDir => childDirectory(pkgDir, join('example', 'simple'));
 Directory get outDir =>
-    childDirectory(pkgDir, join('test', 'out', joinAll(testDescriptions)));
+    childDirectory(pkgDir, join(testOutTopPath, joinAll(testDescriptions)));
 
 main() {
   group('fs_io_example_simple', () {

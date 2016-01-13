@@ -4,6 +4,7 @@ import 'import.dart';
 import 'package:yaml/yaml.dart';
 
 const String pubspecYamlBasename = 'pubspec.yaml';
+const String dotPackagesBasename = '.packages';
 
 Future<Map> getDotPackagesYaml(Directory packageDir) async {
   String yamlPath = _pubspecDotPackagesPath(packageDir.path);
@@ -26,13 +27,13 @@ Future<Map> getDotPackagesYaml(Directory packageDir) async {
 //String _pubspecYamlPath(String packageRoot) =>
 //    join(packageRoot, 'pubspec.yaml');
 String _pubspecDotPackagesPath(String packageRoot) =>
-    join(packageRoot, '.packages');
+    join(packageRoot, dotPackagesBasename);
 
 @deprecated
 Future<Map> getPackageYaml(Directory packageDir) => getPubspecYaml(packageDir);
 
 Future<Map> getPubspecYaml(Directory packageDir) =>
-    _getYaml(packageDir, "pubspec.yaml");
+    _getYaml(packageDir, pubspecYamlBasename);
 
 Future<Map> _getYaml(Directory packageDir, String name) async {
   String yamlPath = join(packageDir.path, name);

@@ -10,6 +10,7 @@ import 'package:fs_shim/fs_io.dart';
 import 'package:tekartik_pub/pub_fs_io.dart';
 import 'package:fs_shim_test/test_io.dart';
 import 'pub_fs_test.dart' as pub_fs_test;
+import 'test_common.dart';
 
 class TestScript extends Script {}
 
@@ -18,10 +19,13 @@ Directory get pkgDir => new File(getScriptPath(TestScript)).parent.parent;
 void main() => defineTests();
 
 void defineTests() {
+  IoFileSystemTestContext testContext =
+      newIoFileSystemContext(join(pkgDir.path, testOutTopPath));
+
   //useVMConfiguration();
   group('pub_fs_io', () {
-    pub_fs_test
-        .defineTests(newIoFileSystemContext(join(pkgDir.path, 'test', 'out')));
+    // Common test
+    pub_fs_test.defineTests(testContext);
 
     IoFsPubPackage pkg = new IoFsPubPackage(pkgDir);
 
