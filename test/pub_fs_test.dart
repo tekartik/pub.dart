@@ -7,6 +7,7 @@ import 'package:fs_shim/utils/copy.dart';
 import 'package:fs_shim/utils/entity.dart';
 import 'package:fs_shim_test/context.dart';
 import 'package:tekartik_pub/pub_fs.dart';
+import 'package:pub_semver/pub_semver.dart';
 //import 'package:tekartik_pub/src/pubutils_fs.dart';
 
 void main() => defineTests(memoryFileSystemTestContext);
@@ -108,6 +109,21 @@ test:file:///home/alex/.pub-cache/hosted/pub.dartlang.org/test-0.12.7/lib/
       expect(testPackages.name, "test");
       expect(top.fs.pathContext.split(testPackages.dir.path),
           contains('pub.dartlang.org'));
+    });
+
+    test('extractVersion', () async {
+      Directory top = await ctx.prepare();
+      pkg = new FsPubPackage(top);
+      //expect(await pkg.extractVersion(), isNull);
+      await childFile(pkg.dir, pubspecYamlBasename).writeAsString('''
+version: 1.0.0
+''');
+      expect(await pkg.extractVersion(), new Version(1, 0, 0));
+
+      // pkg = new FsPubPackage(top);
+      // expect(await pkg.extractVersion(), isNull);
+      // await childFile(pkg.dir, pubspecYamlBasename).writeAsString('_version: 1.0.0');
+      // expect(await pkg.extractVersion(), isNull);
     });
   });
 }
