@@ -125,5 +125,36 @@ version: 1.0.0
       // await childFile(pkg.dir, pubspecYamlBasename).writeAsString('_version: 1.0.0');
       // expect(await pkg.extractVersion(), isNull);
     });
+
+    test('pubRunTestJsonSuccessCount', () {
+      String out = '''
+{"protocolVersion":"0.1.0","runnerVersion":"0.12.7","type":"start","time":0}
+{"test":{"id":0,"name":"loading test/case/one_solo_test_case_test.dart","groupIDs":[],"metadata":{"skip":false,"skipReason":null}},"type":"testStart","time":0}
+{"testID":0,"result":"success","hidden":true,"type":"testDone","time":159}
+{"group":{"id":1,"parentID":null,"name":null,"metadata":{"skip":false,"skipReason":null}},"type":"group","time":162}
+{"test":{"id":2,"name":"solo_test","groupIDs":[1],"metadata":{"skip":false,"skipReason":null}},"type":"testStart","time":162}
+{"testID":2,"result":"success","hidden":false,"type":"testDone","time":182}
+{"test":{"id":3,"name":"dev_test report","groupIDs":[1],"metadata":{"skip":true,"skipReason":"[dev_test] 1 test skipped"}},"type":"testStart","time":183}
+{"testID":3,"result":"success","hidden":false,"type":"testDone","time":185}
+{"success":true,"type":"done","time":187}
+''';
+      expect(pubRunTestJsonSuccessCount(out), 1);
+      expect(pubRunTestJsonIsSuccess(out), isTrue);
+    });
+
+    test('pubRunTestJsonFailureCount', () {
+      String out = '''
+{"protocolVersion":"0.1.0","runnerVersion":"0.12.6+2","type":"start","time":0}
+{"test":{"id":0,"name":"loading test/data/fail_test_.dart","groupIDs":[],"metadata":{"skip":false,"skipReason":null}},"type":"testStart","time":0}
+{"testID":0,"result":"success","hidden":true,"type":"testDone","time":180}
+{"group":{"id":1,"parentID":null,"name":null,"metadata":{"skip":false,"skipReason":null}},"type":"group","time":182}
+{"test":{"id":2,"name":"failed","groupIDs":[1],"metadata":{"skip":false,"skipReason":null}},"type":"testStart","time":183}
+{"testID":2,"error":"will fail","stackTrace":"package:test                   fail\ntest/data/fail_test_.dart 7:5  main.<fn>.<async>\n===== asynchronous gap ===========================\ndart:async                     _Completer.completeError\ntest/data/fail_test_.dart 8:4  main.<fn>.<async>\n===== asynchronous gap ===========================\ndart:async                     Future.Future.microtask\ntest/data/fail_test_.dart      main.<fn>\n","isFailure":true,"type":"error","time":345}
+{"testID":2,"result":"failure","hidden":false,"type":"testDone","time":346}
+{"success":false,"type":"done","time":348}
+''';
+      expect(pubRunTestJsonFailureCount(out), 1);
+      expect(pubRunTestJsonIsSuccess(out), isFalse);
+    });
   });
 }
