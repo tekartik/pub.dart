@@ -51,9 +51,9 @@ void defineTests() {
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
       }
-      expect(pubRunTestJsonProcessResultIsSuccess(result), isTrue);
-      expect(pubRunTestJsonProcessResultSuccessCount(result), 1);
-      expect(pubRunTestJsonProcessResultFailureCount(result), 0);
+      expect(pubRunTestJsonIsSuccess(result.stdout), isTrue);
+      expect(pubRunTestJsonSuccessCount(result.stdout), 1);
+      expect(pubRunTestJsonFailureCount(result.stdout), 0);
 
       // pubCmd
       result = await runCmd(pkg.pubCmd(pubRunTestArgs(
@@ -66,9 +66,9 @@ void defineTests() {
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
       }
-      expect(pubRunTestJsonProcessResultIsSuccess(result), isTrue);
-      expect(pubRunTestJsonProcessResultSuccessCount(result), 1);
-      expect(pubRunTestJsonProcessResultFailureCount(result), 0);
+      expect(pubRunTestJsonIsSuccess(result.stdout), isTrue);
+      expect(pubRunTestJsonSuccessCount(result.stdout), 1);
+      expect(pubRunTestJsonFailureCount(result.stdout), 0);
 
       result = await pkg.runPub(pubRunTestArgs(
           args: ['test/data/fail_test_.dart'],
@@ -76,9 +76,9 @@ void defineTests() {
       if (!Platform.isWindows) {
         expect(result.exitCode, 1);
       }
-      expect(pubRunTestJsonProcessResultIsSuccess(result), isFalse);
-      expect(pubRunTestJsonProcessResultSuccessCount(result), 0);
-      expect(pubRunTestJsonProcessResultFailureCount(result), 1);
+      expect(pubRunTestJsonIsSuccess(result.stdout), isFalse);
+      expect(pubRunTestJsonSuccessCount(result.stdout), 0);
+      expect(pubRunTestJsonFailureCount(result.stdout), 1);
 
       // runPub
       result = await pkg.runPub(pubRunTestArgs(

@@ -75,8 +75,8 @@ main() {
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
       }
-      expect(pubRunTestJsonProcessResultIsSuccess(result), isTrue);
-      expect(pubRunTestJsonProcessResultSuccessCount(result), 1);
+      expect(pubRunTestJsonIsSuccess(result.stdout), isTrue);
+      expect(pubRunTestJsonSuccessCount(result.stdout), 1);
     });
 
     test('build', () async {
@@ -86,6 +86,18 @@ main() {
         await buildIndexHtmlFile.delete();
       }
       ProcessResult result = await pkg.runPub(pubBuildArgs());
+
+      expect(result.exitCode, 0);
+      expect(await buildIndexHtmlFile.exists(), isTrue);
+    });
+
+    test('dartdoc', () async {
+      File buildIndexHtmlFile =
+          childFile(pkg.dir, join('doc', 'api', 'index.html'));
+      if (await buildIndexHtmlFile.exists()) {
+        await buildIndexHtmlFile.delete();
+      }
+      ProcessResult result = await pkg.runDartdoc(dartdocArgs());
 
       expect(result.exitCode, 0);
       expect(await buildIndexHtmlFile.exists(), isTrue);

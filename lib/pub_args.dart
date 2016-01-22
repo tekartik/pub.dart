@@ -149,3 +149,33 @@ Iterable<String> pubRunTestArgs(
   }
   return (testArgs);
 }
+
+Iterable<String> dartdocArgs(
+    {Iterable<String> args,
+    bool version,
+    bool help,
+    String input,
+    String output}) {
+  List<String> pubArgs = [];
+  // --version          Print pub version.
+
+  if (version == true) {
+    pubArgs.add('--version');
+  }
+  // --help             Print this usage information.
+  if (help == true) {
+    pubArgs.add('--help');
+  }
+  // --verbose          Shortcut for "--verbosity=all".
+  if (input != null) {
+    pubArgs..add('--input')..add(input);
+  }
+  if (output != null) {
+    pubArgs..add('--output')..add(output);
+  }
+  if (args != null) {
+    pubArgs.addAll(args);
+  }
+
+  return pubArgs;
+}
