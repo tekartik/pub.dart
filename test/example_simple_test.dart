@@ -46,13 +46,20 @@ main() {
     });
 
     test('get', () async {
-      ProcessResult result = await runCmd(
-          pkg.pubCmd(pubGetArgs(offline: true))..connectStderr = false);
+      // offline: true crashes with 1.16
+      ProcessResult result = await runCmd(pkg.pubCmd(pubGetArgs()));
+      expect(result.exitCode, 0);
+    });
+
+    test('getOffline', () async {
+      // offline: true crashes with 1.16
+      ProcessResult result =
+          await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
       expect(result.exitCode, 0);
     });
     test('upgrade', () async {
-      ProcessResult result =
-          await runCmd(pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)));
+      ProcessResult result = await runCmd(
+          pkg.pubCmd(pubUpgradeArgs(/*offline: true,*/ dryRun: true)));
       expect(result.exitCode, 0);
     });
     test('test', () async {
