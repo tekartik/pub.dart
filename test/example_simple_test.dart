@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:tekartik_pub/pub_fs_io.dart' as fs;
 import 'package:fs_shim/utils/entity.dart' as fs;
 import 'package:tekartik_pub/script.dart';
+import 'test_common.dart';
 
 class _TestUtils {
   static final String scriptPath =
@@ -26,7 +27,7 @@ fs.Directory get pkgDir => new fs.File(getScriptPath(TestScript)).parent.parent;
 fs.Directory get simplePkgDir =>
     fs.childDirectory(pkgDir, join('example', 'simple'));
 fs.Directory get outDir =>
-    fs.childDirectory(pkgDir, join('test', 'out', joinAll(testDescriptions)));
+    fs.childDirectory(pkgDir, join(testOutTopPath, joinAll(testDescriptions)));
 main() {
   group('example_simple', () {
     fs.IoFsPubPackage fsPkg;
@@ -45,13 +46,20 @@ main() {
     });
 
     test('get', () async {
-      ProcessResult result = await runCmd(
-          pkg.pubCmd(pubGetArgs(offline: true))..connectStderr = false);
+      // offline: true crashes with 1.16
+      ProcessResult result = await runCmd(pkg.pubCmd(pubGetArgs()));
+      expect(result.exitCode, 0);
+    });
+
+    test('getOffline', () async {
+      // offline: true crashes with 1.16
+      ProcessResult result =
+          await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
       expect(result.exitCode, 0);
     });
     test('upgrade', () async {
-      ProcessResult result =
-          await runCmd(pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)));
+      ProcessResult result = await runCmd(
+          pkg.pubCmd(pubUpgradeArgs(/*offline: true,*/ dryRun: true)));
       expect(result.exitCode, 0);
     });
     test('test', () async {

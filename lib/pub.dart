@@ -29,7 +29,9 @@ class PubPackage {
   }
 
   @deprecated
-  set name(String name) => _name = name;
+  set name(String name) {
+    _name = name;
+  }
 
   String get path => _path;
 

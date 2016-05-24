@@ -115,13 +115,17 @@ Stream<String> recursivePubPath(List<String> dirs,
         }
       } else {
         List<Future> sub = [];
-        return new Directory(dir).list().listen((FileSystemEntity fse) {
-          if (FileSystemEntity.isDirectorySync(fse.path)) {
-            sub.add(_handleDir(fse.path));
-          }
-        }).asFuture().then((_) {
-          return Future.wait(sub);
-        });
+        return new Directory(dir)
+            .list()
+            .listen((FileSystemEntity fse) {
+              if (FileSystemEntity.isDirectorySync(fse.path)) {
+                sub.add(_handleDir(fse.path));
+              }
+            })
+            .asFuture()
+            .then((_) {
+              return Future.wait(sub);
+            });
       }
     }
   }
