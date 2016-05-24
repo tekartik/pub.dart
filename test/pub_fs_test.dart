@@ -17,18 +17,23 @@ void defineTests(FileSystemTestContext ctx) {
   group('pub_fs', () {
     FsPubPackage pkg;
 
-    test('pubspec', () async {
+    test('dir', () async {
       Directory top = await ctx.prepare();
 
       expect(await isPubPackageDir(top), isFalse);
 
+      Directory sub = await createDirectory(childDirectory(top, 'sub'));
       await createFile(childFile(top, pubspecYamlBasename));
 
       expect(await isPubPackageDir(top), isTrue);
-      expect(await isPubPackageDir(childDirectory(top, 'sub')), isFalse);
+      expect(await isPubPackageDir(sub), isFalse);
 
       expect(
           (await getPubPackageDir(childDirectory(top, 'sub'))).path, top.path);
+      expect((await getPubPackageDir(top)).path, top.path);
+
+      expect(
+          (await getPubPackageDir(childFile(top, pubspecYamlBasename))).path, top.path);
       expect((await getPubPackageDir(top)).path, top.path);
     });
     test('clone', () async {

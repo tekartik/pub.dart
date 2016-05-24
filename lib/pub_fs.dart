@@ -53,6 +53,17 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
     return pubspecYamlGetPackageName(await getPubspecYaml());
   }
 
+  Future<Version> extractVersion() async {
+    return pubspecYamlGetVersion(await getPubspecYaml());
+  }
+
+  // return as package name
+  Future<Iterable<String>> extractPubspecDependencies() async {
+    Map yaml = await getPubspecYaml();
+    Iterable<String> list = pubspecYamlGetDependenciesPackageName(yaml);
+    return list;
+  }
+
   // Extract a package (dependency)
   Future<FsPubPackage> extractPackage(String packageName) async {
     try {
@@ -63,7 +74,7 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
         if (isRelative(path)) {
           path = normalize(join(dir.path, path));
         }
-        return new FsPubPackage(fs.newDirectory(path));
+        return factory.create(fs.newDirectory(path));
       }
     } catch (_) {}
     return null;
@@ -103,10 +114,14 @@ Future<bool> isPubPackageDir(Directory dir) async {
   return await dir.fs.isFile(pubspecYamlFile.path);
 }
 
-/// throws if no project found
-Future<Directory> getPubPackageDir(Directory resolverDir) async {
+/// throws if no project found above
+Future<Directory> getPubPackageDir(FileSystemEntity resolver) async {
+  String path = resolver.path;
+  if (!(await resolver.fs.isDirectory(resolver.path))) {
+    path = resolver.fs.pathContext.dirname(path);
+  }
   Directory dir =
-      resolverDir.fs.newDirectory(normalize(absolute(resolverDir.path)));
+      resolver.fs.newDirectory(normalize(absolute(path)));
 
   while (true) {
     // Find the project root path
@@ -116,8 +131,9 @@ Future<Directory> getPubPackageDir(Directory resolverDir) async {
     Directory parent = dir.parent;
 
     if (parent.path == dir.path) {
-      throw new Exception("No project found for path '$resolverDir");
+      throw new Exception("No project found for path '$resolver");
     }
     dir = parent;
   }
 }
+
