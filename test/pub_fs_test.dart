@@ -103,12 +103,15 @@ void defineTests(FileSystemTestContext ctx) {
       expect(await pkg.extractPackage("test"), isNull);
       await childFile(pkg.dir, dotPackagesBasename).writeAsString('''
 test:file:///home/alex/.pub-cache/hosted/pub.dartlang.org/test-0.12.7/lib/
+test2:lib/
 ''');
       expect(await pkg.extractPackage(null), isNull);
-      FsPubPackage testPackages = await pkg.extractPackage("test");
-      expect(testPackages.name, "test");
-      expect(top.fs.pathContext.split(testPackages.dir.path),
+      FsPubPackage testPackage = await pkg.extractPackage("test");
+      expect(testPackage.name, "test");
+      expect(top.fs.pathContext.split(testPackage.dir.path),
           contains('pub.dartlang.org'));
+      FsPubPackage test2Package = await pkg.extractPackage("test2");
+      expect(test2Package.name, "test2");
     });
 
     test('extractVersion', () async {

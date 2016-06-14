@@ -34,7 +34,7 @@ main() {
     });
 
     // fastest test
-    skip_test('get_offline', () async {
+    test('get_offline', () async {
       ProcessResult result = await pkg.runPub(pubGetArgs(offline: true));
       // Called first to depedencies have changed
       expect(result.stdout, contains('Got dependencies'));
