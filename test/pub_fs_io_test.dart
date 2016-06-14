@@ -36,7 +36,7 @@ void defineTests() {
     // use pk.runCmd and then pkg.pubCmd
 
     test('test', () async {
-      ProcessResult result = await pkg.runCmd(_cmd_run.pubCmd(pubRunTestArgs(
+      ProcessResult result = await pkg.devRunCmd(_cmd_run.pubCmd(pubRunTestArgs(
           args: ['test/data/success_test_.dart'],
           platforms: ["vm"],
           //reporter: pubRunTestReporterJson,

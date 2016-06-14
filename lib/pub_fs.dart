@@ -74,7 +74,7 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
         if (isRelative(path)) {
           path = normalize(join(dir.path, path));
         }
-        return factory.create(fs.newDirectory(path));
+        return factory.create(fs.newDirectory(path), packageName);
       }
     } catch (_) {}
     return null;
@@ -120,8 +120,7 @@ Future<Directory> getPubPackageDir(FileSystemEntity resolver) async {
   if (!(await resolver.fs.isDirectory(resolver.path))) {
     path = resolver.fs.pathContext.dirname(path);
   }
-  Directory dir =
-      resolver.fs.newDirectory(normalize(absolute(path)));
+  Directory dir = resolver.fs.newDirectory(normalize(absolute(path)));
 
   while (true) {
     // Find the project root path
@@ -136,4 +135,3 @@ Future<Directory> getPubPackageDir(FileSystemEntity resolver) async {
     dir = parent;
   }
 }
-

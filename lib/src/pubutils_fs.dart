@@ -90,13 +90,10 @@ bool pubspecYamlHasAnyDependencies(Map yaml, List<String> dependencies) {
   return false;
 }
 
-
 /// result must be run with reporter:json
 bool pubRunTestJsonIsSuccess(String stdout) {
   try {
-    Map map = JSON.decode(LineSplitter
-        .split(stdout)
-        .last);
+    Map map = JSON.decode(LineSplitter.split(stdout).last);
     return map['success'];
   } catch (_) {
     return false;

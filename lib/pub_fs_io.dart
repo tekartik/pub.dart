@@ -97,9 +97,7 @@ class IoFsPubPackage extends FsPubPackage
 /// result must be run with reporter:json
 bool pubRunTestJsonProcessResultIsSuccess(ProcessResult result) {
   try {
-    Map map = JSON.decode(LineSplitter
-        .split(result.stdout)
-        .last);
+    Map map = JSON.decode(LineSplitter.split(result.stdout).last);
     return map['success'];
   } catch (_) {
     return false;

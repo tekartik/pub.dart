@@ -33,8 +33,8 @@ void defineTests(FileSystemTestContext ctx) {
           (await getPubPackageDir(childDirectory(top, 'sub'))).path, top.path);
       expect((await getPubPackageDir(top)).path, top.path);
 
-      expect(
-          (await getPubPackageDir(childFile(top, pubspecYamlBasename))).path, top.path);
+      expect((await getPubPackageDir(childFile(top, pubspecYamlBasename))).path,
+          top.path);
       expect((await getPubPackageDir(top)).path, top.path);
     });
     test('clone', () async {
@@ -140,7 +140,7 @@ version: 1.0.0
 {"testID":3,"result":"success","hidden":false,"type":"testDone","time":185}
 {"success":true,"type":"done","time":187}
 ''';
-      expect(pubRunTestJsonSuccessCount(out), 1);
+      expect(pubRunTestJsonSuccessCount(out), 2);
       expect(pubRunTestJsonIsSuccess(out), isTrue);
     });
 
