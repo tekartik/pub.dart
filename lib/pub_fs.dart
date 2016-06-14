@@ -16,7 +16,10 @@ export 'src/pubutils_fs.dart'
         getPubspecYaml,
         pubspecYamlBasename,
         pubspecYamlHasAnyDependencies,
-        pubspecYamlGetVersion;
+        pubspecYamlGetVersion,
+        pubRunTestJsonFailureCount,
+        pubRunTestJsonIsSuccess,
+        pubRunTestJsonSuccessCount;
 
 typedef FsPubPackage FsPubPackageFactoryCreate(Directory dir, [String name]);
 
