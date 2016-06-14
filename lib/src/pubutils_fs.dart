@@ -33,7 +33,7 @@ String _pubspecDotPackagesPath(String packageRoot) =>
 Future<Map> getPackageYaml(Directory packageDir) => getPubspecYaml(packageDir);
 
 Future<Map> getPubspecYaml(Directory packageDir) =>
-    _getYaml(packageDir, pubspecYamlBasename);
+    _getYaml(packageDir, "pubspec.yaml");
 
 Future<Map> _getYaml(Directory packageDir, String name) async {
   String yamlPath = join(packageDir.path, name);
@@ -62,11 +62,7 @@ Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
 }
 
 Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
-  Map map = yaml['dependencies'];
-  if (map != null) {
-    return map.keys as Iterable<String>;
-  }
-  return null;
+  return (yaml['dependencies'] as Map).keys as Iterable<String>;
 }
 
 Version pubspecLockGetVersion(Map yaml, String packageName) =>
@@ -92,4 +88,79 @@ bool pubspecYamlHasAnyDependencies(Map yaml, List<String> dependencies) {
   }
 
   return false;
+}
+
+
+/// result must be run with reporter:json
+bool pubRunTestJsonIsSuccess(String stdout) {
+  try {
+    Map map = JSON.decode(LineSplitter
+        .split(stdout)
+        .last);
+    return map['success'];
+  } catch (_) {
+    return false;
+  }
+}
+
+int pubRunTestJsonSuccessCount(String stdout) {
+  //int _warn;
+  //print('# ${processResultToDebugString(result)}');
+  int count = 0;
+  for (String line in LineSplitter.split(stdout)) {
+    try {
+      var map = JSON.decode(line);
+      //print(map);
+      if (map is Map) {
+        // {testID: 0, result: success, hidden: true, type: testDone, time: 199}
+        // {testID: 2, result: success, hidden: false, type: testDone, time: 251}
+        //
+        // {protocolVersion: 0.1.0, runnerVersion: 0.12.6+2, type: start, time: 0}
+        // {test: {id: 0, name: loading test/data/success_test_.dart, groupIDs: [], metadata: {skip: false, skipReason: null}}, type: testStart, time: 0}
+        // {testID: 0, result: success, hidden: true, type: testDone, time: 224}
+        // {group: {id: 1, parentID: null, name: null, metadata: {skip: false, skipReason: null}}, type: group, time: 227}
+        // {test: {id: 2, name: success, groupIDs: [1], metadata: {skip: false, skipReason: null}}, type: testStart, time: 227}
+        // {testID: 2, result: success, hidden: false, type: testDone, time: 251}
+        if (map['testID'] != null) {
+          //print('1 $map');
+          if ((map['result'] == 'success') && (map['hidden'] != true)) {
+            //print('2 $map');
+            count++;
+          }
+        }
+      }
+    } catch (_) {}
+  }
+
+  return count;
+}
+
+/*
+{"protocolVersion":"0.1.0","runnerVersion":"0.12.6+2","type":"start","time":0}
+{"test":{"id":0,"name":"loading test/data/fail_test_.dart","groupIDs":[],"metadata":{"skip":false,"skipReason":null}},"type":"testStart","time":0}
+{"testID":0,"result":"success","hidden":true,"type":"testDone","time":180}
+{"group":{"id":1,"parentID":null,"name":null,"metadata":{"skip":false,"skipReason":null}},"type":"group","time":182}
+{"test":{"id":2,"name":"failed","groupIDs":[1],"metadata":{"skip":false,"skipReason":null}},"type":"testStart","time":183}
+{"testID":2,"error":"will fail","stackTrace":"package:test                   fail\ntest/data/fail_test_.dart 7:5  main.<fn>.<async>\n===== asynchronous gap ===========================\ndart:async                     _Completer.completeError\ntest/data/fail_test_.dart 8:4  main.<fn>.<async>\n===== asynchronous gap ===========================\ndart:async                     Future.Future.microtask\ntest/data/fail_test_.dart      main.<fn>\n","isFailure":true,"type":"error","time":345}
+{"testID":2,"result":"failure","hidden":false,"type":"testDone","time":346}
+{"success":false,"type":"done","time":348}
+ */
+int pubRunTestJsonFailureCount(String stdout) {
+  int count = 0;
+  for (String line in LineSplitter.split(stdout)) {
+    try {
+      var map = JSON.decode(line);
+      //print(map);
+      if (map is Map) {
+        // {"testID":2,"result":"failure","hidden":false,"type":"testDone","time":346}
+        if (map['testID'] != null) {
+          if ((map['result'] == 'failure') && (map['hidden'] != true)) {
+            count++;
+          }
+        }
+      }
+    } catch (_) {}
+  }
+
+  return count;
 }

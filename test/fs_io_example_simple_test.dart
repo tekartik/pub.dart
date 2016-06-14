@@ -7,15 +7,13 @@ import 'package:tekartik_pub/pub_fs_io.dart';
 import 'package:fs_shim/fs_io.dart';
 import 'package:fs_shim/utils/entity.dart';
 import 'package:tekartik_pub/script.dart';
-import 'package:tekartik_pub/pub_io.dart';
-import 'test_common.dart';
 
 class TestScript extends Script {}
 
 Directory get pkgDir => new File(getScriptPath(TestScript)).parent.parent;
 Directory get simplePkgDir => childDirectory(pkgDir, join('example', 'simple'));
 Directory get outDir =>
-    childDirectory(pkgDir, join(testOutTopPath, joinAll(testDescriptions)));
+    childDirectory(pkgDir, join('test', 'out', joinAll(testDescriptions)));
 
 main() {
   group('fs_io_example_simple', () {
@@ -28,16 +26,13 @@ main() {
       // clone the package in a temp output location
 
       pkg = await simplePkg.clone(outDir, delete: true);
-
-      ProcessResult result = await pkg.runPub(pubGetArgs(/*offline: true*/));
-      expect(result.stdout, contains('Changed '));
     });
 
     // fastest test
     test('get_offline', () async {
       ProcessResult result = await pkg.runPub(pubGetArgs(offline: true));
       // Called first to depedencies have changed
-      expect(result.stdout, contains('Got dependencies'));
+      expect(result.stdout, contains('Changed '));
     });
 
     test('get', () async {
@@ -45,13 +40,12 @@ main() {
       expect(result.stdout, contains('Got dependencies'));
 
       // offline
-      /*
+
       result = await pkg.runPub(pubGetArgs(offline: true));
       expect(result.stdout, contains('Got dependencies'));
-      */
 
       // dry run
-      result = await pkg.runPub(pubGetArgs(/*offline: true,*/ dryRun: true));
+      result = await pkg.runPub(pubGetArgs(offline: true, dryRun: true));
       expect(result.stdout, contains('No dependencies'));
     });
 
@@ -60,25 +54,21 @@ main() {
       expect(result.stdout, contains('Resolving dependencies'));
 
       // offline
-/*
+
       result = await pkg.runPub(pubUpgradeArgs(offline: true));
       expect(result.stdout, contains('Resolving dependencies'));
-      */
 
       // dry run
-      result = await pkg.runPub(pubUpgradeArgs(dryRun: true));
+      result = await pkg.runPub(pubUpgradeArgs(offline: true, dryRun: true));
       expect(result.stdout, contains('No dependencies'));
     });
 
     test('test', () async {
-      ProcessResult result =
-          await pkg.runPub(pubRunTestArgs(reporter: pubRunTestReporterJson));
+      ProcessResult result = await pkg.runPub(pubRunTestArgs());
       // on 1.13, current windows is failing
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
       }
-      expect(pubRunTestJsonIsSuccess(result.stdout), isTrue);
-      expect(pubRunTestJsonSuccessCount(result.stdout), 1);
     });
 
     test('build', () async {
@@ -88,18 +78,6 @@ main() {
         await buildIndexHtmlFile.delete();
       }
       ProcessResult result = await pkg.runPub(pubBuildArgs());
-
-      expect(result.exitCode, 0);
-      expect(await buildIndexHtmlFile.exists(), isTrue);
-    });
-
-    test('dartdoc', () async {
-      File buildIndexHtmlFile =
-          childFile(pkg.dir, join('doc', 'api', 'index.html'));
-      if (await buildIndexHtmlFile.exists()) {
-        await buildIndexHtmlFile.delete();
-      }
-      ProcessResult result = await pkg.runDartdoc(dartdocArgs());
 
       expect(result.exitCode, 0);
       expect(await buildIndexHtmlFile.exists(), isTrue);

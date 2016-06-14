@@ -7,14 +7,13 @@ import 'package:fs_shim/utils/copy.dart';
 import 'package:fs_shim/utils/entity.dart';
 import 'package:fs_shim_test/context.dart';
 import 'package:tekartik_pub/pub_fs.dart';
+import 'package:tekartik_pub/src/pubutils_fs.dart';
 import 'package:pub_semver/pub_semver.dart';
-//import 'package:tekartik_pub/src/pubutils_fs.dart';
 
 void main() => defineTests(memoryFileSystemTestContext);
 
 void defineTests(FileSystemTestContext ctx) {
   //useVMConfiguration();
-  //factory = new FsPubPackageFactory();
 
   group('pub_fs', () {
     FsPubPackage pkg;
@@ -34,8 +33,8 @@ void defineTests(FileSystemTestContext ctx) {
           (await getPubPackageDir(childDirectory(top, 'sub'))).path, top.path);
       expect((await getPubPackageDir(top)).path, top.path);
 
-      expect((await getPubPackageDir(childFile(top, pubspecYamlBasename))).path,
-          top.path);
+      expect(
+          (await getPubPackageDir(childFile(top, pubspecYamlBasename))).path, top.path);
       expect((await getPubPackageDir(top)).path, top.path);
     });
     test('clone', () async {

@@ -10,7 +10,6 @@ import 'package:fs_shim/fs_io.dart';
 import 'package:tekartik_pub/pub_fs_io.dart';
 import 'package:fs_shim_test/test_io.dart';
 import 'pub_fs_test.dart' as pub_fs_test;
-import 'test_common.dart';
 
 class TestScript extends Script {}
 
@@ -19,13 +18,10 @@ Directory get pkgDir => new File(getScriptPath(TestScript)).parent.parent;
 void main() => defineTests();
 
 void defineTests() {
-  IoFileSystemTestContext testContext =
-      newIoFileSystemContext(join(pkgDir.path, testOutTopPath));
-
   //useVMConfiguration();
   group('pub_fs_io', () {
-    // Common test
-    pub_fs_test.defineTests(testContext);
+    pub_fs_test
+        .defineTests(newIoFileSystemContext(join(pkgDir.path, 'test', 'out')));
 
     IoFsPubPackage pkg = new IoFsPubPackage(pkgDir);
 
@@ -51,9 +47,9 @@ void defineTests() {
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
       }
-      expect(pubRunTestJsonIsSuccess(result.stdout), isTrue);
-      expect(pubRunTestJsonSuccessCount(result.stdout), 1);
-      expect(pubRunTestJsonFailureCount(result.stdout), 0);
+      expect(pubRunTestJsonProcessResultIsSuccess(result), isTrue);
+      expect(pubRunTestJsonProcessResultSuccessCount(result), 1);
+      expect(pubRunTestJsonProcessResultFailureCount(result), 0);
 
       // pubCmd
       result = await runCmd(pkg.pubCmd(pubRunTestArgs(
@@ -66,9 +62,9 @@ void defineTests() {
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
       }
-      expect(pubRunTestJsonIsSuccess(result.stdout), isTrue);
-      expect(pubRunTestJsonSuccessCount(result.stdout), 1);
-      expect(pubRunTestJsonFailureCount(result.stdout), 0);
+      expect(pubRunTestJsonProcessResultIsSuccess(result), isTrue);
+      expect(pubRunTestJsonProcessResultSuccessCount(result), 1);
+      expect(pubRunTestJsonProcessResultFailureCount(result), 0);
 
       result = await pkg.runPub(pubRunTestArgs(
           args: ['test/data/fail_test_.dart'],
@@ -76,9 +72,9 @@ void defineTests() {
       if (!Platform.isWindows) {
         expect(result.exitCode, 1);
       }
-      expect(pubRunTestJsonIsSuccess(result.stdout), isFalse);
-      expect(pubRunTestJsonSuccessCount(result.stdout), 0);
-      expect(pubRunTestJsonFailureCount(result.stdout), 1);
+      expect(pubRunTestJsonProcessResultIsSuccess(result), isFalse);
+      expect(pubRunTestJsonProcessResultSuccessCount(result), 0);
+      expect(pubRunTestJsonProcessResultFailureCount(result), 1);
 
       // runPub
       result = await pkg.runPub(pubRunTestArgs(
