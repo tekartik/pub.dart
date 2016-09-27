@@ -1,5 +1,7 @@
 library tekartik_io_tools.pub_args;
 
+// 2016-09-25 Use this
+
 enum TestReporter { COMPACT, EXPANDED }
 
 final Map<String, TestReporter> _testReporterMap = new Map.fromIterables(
@@ -148,6 +150,16 @@ Iterable<String> pubRunTestArgs(
     testArgs.addAll(args);
   }
   return (testArgs);
+}
+
+/// list of argument for pubCmd
+Iterable<String> pubRunArgs(
+    Iterable<String> args) {
+  List<String> runArgs = ['run'];
+  if (args != null) {
+    runArgs.addAll(args);
+  }
+  return (runArgs);
 }
 
 Iterable<String> dartdocArgs(

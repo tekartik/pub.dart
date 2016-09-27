@@ -1,13 +1,17 @@
 library tekartik_io_tools.pub;
 
-import 'package:process_run/process_run.dart';
-import 'package:process_run/dartbin.dart' as _dartbin;
-import 'package:process_run/cmd_run.dart';
 import 'dart:async';
 import 'dart:io';
+
 import 'package:path/path.dart';
-import 'pubspec.dart';
+import 'package:process_run/cmd_run.dart';
+import 'package:process_run/cmd_run.dart' as cmd_run;
+import 'package:process_run/dartbin.dart' as _dartbin;
+import 'package:process_run/process_run.dart';
+
 import 'pub_args.dart';
+import 'pubspec.dart';
+
 export 'pub_args.dart';
 
 bool _DEBUG = false;
@@ -42,10 +46,8 @@ class PubPackage {
     return run(_dartbin.dartExecutable, _dartbin.pubArguments(args),
         workingDirectory: _path);
   }
-  /*
-  List<String> pubCmd(List<String> args) =>
-      pubArguments(args), workingDirectory: _path
-      */
+
+  ProcessCmd pubCmd(List<String> args) => _pubCmd(args);
 
   @deprecated
   List<String> upgradeCmdArgs() {
@@ -56,11 +58,11 @@ class PubPackage {
 
   @deprecated
   ProcessCmd testCmd(List<String> args,
-          {TestReporter reporter,
-          bool color,
-          int concurrency,
-          List<String> platforms,
-          String name}) =>
+      {TestReporter reporter,
+      bool color,
+      int concurrency,
+      List<String> platforms,
+      String name}) =>
       _pubCmd(pubRunTestArgs(
           args: args,
           reporter: reporter.toString(),
@@ -70,7 +72,8 @@ class PubPackage {
           name: name));
 
   ProcessCmd _pubCmd(List<String> args) {
-    return pubCmd(args)..workingDirectory = path;
+    return cmd_run.pubCmd(args)
+      ..workingDirectory = path;
   }
 
   @deprecated
@@ -79,6 +82,7 @@ class PubPackage {
   @deprecated
   ProcessCmd upgradeCmd({bool offline, bool dryRun}) =>
       _pubCmd(pubUpgradeArgs(offline: offline, dryRun: dryRun));
+
   @deprecated
   ProcessCmd getCmd({bool offline, bool dryRun}) =>
       _pubCmd(pubGetArgs(offline: offline, dryRun: dryRun));
@@ -93,6 +97,17 @@ class PubPackage {
 
   @override
   String toString() => path;
+
+
+/*
+  // 2016-09-24
+  ProcessCmd cmd(Iterable<String> args) {
+    ProcessCmd _cmd = cmd_run.pubCmd(args)
+      ..workingDirectory = path;
+
+    return _cmd;
+  }
+  */
 }
 
 final String _pubspecYaml = "pubspec.yaml";

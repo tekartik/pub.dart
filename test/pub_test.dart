@@ -5,6 +5,9 @@ import 'dart:mirrors';
 import 'package:path/path.dart';
 import 'package:dev_test/test.dart';
 import 'package:tekartik_pub/pub.dart';
+import 'package:tekartik_pub/pub_args.dart';
+import 'package:process_run/cmd_run.dart';
+import 'dart:io';
 
 class _TestUtils {
   static final String scriptPath =
@@ -26,6 +29,20 @@ void defineTests() {
         PubPackage pkg2 = new PubPackage(packageRoot);
         expect(pkg1.hashCode, pkg2.hashCode);
         expect(pkg1, pkg2);
+      });
+
+      test('version', () async {
+        PubPackage pkg = new PubPackage(packageRoot);
+        ProcessResult result = await runCmd(pkg.pubCmd(pubArgs(version: true)));
+        //print(result);
+        expect(result.stdout, startsWith("Pub"));
+      });
+
+      test('run', () async {
+        PubPackage pkg = new PubPackage(packageRoot);
+        ProcessResult result = await runCmd(pkg.pubCmd(pubArgs(version: true)));
+        //print(result);
+        expect(result.stdout, startsWith("Pub"));
       });
     });
   });
