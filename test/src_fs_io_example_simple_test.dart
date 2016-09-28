@@ -16,7 +16,7 @@ Directory get outDir =>
     childDirectory(pkgDir, join('test', 'out', joinAll(testDescriptions)));
 
 main() {
-  group('fs_io_example_simple', () {
+  group('src_fs_io_example_simple', () {
     IoFsPubPackage pkg;
 
     // Order is important in the tests here

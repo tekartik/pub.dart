@@ -6,7 +6,7 @@ import 'package:process_run/cmd_run.dart';
 import 'package:process_run/cmd_run.dart' as _cmd;
 
 import 'pub_fs.dart';
-import 'pub_package.dart';
+import 'pub_package_fs.dart';
 
 export 'package:fs_shim/fs_io.dart';
 

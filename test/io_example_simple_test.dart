@@ -17,7 +17,7 @@ Directory get outDir =>
     childDirectory(pkgDir, join('test', 'out', joinAll(testDescriptions)));
 
 main() {
-  group('fs_io_example_simple', () {
+  group('io_example_simple', () {
     PubPackage pkg;
 
     // Order is important in the tests here

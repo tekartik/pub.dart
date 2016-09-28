@@ -10,30 +10,24 @@ import 'package:process_run/dartbin.dart' as _dartbin;
 import 'package:process_run/process_run.dart';
 
 import 'pub_args.dart';
-import 'pubspec.dart';
 import 'src/pub_fs_io.dart';
 import 'tekartik_pub.dart' as common;
 
 export 'pub_args.dart';
+export 'src/pubutils_fs.dart'
+    show
+    getPubspecYaml,
+    pubspecYamlBasename,
+    pubspecYamlHasAnyDependencies,
+    pubspecYamlGetVersion,
+    pubRunTestJsonFailureCount,
+    pubRunTestJsonIsSuccess,
+    pubRunTestJsonSuccessCount;
+import 'pubspec.dart';
 
 bool _DEBUG = false;
 
 class PubPackage extends common.PubPackage {
-
-  String _name;
-
-  @deprecated
-  String get name {
-    if (_name == null) {
-      _name = extractPubspecYamlNameSync(path);
-    }
-    return _name;
-  }
-
-  @deprecated
-  set name(String name) {
-    _name = name;
-  }
 
   io.Directory get dir => unwrapIoDirectory(fsPubPackage.dir);
 
@@ -47,6 +41,13 @@ class PubPackage extends common.PubPackage {
         workingDirectory: path);
   }
 
+  String get name {
+      if (super.name == null) {
+        super.name = extractPubspecYamlNameSync(path);
+      }
+      return super.name;
+
+  }
   ProcessCmd pubCmd(List<String> args) => _pubCmd(args);
 
   @deprecated
@@ -115,6 +116,7 @@ class PubPackage extends common.PubPackage {
     return _cmd;
   }
   */
+
 }
 
 final String _pubspecYaml = "pubspec.yaml";

@@ -27,7 +27,7 @@ Future<String> get _pubPackageRoot => getPubPackageRoot(testScriptPath);
 
 void defineTests() {
   //useVMConfiguration();
-  group('pub_io', () {
+  group('src_pub_io', () {
     test('version', () async {
       ProcessResult result =
           await run(dartExecutable, pubArguments(['--version']));

@@ -7,9 +7,9 @@ import 'package:process_run/cmd_run.dart' as _cmd_run;
 import 'package:process_run/dartbin.dart';
 import 'package:dev_test/test.dart';
 import 'package:fs_shim/fs_io.dart';
-import 'package:tekartik_pub/pub_fs_io.dart';
+import 'package:tekartik_pub/src/pub_fs_io.dart';
 import 'package:fs_shim_test/test_io.dart';
-import 'pub_fs_test.dart' as pub_fs_test;
+import 'src_pub_fs_test.dart' as pub_fs_test;
 
 class TestScript extends Script {}
 
@@ -19,7 +19,7 @@ void main() => defineTests();
 
 void defineTests() {
   //useVMConfiguration();
-  group('pub_fs_io', () {
+  group('src_pub_fs_io', () {
     pub_fs_test
         .defineTests(newIoFileSystemContext(join(pkgDir.path, 'test', 'out')));
 

@@ -1,7 +1,7 @@
 import 'package:process_run/cmd_run.dart';
 //import 'pub.dart';
 //export 'pub.dart';
-import 'pub_package.dart';
+import 'pub_package_fs.dart';
 //import 'pubspec.dart';
 import 'package:fs_shim/fs.dart';
 import 'package:fs_shim/utils/entity.dart';

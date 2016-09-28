@@ -15,7 +15,7 @@ void main() => defineTests(memoryFileSystemTestContext);
 void defineTests(FileSystemTestContext ctx) {
   //useVMConfiguration();
 
-  group('pub_fs', () {
+  group('src_pub_fs', () {
     FsPubPackage pkg;
 
     test('dir', () async {
