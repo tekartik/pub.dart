@@ -1,9 +1,11 @@
+// used?
+@deprecated
 library tekartik_pub.src.rpubpath_fs;
 
 import 'dart:async';
 import 'package:fs_shim/fs.dart';
 import 'package:path/path.dart';
-import 'package:tekartik_pub/pub_fs.dart';
+import 'pub_fs.dart';
 import 'import.dart';
 
 bool _isToBeIgnored(String baseName) {

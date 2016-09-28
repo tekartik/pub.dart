@@ -1,4 +1,4 @@
-import 'package:tekartik_pub/pub_fs_io.dart';
+import 'package:tekartik_pub/src/pub_fs_io.dart';
 
 main() async {
   IoFsPubPackage pkg = new IoFsPubPackage(Directory.current);

@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 import 'package:yaml/yaml.dart';
 import 'dart:async';
 import 'src/rpubpath.dart';
-import 'pub.dart';
+import 'io.dart';
 import 'src/pubutils_fs.dart' show pubspecYamlGetPackageName;
 
 // packages:

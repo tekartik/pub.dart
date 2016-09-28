@@ -3,7 +3,7 @@ library tekartik_pub.src.rpubpath;
 import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
-import 'package:tekartik_pub/pub.dart';
+import 'package:tekartik_pub/io.dart';
 import 'package:yaml/yaml.dart';
 import 'dart:convert';
 

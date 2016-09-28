@@ -1,7 +1,7 @@
 library tekartik_pub.src.import;
 
 export 'pubutils_fs.dart';
-export '../pub_fs.dart';
+export 'pub_fs.dart';
 export 'package:fs_shim/fs.dart';
 export 'package:fs_shim/utils/entity.dart';
 /*
