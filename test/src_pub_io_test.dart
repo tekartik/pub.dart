@@ -8,7 +8,7 @@ import 'package:process_run/process_run.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:process_run/dartbin.dart';
 import 'package:dev_test/test.dart';
-import 'package:tekartik_pub/pub_io.dart';
+import 'package:tekartik_pub/src/pub_io.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';

@@ -31,7 +31,8 @@ main() {
 
     // fastest test
     test('get_offline', () async {
-      ProcessResult result = await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
+      ProcessResult result =
+          await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
       // Called first to depedencies have changed
       expect(result.stdout, contains('Changed '));
     });
@@ -46,7 +47,8 @@ main() {
       expect(result.stdout, contains('Got dependencies'));
 
       // dry run
-      result = await runCmd(pkg.pubCmd(pubGetArgs(offline: true, dryRun: true)));
+      result =
+          await runCmd(pkg.pubCmd(pubGetArgs(offline: true, dryRun: true)));
       expect(result.stdout, contains('No dependencies'));
     });
 
@@ -60,7 +62,8 @@ main() {
       expect(result.stdout, contains('Resolving dependencies'));
 
       // dry run
-      result = await runCmd(pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)));
+      result =
+          await runCmd(pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)));
       expect(result.stdout, contains('No dependencies'));
     });
 

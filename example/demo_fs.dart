@@ -4,6 +4,8 @@ main() async {
   IoFsPubPackage pkg = new IoFsPubPackage(Directory.current);
 
   // Run all tests
-  ProcessResult result = await pkg.runPub(pubRunTestArgs(reporter: pubRunTestReporterExpanded), verbose: true);
+  ProcessResult result = await pkg.runPub(
+      pubRunTestArgs(reporter: pubRunTestReporterExpanded),
+      verbose: true);
   print('exitCode: ${result.exitCode}');
 }

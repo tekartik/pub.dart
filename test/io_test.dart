@@ -6,10 +6,7 @@ import 'package:fs_shim_test/test_io.dart';
 import 'package:process_run/cmd_run.dart' hide pubCmd;
 import 'package:tekartik_pub/io.dart';
 
-import 'src_pub_fs_test.dart' as pub_fs_test;
-
 class TestScript extends Script {}
-
 
 String get testScriptPath => getScriptPath(TestScript);
 
@@ -18,12 +15,12 @@ Directory get pkgDir => new File(testScriptPath).parent.parent;
 void main() => defineTests();
 
 Future<String> get _pubPackageRoot => getPubPackageRoot(testScriptPath);
+
 String get packageRoot => dirname(dirname(testScriptPath));
 
 void defineTests() {
   //useVMConfiguration();
   group('io', () {
-
     PubPackage pkg = new PubPackage(pkgDir.path);
 
     test('equals', () {
@@ -47,7 +44,6 @@ void defineTests() {
       //print(result);
       expect(result.stdout, startsWith("Pub"));
     });
-
 
     _testIsPubPackageRoot(String path, bool expected) async {
       expect(await isPubPackageRoot(path), expected);
@@ -121,6 +117,10 @@ void defineTests() {
       }
     });
 
+    test('getPubspecYaml', () async {
+      Map map = await getPubspecYaml(packageRoot);
+      expect(map['name'], "tekartik_pub");
+    });
     test('name', () async {
       expect(await pkg.extractPackageName(), 'tekartik_pub');
     });

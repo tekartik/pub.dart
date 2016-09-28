@@ -14,7 +14,6 @@ export '../pub_args.dart';
 export 'pub_fs.dart';
 //export 'pub.dart';
 
-
 final FsPubPackageFactory ioFactory = new FsPubPackageFactory(
     (fs.Directory dir, [String name]) => new IoFsPubPackage(dir, name));
 
@@ -24,8 +23,7 @@ class IoFsPubPackage extends FsPubPackage
       : super.created(ioFactory, dir, name);
 
   ProcessCmd pubCmd(Iterable<String> args) {
-    return _cmd.pubCmd(args)
-      ..workingDirectory = dir.path;
+    return _cmd.pubCmd(args)..workingDirectory = dir.path;
   }
 
   /// main entry point deprecated to prevent permanent use
@@ -42,18 +40,17 @@ class IoFsPubPackage extends FsPubPackage
 
   /// main entry point
   Future<ProcessResult> runPub(Iterable<String> args,
-      {
-      bool verbose,
-      @deprecated bool connectStdin: false,
-      @deprecated bool connectStdout: false,
-      @deprecated bool connectStderr: false}) =>
+          {bool verbose,
+          @deprecated bool connectStdin: false,
+          @deprecated bool connectStdout: false,
+          @deprecated bool connectStderr: false}) =>
       runCmd(pubCmd(args),
           verbose: verbose,
-      // ignore: deprecated_member_use
+          // ignore: deprecated_member_use
           connectStdin: connectStdin,
-      // ignore: deprecated_member_use
+          // ignore: deprecated_member_use
           connectStderr: connectStderr,
-      // ignore: deprecated_member_use
+          // ignore: deprecated_member_use
           connectStdout: connectStdout);
 
   /// main entry point deprecated to prevent permanent use
@@ -61,13 +58,12 @@ class IoFsPubPackage extends FsPubPackage
   /// to use for debugging only
   @deprecated
   Future<ProcessResult> devRunPub(Iterable<String> args,
-      {bool connectStdin: false, bool connectStdout, bool connectStderr}) =>
+          {bool connectStdin: false, bool connectStdout, bool connectStderr}) =>
       _devRunCmd(pubCmd(args), connectStdin: connectStdin);
 
   /// main entry point
   Future<ProcessResult> runCmd(ProcessCmd cmd,
-      {
-      bool verbose,
+      {bool verbose,
       @deprecated bool connectStdin: false,
       @deprecated bool connectStdout: false,
       @deprecated bool connectStderr: false}) {
@@ -80,11 +76,11 @@ class IoFsPubPackage extends FsPubPackage
         connectStderr) {
       cmd = cmd.clone()
         ..workingDirectory = dir.path
-      // ignore: deprecated_member_use
+        // ignore: deprecated_member_use
         ..connectStdin = connectStdin
-      // ignore: deprecated_member_use
+        // ignore: deprecated_member_use
         ..connectStderr = connectStderr
-      // ignore: deprecated_member_use
+        // ignore: deprecated_member_use
         ..connectStdout = connectStdout;
     }
     return _cmd.runCmd(cmd, verbose: verbose);
@@ -95,25 +91,25 @@ class IoFsPubPackage extends FsPubPackage
   /// to use for debugging only
   @deprecated
   Future<ProcessResult> devRunCmd(ProcessCmd cmd,
-      {@deprecated bool connectStdin,
-      @deprecated bool connectStdout,
-      @deprecated bool connectStderr}) =>
-      _devRunCmd(cmd.clone()
-        ..connectStdin = connectStdin);
+          {@deprecated bool connectStdin,
+          @deprecated bool connectStdout,
+          @deprecated bool connectStderr}) =>
+      _devRunCmd(cmd.clone()..connectStdin = connectStdin);
 
   Future<ProcessResult> _devRunCmd(ProcessCmd cmd,
       {@deprecated bool connectStdin,
       @deprecated bool connectStdout,
       @deprecated bool connectStderr}) {
     print(processCmdToDebugString(cmd));
-    return _cmd.runCmd(cmd.clone()
-      ..workingDirectory = dir.path
-      // ignore: deprecated_member_use
-      ..connectStdin = connectStdin
-      // ignore: deprecated_member_use
-      ..connectStderr = true
-      // ignore: deprecated_member_use
-      ..connectStdout = true,
+    return _cmd.runCmd(
+        cmd.clone()
+          ..workingDirectory = dir.path
+          // ignore: deprecated_member_use
+          ..connectStdin = connectStdin
+          // ignore: deprecated_member_use
+          ..connectStderr = true
+          // ignore: deprecated_member_use
+          ..connectStdout = true,
         verbose: true);
   }
 }

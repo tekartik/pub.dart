@@ -2,7 +2,7 @@
 library tekartik_pub.test.pub_test;
 
 import 'package:dev_test/test.dart';
-import 'package:tekartik_pub/pub_fs.dart';
+import 'package:tekartik_pub/src/pub_fs.dart';
 //import 'package:tekartik_pub/src/pubutils_fs.dart';
 import 'package:pub_semver/pub_semver.dart';
 

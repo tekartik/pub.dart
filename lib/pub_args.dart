@@ -153,8 +153,7 @@ Iterable<String> pubRunTestArgs(
 }
 
 /// list of argument for pubCmd
-Iterable<String> pubRunArgs(
-    Iterable<String> args) {
+Iterable<String> pubRunArgs(Iterable<String> args) {
   List<String> runArgs = ['run'];
   if (args != null) {
     runArgs.addAll(args);

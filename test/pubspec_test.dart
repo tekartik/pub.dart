@@ -8,7 +8,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:path/path.dart';
 
 import 'package:tekartik_pub/script.dart';
-import 'package:tekartik_pub/pub_io.dart';
+import 'package:tekartik_pub/io.dart';
 
 class TestScript extends Script {}
 
@@ -36,7 +36,7 @@ main() {
     });
 
     test('.packages', () async {
-      IoPubPackage selfPkg = new IoPubPackage(packageRoot);
+      PubPackage selfPkg = new PubPackage(packageRoot);
 
       PubPackage pkg = await extractPackage(selfPkg.name, selfPkg.path);
       expect(pkg, selfPkg);

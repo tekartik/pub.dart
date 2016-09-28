@@ -4,7 +4,7 @@ library tekartik_pub.test.pub_test;
 import 'dart:mirrors';
 import 'package:path/path.dart';
 import 'package:dev_test/test.dart';
-import 'package:tekartik_pub/pub.dart';
+import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 import 'dart:async';
 

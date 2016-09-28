@@ -10,25 +10,26 @@ import 'package:process_run/dartbin.dart' as _dartbin;
 import 'package:process_run/process_run.dart';
 
 import 'pub_args.dart';
+import 'pubspec.dart';
 import 'src/pub_fs_io.dart';
+import 'src/pubutils_fs.dart' as fs;
 import 'tekartik_pub.dart' as common;
 
 export 'pub_args.dart';
+export 'pubspec.dart';
 export 'src/pubutils_fs.dart'
     show
-    getPubspecYaml,
     pubspecYamlBasename,
     pubspecYamlHasAnyDependencies,
     pubspecYamlGetVersion,
     pubRunTestJsonFailureCount,
     pubRunTestJsonIsSuccess,
     pubRunTestJsonSuccessCount;
-import 'pubspec.dart';
+export 'src/rpubpath.dart' show recursivePubPath;
 
 bool _DEBUG = false;
 
 class PubPackage extends common.PubPackage {
-
   io.Directory get dir => unwrapIoDirectory(fsPubPackage.dir);
 
   PubPackage._(IoFsPubPackage fsPubPackage) : super(fsPubPackage);
@@ -42,13 +43,29 @@ class PubPackage extends common.PubPackage {
   }
 
   String get name {
-      if (super.name == null) {
-        super.name = extractPubspecYamlNameSync(path);
-      }
-      return super.name;
-
+    if (super.name == null) {
+      super.name = extractPubspecYamlNameSync(path);
+    }
+    return super.name;
   }
+
   ProcessCmd pubCmd(List<String> args) => _pubCmd(args);
+
+  ProcessCmd dartCmd(List<String> args) => _dartCmd(args);
+
+  Future<Map> getPubspecYaml() => fsPubPackage.getPubspecYaml();
+
+  Future<Iterable<String>> extractPubspecDependencies() =>
+      fsPubPackage.extractPubspecDependencies();
+
+  Future<PubPackage> extractPackage(String dependency) async {
+    FsPubPackage fsDependencyPubPackage = await fsPubPackage.extractPackage(
+        dependency);
+    if (fsDependencyPubPackage != null) {
+      return new PubPackage._(fsDependencyPubPackage);
+    }
+    return null;
+  }
 
   @deprecated
   List<String> upgradeCmdArgs() {
@@ -74,6 +91,11 @@ class PubPackage extends common.PubPackage {
 
   ProcessCmd _pubCmd(List<String> args) {
     return cmd_run.pubCmd(args)
+      ..workingDirectory = path;
+  }
+
+  ProcessCmd _dartCmd(List<String> args) {
+    return cmd_run.dartCmd(args)
       ..workingDirectory = path;
   }
 
@@ -106,17 +128,6 @@ class PubPackage extends common.PubPackage {
     return new PubPackage._(
         await fsPubPackage.clone(new fs.Directory(dir), delete: delete));
   }
-
-/*
-  // 2016-09-24
-  ProcessCmd cmd(Iterable<String> args) {
-    ProcessCmd _cmd = cmd_run.pubCmd(args)
-      ..workingDirectory = path;
-
-    return _cmd;
-  }
-  */
-
 }
 
 final String _pubspecYaml = "pubspec.yaml";
@@ -168,3 +179,7 @@ String getPubPackageRootSync(String resolverPath) {
     dirPath = parentDirPath;
   }
 }
+
+Future<Map> getPubspecYaml(String dirPath) =>
+    fs.getPubspecYaml(wrapIoDirectory(new io.Directory(dirPath)));
+
