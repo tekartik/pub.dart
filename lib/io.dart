@@ -107,8 +107,8 @@ class PubPackage extends common.PubPackage {
       _pubCmd(pubUpgradeArgs(offline: offline, dryRun: dryRun));
 
   @deprecated
-  ProcessCmd getCmd({bool offline, bool dryRun}) =>
-      _pubCmd(pubGetArgs(offline: offline, dryRun: dryRun));
+  ProcessCmd getCmd({bool offline, bool dryRun, bool packagesDir}) =>
+      _pubCmd(pubGetArgs(offline: offline, dryRun: dryRun, packagesDir: packagesDir));
 
   // same package is same path
 
