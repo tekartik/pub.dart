@@ -9,6 +9,7 @@ dependencies:
   yaml: any
   fs_shim: any
   pub_semver: any
+  args: any
 dev_dependencies:
   fs_shim_test:
     git: git://github.com/tekartik/fs_shim_test.dart
