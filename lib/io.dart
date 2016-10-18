@@ -19,12 +19,12 @@ export 'pub_args.dart';
 export 'pubspec.dart';
 export 'src/pubutils_fs.dart'
     show
-    pubspecYamlBasename,
-    pubspecYamlHasAnyDependencies,
-    pubspecYamlGetVersion,
-    pubRunTestJsonFailureCount,
-    pubRunTestJsonIsSuccess,
-    pubRunTestJsonSuccessCount;
+        pubspecYamlBasename,
+        pubspecYamlHasAnyDependencies,
+        pubspecYamlGetVersion,
+        pubRunTestJsonFailureCount,
+        pubRunTestJsonIsSuccess,
+        pubRunTestJsonSuccessCount;
 export 'src/rpubpath.dart' show recursivePubPath;
 
 bool _DEBUG = false;
@@ -59,8 +59,8 @@ class PubPackage extends common.PubPackage {
       fsPubPackage.extractPubspecDependencies();
 
   Future<PubPackage> extractPackage(String dependency) async {
-    FsPubPackage fsDependencyPubPackage = await fsPubPackage.extractPackage(
-        dependency);
+    FsPubPackage fsDependencyPubPackage =
+        await fsPubPackage.extractPackage(dependency);
     if (fsDependencyPubPackage != null) {
       return new PubPackage._(fsDependencyPubPackage);
     }
@@ -76,11 +76,11 @@ class PubPackage extends common.PubPackage {
 
   @deprecated
   ProcessCmd testCmd(List<String> args,
-      {TestReporter reporter,
-      bool color,
-      int concurrency,
-      List<String> platforms,
-      String name}) =>
+          {TestReporter reporter,
+          bool color,
+          int concurrency,
+          List<String> platforms,
+          String name}) =>
       _pubCmd(pubRunTestArgs(
           args: args,
           reporter: reporter.toString(),
@@ -90,13 +90,11 @@ class PubPackage extends common.PubPackage {
           name: name));
 
   ProcessCmd _pubCmd(List<String> args) {
-    return cmd_run.pubCmd(args)
-      ..workingDirectory = path;
+    return cmd_run.pubCmd(args)..workingDirectory = path;
   }
 
   ProcessCmd _dartCmd(List<String> args) {
-    return cmd_run.dartCmd(args)
-      ..workingDirectory = path;
+    return cmd_run.dartCmd(args)..workingDirectory = path;
   }
 
   @deprecated
@@ -107,8 +105,8 @@ class PubPackage extends common.PubPackage {
       _pubCmd(pubUpgradeArgs(offline: offline, dryRun: dryRun));
 
   @deprecated
-  ProcessCmd getCmd({bool offline, bool dryRun, bool packagesDir}) =>
-      _pubCmd(pubGetArgs(offline: offline, dryRun: dryRun, packagesDir: packagesDir));
+  ProcessCmd getCmd({bool offline, bool dryRun, bool packagesDir}) => _pubCmd(
+      pubGetArgs(offline: offline, dryRun: dryRun, packagesDir: packagesDir));
 
   // same package is same path
 
@@ -182,4 +180,3 @@ String getPubPackageRootSync(String resolverPath) {
 
 Future<Map> getPubspecYaml(String dirPath) =>
     fs.getPubspecYaml(wrapIoDirectory(new io.Directory(dirPath)));
-

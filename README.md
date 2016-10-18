@@ -4,6 +4,8 @@ Pub and package helpers
 
 [![Build Status](https://travis-ci.org/tekartik/tekartik_pub.dart.svg?branch=master)](https://travis-ci.org/tekartik/tekartik_pub.dart)
 
+# API
+
 ## Usage
 
 ````
@@ -17,3 +19,27 @@ main() async {
   print('exitCode: ${result.exitCode}');
 }
 ````
+
+# Commands
+
+## pubget
+
+Recursively call `pub get`
+
+   pubget
+    
+## pubupgrade
+
+Recursively call `pub upgrade`
+
+   pubupgrade
+   
+## Activation
+
+### From git repository
+
+    pub global activate -s git git://github.com/tekartik/tekartik_pub.dart
+
+### From local path
+
+    pub global activate -s path .

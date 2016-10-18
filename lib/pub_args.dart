@@ -83,13 +83,16 @@ Iterable<String> pubGetArgs({bool offline, bool dryRun, bool packagesDir}) {
   return args;
 }
 
-Iterable<String> pubUpgradeArgs({bool offline, bool dryRun}) {
+Iterable<String> pubUpgradeArgs({bool offline, bool dryRun, bool packagesDir}) {
   List<String> args = ['upgrade'];
   if (offline == true) {
     args.add('--offline');
   }
   if (dryRun == true) {
     args.add('--dry-run');
+  }
+  if (packagesDir == true) {
+    args.add('--packages-dir');
   }
   return args;
 }

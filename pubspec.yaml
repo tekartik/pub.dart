@@ -1,5 +1,5 @@
 name: tekartik_pub
-version: 0.4.3
+version: 0.5.0
 description: Pub and package helpers
 homepage: https://github.com/tekartik/tekartik_pub.dart
 environment:
@@ -17,8 +17,8 @@ dev_dependencies:
 test_dependencies:
 - process_run
 dependency_overrides:
-  process_run:
-    git: git://github.com/tekartik/process_run.dart
+#  process_run:
+#    git: git://github.com/tekartik/process_run.dart
 #  fs_shim:
 #    git: git://github.com/tekartik/fs_shim.dart
 #  fs_shim:
