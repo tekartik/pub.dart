@@ -57,7 +57,7 @@ void defineTests() {
   test('extract', () async {
     Map yaml = getPackageYamlSync(packageRoot);
     expect(await pubspecYamlGetDependenciesPackageName(yaml),
-        unorderedEquals(['pub_semver', 'process_run', 'yaml', 'fs_shim']));
+        unorderedEquals(['pub_semver', 'process_run', 'yaml', 'fs_shim', 'args']));
     expect(
         await pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
 
