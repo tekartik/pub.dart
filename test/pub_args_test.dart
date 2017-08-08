@@ -32,6 +32,7 @@ void defineTests() {
       expect(pubBuildArgs(mode: 'debug'), ['build', '--mode', 'debug']);
       expect(pubBuildArgs(format: 'json'), ['build', '--format', 'json']);
       expect(pubBuildArgs(args: ['web']), ['build', 'web']);
+      expect(pubBuildArgs(directories: ['web']), ['build', 'web']);
     });
 
     test('pubRunTestArgs', () {

@@ -5,7 +5,6 @@ import 'package:tekartik_pub/io.dart';
 import 'package:process_run/cmd_run.dart';
 import 'pubget.dart';
 
-
 // chmod +x ...
 main(List<String> arguments) async {
   ArgParser parser = new ArgParser(allowTrailingOptions: true);
@@ -13,7 +12,8 @@ main(List<String> arguments) async {
   parser.addFlag(argOneByOne,
       abbr: 'o', help: 'One at a time', defaultsTo: Platform.isWindows);
   parser.addFlag(argOffline, help: 'offline get', negatable: false);
-  parser.addFlag(argPackagesDir, help: 'generates packages dir', negatable: false);
+  parser.addFlag(argPackagesDir,
+      help: 'generates packages dir', negatable: false);
 
   ArgResults argResults = parser.parse(arguments);
 
@@ -41,7 +41,8 @@ main(List<String> arguments) async {
 
   for (String dir in pkgPaths) {
     PubPackage pkg = new PubPackage(dir);
-    ProcessCmd cmd = pkg.pubCmd(pubUpgradeArgs(offline: offline, packagesDir: packagesDir));
+    ProcessCmd cmd =
+        pkg.pubCmd(pubUpgradeArgs(offline: offline, packagesDir: packagesDir));
 
     if (oneByOne) {
       await runCmd(cmd, verbose: true);

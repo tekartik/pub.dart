@@ -45,7 +45,11 @@ Iterable<String> pubArgs(
 
 /// list of argument for pubCmd
 Iterable<String> pubBuildArgs(
-    {Iterable<String> args, String mode, String format, String output}) {
+    {Iterable<String> directories,
+    Iterable<String> args,
+    String mode,
+    String format,
+    String output}) {
   List<String> buildArgs = ['build'];
   // --mode      Mode to run transformers in.
   //    (defaults to "release")
@@ -61,6 +65,9 @@ Iterable<String> pubBuildArgs(
   // (defaults to "build")
   if (output != null) {
     buildArgs.addAll(['--output', output]);
+  }
+  if (directories != null) {
+    buildArgs.addAll(directories);
   }
   if (args != null) {
     buildArgs.addAll(args);
