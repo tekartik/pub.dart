@@ -27,7 +27,7 @@ void defineTests() {
 
     test('version', () async {
       IoFsPubPackage pkg = new IoFsPubPackage(pkgDir);
-      ProcessResult result = await pkg.runPub(pubArgs(version: true));
+      ProcessResult result = await runCmd(pkg.pubCmd(pubArgs(version: true)));
       await run(dartExecutable, pubArguments(['--version']));
       expect(result.stdout.startsWith("Pub"), isTrue);
     });
@@ -65,9 +65,9 @@ void defineTests() {
       expect(pubRunTestJsonSuccessCount(result.stdout), 1);
       expect(pubRunTestJsonFailureCount(result.stdout), 0);
 
-      result = await pkg.runPub(pubRunTestArgs(
+      result = await runCmd(pkg.pubCmd(pubRunTestArgs(
           args: ['test/data/fail_test_.dart'],
-          reporter: pubRunTestReporterJson));
+          reporter: pubRunTestReporterJson)));
       if (!Platform.isWindows) {
         expect(result.exitCode, 1);
       }
@@ -76,11 +76,11 @@ void defineTests() {
       expect(pubRunTestJsonFailureCount(result.stdout), 1);
 
       // runPub
-      result = await pkg.runPub(pubRunTestArgs(
+      result = await runCmd(pkg.pubCmd(pubRunTestArgs(
           args: ['test/data/success_test_.dart'],
           platforms: ["vm"],
           reporter: pubRunTestReporterExpanded,
-          concurrency: 1));
+          concurrency: 1)));
 
       // on 1.13, current windows is failing
       if (!Platform.isWindows) {

@@ -26,91 +26,17 @@ class IoFsPubPackage extends FsPubPackage
     return _cmd.pubCmd(args)..workingDirectory = dir.path;
   }
 
-  /// main entry point deprecated to prevent permanent use
-  ///
-  /// to use for debugging only
+  /// main entry point
   @deprecated
-  ProcessCmd devPubCmd(Iterable<String> args,
-      {bool version, bool help, bool verbose}) {
-    return _cmd.pubCmd(args)
-      ..workingDirectory = dir.path
-      ..connectStderr = true
-      ..connectStdout = true;
-  }
+  Future<ProcessResult> runPub(Iterable<String> args, {bool verbose}) =>
+      runCmd(pubCmd(args), verbose: verbose);
 
   /// main entry point
-  Future<ProcessResult> runPub(Iterable<String> args,
-          {bool verbose,
-          @deprecated bool connectStdin: false,
-          @deprecated bool connectStdout: false,
-          @deprecated bool connectStderr: false}) =>
-      runCmd(pubCmd(args),
-          verbose: verbose,
-          // ignore: deprecated_member_use
-          connectStdin: connectStdin,
-          // ignore: deprecated_member_use
-          connectStderr: connectStderr,
-          // ignore: deprecated_member_use
-          connectStdout: connectStdout);
-
-  /// main entry point deprecated to prevent permanent use
-  ///
-  /// to use for debugging only
-  @deprecated
-  Future<ProcessResult> devRunPub(Iterable<String> args,
-          {bool connectStdin: false, bool connectStdout, bool connectStderr}) =>
-      _devRunCmd(pubCmd(args), connectStdin: connectStdin);
-
-  /// main entry point
-  Future<ProcessResult> runCmd(ProcessCmd cmd,
-      {bool verbose,
-      @deprecated bool connectStdin: false,
-      @deprecated bool connectStdout: false,
-      @deprecated bool connectStderr: false}) {
-    if (cmd.workingDirectory != dir.path ||
-        // ignore: deprecated_member_use
-        connectStdin ||
-        // ignore: deprecated_member_use
-        connectStdout ||
-        // ignore: deprecated_member_use
-        connectStderr) {
-      cmd = cmd.clone()
-        ..workingDirectory = dir.path
-        // ignore: deprecated_member_use
-        ..connectStdin = connectStdin
-        // ignore: deprecated_member_use
-        ..connectStderr = connectStderr
-        // ignore: deprecated_member_use
-        ..connectStdout = connectStdout;
+  Future<ProcessResult> runCmd(ProcessCmd cmd, {bool verbose}) {
+    if (cmd.workingDirectory != dir.path) {
+      cmd = cmd.clone()..workingDirectory = dir.path;
     }
     return _cmd.runCmd(cmd, verbose: verbose);
-  }
-
-  /// main entry point deprecated to prevent permanent use
-  ///
-  /// to use for debugging only
-  @deprecated
-  Future<ProcessResult> devRunCmd(ProcessCmd cmd,
-          {@deprecated bool connectStdin,
-          @deprecated bool connectStdout,
-          @deprecated bool connectStderr}) =>
-      _devRunCmd(cmd.clone()..connectStdin = connectStdin);
-
-  Future<ProcessResult> _devRunCmd(ProcessCmd cmd,
-      {@deprecated bool connectStdin,
-      @deprecated bool connectStdout,
-      @deprecated bool connectStderr}) {
-    print(processCmdToDebugString(cmd));
-    return _cmd.runCmd(
-        cmd.clone()
-          ..workingDirectory = dir.path
-          // ignore: deprecated_member_use
-          ..connectStdin = connectStdin
-          // ignore: deprecated_member_use
-          ..connectStderr = true
-          // ignore: deprecated_member_use
-          ..connectStdout = true,
-        verbose: true);
   }
 }
 
