@@ -37,7 +37,60 @@ void defineTests() {
 
     test('pubRunTestArgs', () {
       expect(pubRunTestArgs(), ['run', "test"]);
+      expect(
+          pubRunTestArgs(
+              args: ['arg1', 'arg2'],
+              platforms: ['platform1', 'platform2'],
+              reporter: 'reporter',
+              color: true,
+              concurrency: 2,
+              name: 'name'),
+          [
+            'run',
+            'test',
+            '-r',
+            'reporter',
+            '-j',
+            '2',
+            '-n',
+            'name',
+            '--color',
+            '-p',
+            'platform1',
+            '-p',
+            'platform2',
+            'arg1',
+            'arg2'
+          ]);
     });
+
+    test('pubRunTestRunnerArgs', () {
+      expect(pubRunTestRunnerArgs(), []);
+      expect(
+          pubRunTestRunnerArgs(new TestRunnerArgs(
+              args: ['arg1', 'arg2'],
+              platforms: ['platform1', 'platform2'],
+              reporter: 'reporter',
+              color: true,
+              concurrency: 2,
+              name: 'name')),
+          [
+            '-r',
+            'reporter',
+            '-j',
+            '2',
+            '-n',
+            'name',
+            '--color',
+            '-p',
+            'platform1',
+            '-p',
+            'platform2',
+            'arg1',
+            'arg2'
+          ]);
+    });
+
 
     test('pubGetArgs', () {
       expect(pubGetArgs(), ['get']);

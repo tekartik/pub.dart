@@ -129,6 +129,46 @@ List<String> pubRunTestReporters = [
   pubRunTestReporterJson
 ];
 
+class TestRunnerArgs {
+  TestRunnerArgs({this.args, this.reporter, this.color, this.concurrency,
+      this.platforms, this.name});
+  final Iterable<String> args;
+  final String reporter;
+  final bool color;
+  final int concurrency;
+  final List<String> platforms;
+  final String name;
+}
+
+Iterable<String> pubRunTestRunnerArgs([TestRunnerArgs args]) {
+  List<String> testArgs = [];
+  if (args?.reporter != null) {
+    testArgs.addAll(['-r', args.reporter]);
+  }
+  if (args?.concurrency != null) {
+    testArgs.addAll(['-j', args.concurrency.toString()]);
+  }
+  if (args?.name != null) {
+    testArgs.addAll(['-n', args.name]);
+  }
+  if (args?.color != null) {
+    if (args.color) {
+      testArgs.add('--color');
+    } else {
+      testArgs.add('--no-color');
+    }
+  }
+  if (args?.platforms != null) {
+    for (String platform in args.platforms) {
+      testArgs.addAll(['-p', platform]);
+    }
+  }
+  if (args?.args != null) {
+    testArgs.addAll(args.args);
+  }
+  return (testArgs);
+}
+
 /// list of argument for pubCmd
 Iterable<String> pubRunTestArgs(
     {Iterable<String> args,
@@ -138,30 +178,13 @@ Iterable<String> pubRunTestArgs(
     List<String> platforms,
     String name}) {
   List<String> testArgs = ['run', 'test'];
-  if (reporter != null) {
-    testArgs.addAll(['-r', reporter]);
-  }
-  if (concurrency != null) {
-    testArgs.addAll(['-j', concurrency.toString()]);
-  }
-  if (name != null) {
-    testArgs.addAll(['-n', name]);
-  }
-  if (color != null) {
-    if (color) {
-      testArgs.add('--color');
-    } else {
-      testArgs.add('--no-color');
-    }
-  }
-  if (platforms != null) {
-    for (String platform in platforms) {
-      testArgs.addAll(['-p', platform]);
-    }
-  }
-  if (args != null) {
-    testArgs.addAll(args);
-  }
+  testArgs.addAll(pubRunTestRunnerArgs(new TestRunnerArgs(
+      args: args,
+      reporter: reporter,
+      color: color,
+      concurrency: concurrency,
+      platforms: platforms,
+      name: name)));
   return (testArgs);
 }
 
