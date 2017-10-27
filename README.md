@@ -38,7 +38,7 @@ Recursively call `pub upgrade`
 
 ### From git repository
 
-    pub global activate -s git git://github.com/tekartik/tekartik_pub.dart
+    pub global activate -s git git://github.com/tekartik/pub.dart
 
 ### From local path
 
