@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0
+
+* use enum for BuildMode, BuildFormat and RunTestFormat
+
 ## 0.6.3
 
 * udpate pub_args.dart for node support

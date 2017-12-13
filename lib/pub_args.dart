@@ -2,23 +2,27 @@ library tekartik_io_tools.pub_args;
 
 // 2016-09-25 Use this
 
-enum TestReporter { COMPACT, EXPANDED }
+enum RunTestReporter { COMPACT, EXPANDED, JSON }
 
-final Map<String, TestReporter> _testReporterMap = new Map.fromIterables(
-    ["compact", "expanded"], [TestReporter.COMPACT, TestReporter.EXPANDED]);
+enum BuildMode { DEBUG, RELEASE }
+enum BuildFormat { TEXT, JSON }
 
-final Map<TestReporter, String> _testReporterStringMap =
-    new Map.fromIterables(_testReporterMap.values, _testReporterMap.keys);
+final Map<BuildMode, String> _buildModeValueMap = new Map.fromIterables(
+    [BuildMode.DEBUG, BuildMode.RELEASE], ["debug", "release"]);
 
-String testReporterString(TestReporter reporter) =>
-    _testReporterStringMap[reporter];
+final Map<BuildFormat, String> _buildFormatValueMap = new Map.fromIterables(
+    [BuildFormat.TEXT, BuildFormat.JSON], ["text", "json"]);
 
-List<String> testReporterStrings = new List.from(_testReporterStringMap.values);
-TestReporter testReporterFromString(String reporterString) =>
-    _testReporterMap[reporterString];
-
-const String pubBuildFormatRelease = "release";
-const String pubBuildFormatDebug = "debug";
+final Map<RunTestReporter, String> _runTestReporterValueMap =
+    new Map.fromIterables([
+  RunTestReporter.COMPACT,
+  RunTestReporter.EXPANDED,
+  RunTestReporter.JSON
+], [
+  "compact",
+  "expanded",
+  "json"
+]);
 
 Iterable<String> pubArgs(
     {Iterable<String> args, bool version, bool help, bool verbose}) {
@@ -47,19 +51,19 @@ Iterable<String> pubArgs(
 Iterable<String> pubBuildArgs(
     {Iterable<String> directories,
     Iterable<String> args,
-    String mode,
-    String format,
+    BuildMode mode,
+    BuildFormat format,
     String output}) {
   List<String> buildArgs = ['build'];
   // --mode      Mode to run transformers in.
   //    (defaults to "release")
   if (mode != null) {
-    buildArgs.addAll(['--mode', mode]);
+    buildArgs.addAll(['--mode', _buildModeValueMap[mode]]);
   }
   // --format    How output should be displayed.
   // [text (default), json]
   if (format != null) {
-    buildArgs.addAll(['--format', format]);
+    buildArgs.addAll(['--format', _buildFormatValueMap[format]]);
   }
   // -o, --output    Directory to write build outputs to.
   // (defaults to "build")
@@ -130,10 +134,16 @@ List<String> pubRunTestReporters = [
 ];
 
 class TestRunnerArgs {
-  TestRunnerArgs({this.args, this.reporter, this.color, this.concurrency,
-      this.platforms, this.name});
+  TestRunnerArgs(
+      {this.args,
+      this.reporter,
+      this.color,
+      this.concurrency,
+      this.platforms,
+      this.name});
+
   final Iterable<String> args;
-  final String reporter;
+  final RunTestReporter reporter;
   final bool color;
   final int concurrency;
   final List<String> platforms;
@@ -143,7 +153,7 @@ class TestRunnerArgs {
 Iterable<String> pubRunTestRunnerArgs([TestRunnerArgs args]) {
   List<String> testArgs = [];
   if (args?.reporter != null) {
-    testArgs.addAll(['-r', args.reporter]);
+    testArgs.addAll(['-r', _runTestReporterValueMap[args.reporter]]);
   }
   if (args?.concurrency != null) {
     testArgs.addAll(['-j', args.concurrency.toString()]);
@@ -172,7 +182,7 @@ Iterable<String> pubRunTestRunnerArgs([TestRunnerArgs args]) {
 /// list of argument for pubCmd
 Iterable<String> pubRunTestArgs(
     {Iterable<String> args,
-    String reporter,
+    RunTestReporter reporter,
     bool color,
     int concurrency,
     List<String> platforms,

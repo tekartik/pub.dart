@@ -57,7 +57,7 @@ void defineTests() {
         ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
             args: ['test/data/success_test_.dart'],
             platforms: ["vm"],
-            reporter: pubRunTestReporterJson,
+            reporter: RunTestReporter.JSON,
             concurrency: 1)));
 
         // on 1.13, current windows is failing
@@ -69,7 +69,7 @@ void defineTests() {
 
         result = await runCmd(pkg.pubCmd(pubRunTestArgs(
             args: ['test/data/fail_test_.dart'],
-            reporter: pubRunTestReporterJson)));
+            reporter: RunTestReporter.JSON)));
         if (!Platform.isWindows) {
           expect(result.exitCode, 1);
         }

@@ -29,8 +29,13 @@ void defineTests() {
     test('pubBuildArgs', () {
       expect(pubBuildArgs(), ['build']);
       expect(pubBuildArgs(output: 'out'), ['build', '--output', 'out']);
-      expect(pubBuildArgs(mode: 'debug'), ['build', '--mode', 'debug']);
-      expect(pubBuildArgs(format: 'json'), ['build', '--format', 'json']);
+      expect(pubBuildArgs(mode: BuildMode.DEBUG), ['build', '--mode', 'debug']);
+      expect(pubBuildArgs(mode: BuildMode.RELEASE),
+          ['build', '--mode', 'release']);
+      expect(pubBuildArgs(format: BuildFormat.JSON),
+          ['build', '--format', 'json']);
+      expect(pubBuildArgs(format: BuildFormat.TEXT),
+          ['build', '--format', 'text']);
       expect(pubBuildArgs(args: ['web']), ['build', 'web']);
       expect(pubBuildArgs(directories: ['web']), ['build', 'web']);
     });
@@ -41,7 +46,7 @@ void defineTests() {
           pubRunTestArgs(
               args: ['arg1', 'arg2'],
               platforms: ['platform1', 'platform2'],
-              reporter: 'reporter',
+              reporter: RunTestReporter.JSON,
               color: true,
               concurrency: 2,
               name: 'name'),
@@ -49,7 +54,7 @@ void defineTests() {
             'run',
             'test',
             '-r',
-            'reporter',
+            'json',
             '-j',
             '2',
             '-n',
@@ -70,13 +75,13 @@ void defineTests() {
           pubRunTestRunnerArgs(new TestRunnerArgs(
               args: ['arg1', 'arg2'],
               platforms: ['platform1', 'platform2'],
-              reporter: 'reporter',
+              reporter: RunTestReporter.COMPACT,
               color: true,
               concurrency: 2,
               name: 'name')),
           [
             '-r',
-            'reporter',
+            'compact',
             '-j',
             '2',
             '-n',
@@ -90,7 +95,6 @@ void defineTests() {
             'arg2'
           ]);
     });
-
 
     test('pubGetArgs', () {
       expect(pubGetArgs(), ['get']);

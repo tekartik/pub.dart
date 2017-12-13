@@ -76,14 +76,14 @@ class PubPackage extends common.PubPackage {
 
   @deprecated
   ProcessCmd testCmd(List<String> args,
-          {TestReporter reporter,
+          {RunTestReporter reporter,
           bool color,
           int concurrency,
           List<String> platforms,
           String name}) =>
       _pubCmd(pubRunTestArgs(
           args: args,
-          reporter: reporter.toString(),
+          reporter: reporter,
           color: color,
           concurrency: concurrency,
           platforms: platforms,
@@ -96,9 +96,6 @@ class PubPackage extends common.PubPackage {
   ProcessCmd _dartCmd(List<String> args) {
     return cmd_run.dartCmd(args)..workingDirectory = path;
   }
-
-  @deprecated
-  ProcessCmd buildCmd({String format}) => _pubCmd(pubBuildArgs(format: format));
 
   @deprecated
   ProcessCmd upgradeCmd({bool offline, bool dryRun}) =>

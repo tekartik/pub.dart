@@ -4,6 +4,7 @@
 set -e
 
 dartanalyzer --fatal-warnings \
+  lib/io.dart \
   lib/pub.dart \
   lib/pub_args.dart \
   lib/pub_fs.dart \
