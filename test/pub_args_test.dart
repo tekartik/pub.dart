@@ -96,6 +96,11 @@ void defineTests() {
           ]);
     });
 
+    test('runTestReporterFromString', () {
+      expect(runTestReporterFromString(null), isNull);
+      expect(runTestReporterFromString("json"), RunTestReporter.JSON);
+    });
+
     test('pubGetArgs', () {
       expect(pubGetArgs(), ['get']);
     });

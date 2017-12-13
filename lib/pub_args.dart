@@ -24,6 +24,19 @@ final Map<RunTestReporter, String> _runTestReporterValueMap =
   "json"
 ]);
 
+Map<String, RunTestReporter> _runTestReporterEnumMap;
+
+RunTestReporter runTestReporterFromString(String reporter) {
+  if (_runTestReporterEnumMap == null) {
+    _runTestReporterEnumMap = {};
+    _runTestReporterValueMap
+        .forEach((RunTestReporter runTestReporter, String reporter) {
+      _runTestReporterEnumMap[reporter] = runTestReporter;
+    });
+  }
+  return _runTestReporterEnumMap[reporter];
+}
+
 Iterable<String> pubArgs(
     {Iterable<String> args, bool version, bool help, bool verbose}) {
   List<String> pubArgs = [];
