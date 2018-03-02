@@ -64,7 +64,8 @@ void defineTests() {
         if (!Platform.isWindows) {
           expect(result.exitCode, 0);
         }
-        Map testResult = JSON.decode(LineSplitter.split(result.stdout).last);
+        Map testResult = JSON
+            .decode(LineSplitter.split(result.stdout as String).last) as Map;
         expect(testResult['success'], isTrue);
 
         result = await runCmd(pkg.pubCmd(pubRunTestArgs(
@@ -73,7 +74,8 @@ void defineTests() {
         if (!Platform.isWindows) {
           expect(result.exitCode, 1);
         }
-        testResult = JSON.decode(LineSplitter.split(result.stdout).last);
+        testResult = JSON
+            .decode(LineSplitter.split(result.stdout as String).last) as Map;
         expect(testResult['success'], isFalse);
       });
 

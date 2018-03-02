@@ -16,7 +16,7 @@ Map getPackageYamlSync(String packageRoot) {
   String pubspecYaml = "pubspec.yaml";
   String pubspecYamlPath = join(packageRoot, pubspecYaml);
   String content = new File(pubspecYamlPath).readAsStringSync();
-  return loadYaml(content);
+  return loadYaml(content) as Map;
 }
 
 Future<Map> getPackageYaml(String packageRoot) =>
@@ -25,7 +25,7 @@ Future<Map> getPackageYaml(String packageRoot) =>
 Future<Map> _getYaml(String packageRoot, String name) async {
   String yamlPath = join(packageRoot, name);
   String content = await new File(yamlPath).readAsString();
-  return loadYaml(content);
+  return loadYaml(content) as Map;
 }
 
 Future<Map> getDotPackagesYaml(String packageRoot) async {
@@ -47,7 +47,7 @@ Future<Map> getDotPackagesYaml(String packageRoot) async {
 }
 
 Uri dotPackagesGetLibUri(Map yaml, String packageName) {
-  return Uri.parse(yaml[packageName]);
+  return Uri.parse(yaml[packageName] as String);
 }
 
 Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
@@ -67,7 +67,7 @@ Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
 
 bool yamlHasAnyDependencies(Map yaml, List<String> dependencies) {
   bool _hasDependencies(String kind, String dependency) {
-    Map dependencies = yaml[kind];
+    Map dependencies = yaml[kind] as Map;
     if (dependencies != null) {
       if (dependencies[dependency] != null) {
         return true;

@@ -37,7 +37,7 @@ RunTestReporter runTestReporterFromString(String reporter) {
   return _runTestReporterEnumMap[reporter];
 }
 
-Iterable<String> pubArgs(
+List<String> pubArgs(
     {Iterable<String> args, bool version, bool help, bool verbose}) {
   List<String> pubArgs = [];
   // --version          Print pub version.
@@ -61,7 +61,7 @@ Iterable<String> pubArgs(
 }
 
 /// list of argument for pubCmd
-Iterable<String> pubBuildArgs(
+List<String> pubBuildArgs(
     {Iterable<String> directories,
     Iterable<String> args,
     BuildMode mode,
@@ -93,7 +93,7 @@ Iterable<String> pubBuildArgs(
   return buildArgs;
 }
 
-Iterable<String> pubGetArgs({bool offline, bool dryRun, bool packagesDir}) {
+List<String> pubGetArgs({bool offline, bool dryRun, bool packagesDir}) {
   List<String> args = ['get'];
   if (offline == true) {
     args.add('--offline');
@@ -107,7 +107,7 @@ Iterable<String> pubGetArgs({bool offline, bool dryRun, bool packagesDir}) {
   return args;
 }
 
-Iterable<String> pubUpgradeArgs({bool offline, bool dryRun, bool packagesDir}) {
+List<String> pubUpgradeArgs({bool offline, bool dryRun, bool packagesDir}) {
   List<String> args = ['upgrade'];
   if (offline == true) {
     args.add('--offline');
@@ -125,7 +125,7 @@ const pubDepsStyleCompact = "compact";
 const pubDepsStyleTree = "tree";
 const pubDepsStyleList = "list";
 
-Iterable<String> pubDepsArgs({Iterable<String> args, String style}) {
+List<String> pubDepsArgs({Iterable<String> args, String style}) {
   List<String> depsArgs = ['deps'];
   if (style != null) {
     depsArgs.addAll(['--style', style]);
@@ -163,7 +163,7 @@ class TestRunnerArgs {
   final String name;
 }
 
-Iterable<String> pubRunTestRunnerArgs([TestRunnerArgs args]) {
+List<String> pubRunTestRunnerArgs([TestRunnerArgs args]) {
   List<String> testArgs = [];
   if (args?.reporter != null) {
     testArgs.addAll(['-r', _runTestReporterValueMap[args.reporter]]);
@@ -193,7 +193,7 @@ Iterable<String> pubRunTestRunnerArgs([TestRunnerArgs args]) {
 }
 
 /// list of argument for pubCmd
-Iterable<String> pubRunTestArgs(
+List<String> pubRunTestArgs(
     {Iterable<String> args,
     RunTestReporter reporter,
     bool color,
@@ -212,7 +212,7 @@ Iterable<String> pubRunTestArgs(
 }
 
 /// list of argument for pubCmd
-Iterable<String> pubRunArgs(Iterable<String> args) {
+List<String> pubRunArgs(Iterable<String> args) {
   List<String> runArgs = ['run'];
   if (args != null) {
     runArgs.addAll(args);
@@ -220,7 +220,7 @@ Iterable<String> pubRunArgs(Iterable<String> args) {
   return (runArgs);
 }
 
-Iterable<String> dartdocArgs(
+List<String> dartdocArgs(
     {Iterable<String> args,
     bool version,
     bool help,

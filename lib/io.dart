@@ -32,7 +32,7 @@ bool _DEBUG = false;
 class PubPackage extends common.PubPackage {
   io.Directory get dir => unwrapIoDirectory(fsPubPackage.dir);
 
-  PubPackage._(IoFsPubPackage fsPubPackage) : super(fsPubPackage);
+  PubPackage._(FsPubPackage fsPubPackage) : super(fsPubPackage);
 
   PubPackage(String path) : this._(new IoFsPubPackage(new Directory(path)));
 

@@ -11,10 +11,13 @@ import 'package:tekartik_pub/script.dart';
 
 class TestScript extends Script {}
 
-Directory get pkgDir => new File(getScriptPath(TestScript)).parent.parent;
-Directory get simplePkgDir => childDirectory(pkgDir, join('example', 'simple'));
+Directory get pkgDir =>
+    new File(getScriptPath(TestScript)).parent.parent as Directory;
+Directory get simplePkgDir =>
+    childDirectory(pkgDir, join('example', 'simple')) as Directory;
 Directory get outDir =>
-    childDirectory(pkgDir, join('test', 'out', joinAll(testDescriptions)));
+    childDirectory(pkgDir, join('test', 'out', joinAll(testDescriptions)))
+        as Directory;
 
 main() {
   group('src_fs_io_example_simple', () {
@@ -26,7 +29,7 @@ main() {
       IoFsPubPackage simplePkg = new IoFsPubPackage(simplePkgDir);
       // clone the package in a temp output location
 
-      pkg = await simplePkg.clone(outDir, delete: true);
+      pkg = await simplePkg.clone(outDir, delete: true) as IoFsPubPackage;
     });
 
     // fastest test
@@ -77,7 +80,7 @@ main() {
 
     test('build', () async {
       File buildIndexHtmlFile =
-          childFile(pkg.dir, join('build', 'web', 'index.html'));
+          childFile(pkg.dir, join('build', 'web', 'index.html')) as File;
       if (await buildIndexHtmlFile.exists()) {
         await buildIndexHtmlFile.delete();
       }

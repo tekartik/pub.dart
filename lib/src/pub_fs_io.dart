@@ -14,21 +14,22 @@ export '../pub_args.dart';
 export 'pub_fs.dart';
 //export 'pub.dart';
 
-final FsPubPackageFactory ioFactory = new FsPubPackageFactory(
-    (fs.Directory dir, [String name]) => new IoFsPubPackage(dir, name));
+final FsPubPackageFactory ioFactory = new FsPubPackageFactory((fs.Directory dir,
+        [String name]) =>
+    new IoFsPubPackage(dir as Directory, name));
 
 class IoFsPubPackage extends FsPubPackage
     implements PubPackageDir, PubPackageName {
   IoFsPubPackage(Directory dir, [String name])
       : super.created(ioFactory, dir, name);
 
-  ProcessCmd pubCmd(Iterable<String> args) {
+  ProcessCmd pubCmd(List<String> args) {
     return _cmd.pubCmd(args)..workingDirectory = dir.path;
   }
 
   /// main entry point
   @deprecated
-  Future<ProcessResult> runPub(Iterable<String> args, {bool verbose}) =>
+  Future<ProcessResult> runPub(List<String> args, {bool verbose}) =>
       runCmd(pubCmd(args), verbose: verbose);
 
   /// main entry point
@@ -43,12 +44,12 @@ class IoFsPubPackage extends FsPubPackage
 /// result must be run with reporter:json
 @deprecated
 bool pubRunTestJsonProcessResultIsSuccess(ProcessResult result) =>
-    pubRunTestJsonIsSuccess(result.stdout);
+    pubRunTestJsonIsSuccess(result.stdout as String);
 
 @deprecated
 int pubRunTestJsonProcessResultSuccessCount(ProcessResult result) =>
-    pubRunTestJsonSuccessCount(result.stdout);
+    pubRunTestJsonSuccessCount(result.stdout as String);
 
 @deprecated
 int pubRunTestJsonProcessResultFailureCount(ProcessResult result) =>
-    pubRunTestJsonFailureCount(result.stdout);
+    pubRunTestJsonFailureCount(result.stdout as String);

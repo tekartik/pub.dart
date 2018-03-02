@@ -38,17 +38,18 @@ Future<Map> getPubspecYaml(Directory packageDir) =>
 Future<Map> _getYaml(Directory packageDir, String name) async {
   String yamlPath = join(packageDir.path, name);
   String content = await childFile(packageDir, yamlPath).readAsString();
-  return loadYaml(content);
+  return loadYaml(content) as Map;
 }
 
 Uri dotPackagesGetLibUri(Map yaml, String packageName) {
-  return Uri.parse(yaml[packageName]);
+  return Uri.parse(yaml[packageName] as String);
 }
 
 // in dev tree
-String pubspecYamlGetPackageName(Map yaml) => yaml['name'];
+String pubspecYamlGetPackageName(Map yaml) => yaml['name'] as String;
 
-Version pubspecYamlGetVersion(Map yaml) => new Version.parse(yaml['version']);
+Version pubspecYamlGetVersion(Map yaml) =>
+    new Version.parse(yaml['version'] as String);
 
 Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   if (yaml.containsKey('test_dependencies')) {
@@ -66,11 +67,11 @@ Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
 }
 
 Version pubspecLockGetVersion(Map yaml, String packageName) =>
-    new Version.parse(yaml['packages'][packageName]['version']);
+    new Version.parse(yaml['packages'][packageName]['version'] as String);
 
 bool pubspecYamlHasAnyDependencies(Map yaml, List<String> dependencies) {
   bool _hasDependencies(String kind, String dependency) {
-    Map dependencies = yaml[kind];
+    Map dependencies = yaml[kind] as Map;
     if (dependencies != null) {
       if (dependencies[dependency] != null) {
         return true;
@@ -93,8 +94,8 @@ bool pubspecYamlHasAnyDependencies(Map yaml, List<String> dependencies) {
 /// result must be run with reporter:json
 bool pubRunTestJsonIsSuccess(String stdout) {
   try {
-    Map map = JSON.decode(LineSplitter.split(stdout).last);
-    return map['success'];
+    Map map = JSON.decode(LineSplitter.split(stdout).last) as Map;
+    return map['success'] as bool;
   } catch (_) {
     return false;
   }

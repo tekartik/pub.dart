@@ -17,15 +17,15 @@ main(List<String> arguments) async {
 
   ArgResults argResults = parser.parse(arguments);
 
-  bool help = argResults[argHelp];
+  bool help = argResults[argHelp] as bool;
   if (help) {
     print(parser.usage);
     return;
   }
 
-  bool oneByOne = argResults[argOneByOne];
-  bool offline = argResults[argOffline];
-  bool packagesDir = argResults[argPackagesDir];
+  bool oneByOne = argResults[argOneByOne] as bool;
+  bool offline = argResults[argOffline] as bool;
+  bool packagesDir = argResults[argPackagesDir] as bool;
 
   List<String> rest = argResults.rest;
   // if no default to current folder

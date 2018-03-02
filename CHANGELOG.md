@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.0
+
+* strong mode suppport
+
 ## 0.7.0
 
 * use enum for BuildMode, BuildFormat and RunTestFormat

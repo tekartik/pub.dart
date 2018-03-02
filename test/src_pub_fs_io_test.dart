@@ -13,7 +13,8 @@ import 'src_pub_fs_test.dart' as pub_fs_test;
 
 class TestScript extends Script {}
 
-Directory get pkgDir => new File(getScriptPath(TestScript)).parent.parent;
+Directory get pkgDir =>
+    new File(getScriptPath(TestScript)).parent.parent as Directory;
 
 void main() => defineTests();
 
@@ -46,9 +47,9 @@ void defineTests() {
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
       }
-      expect(pubRunTestJsonIsSuccess(result.stdout), isTrue);
-      expect(pubRunTestJsonSuccessCount(result.stdout), 1);
-      expect(pubRunTestJsonFailureCount(result.stdout), 0);
+      expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
+      expect(pubRunTestJsonSuccessCount(result.stdout as String), 1);
+      expect(pubRunTestJsonFailureCount(result.stdout as String), 0);
 
       // pubCmd
       result = await runCmd(pkg.pubCmd(pubRunTestArgs(
@@ -61,9 +62,9 @@ void defineTests() {
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
       }
-      expect(pubRunTestJsonIsSuccess(result.stdout), isTrue);
-      expect(pubRunTestJsonSuccessCount(result.stdout), 1);
-      expect(pubRunTestJsonFailureCount(result.stdout), 0);
+      expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
+      expect(pubRunTestJsonSuccessCount(result.stdout as String), 1);
+      expect(pubRunTestJsonFailureCount(result.stdout as String), 0);
 
       result = await runCmd(pkg.pubCmd(pubRunTestArgs(
           args: ['test/data/fail_test_.dart'],
@@ -71,9 +72,9 @@ void defineTests() {
       if (!Platform.isWindows) {
         expect(result.exitCode, 1);
       }
-      expect(pubRunTestJsonIsSuccess(result.stdout), isFalse);
-      expect(pubRunTestJsonSuccessCount(result.stdout), 0);
-      expect(pubRunTestJsonFailureCount(result.stdout), 1);
+      expect(pubRunTestJsonIsSuccess(result.stdout as String), isFalse);
+      expect(pubRunTestJsonSuccessCount(result.stdout as String), 0);
+      expect(pubRunTestJsonFailureCount(result.stdout as String), 1);
 
       // runPub
       result = await runCmd(pkg.pubCmd(pubRunTestArgs(

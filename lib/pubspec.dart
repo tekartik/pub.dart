@@ -26,8 +26,10 @@ Future<Version> extractPackagePubspecLockVersion(
     String packageName, String packageRoot) async {
   try {
     Map pubspecLock = loadYaml(
-        await new File(join(packageRoot, 'pubspec.lock')).readAsString());
-    return new Version.parse(pubspecLock['packages'][packageName]['version']);
+            await new File(join(packageRoot, 'pubspec.lock')).readAsString())
+        as Map;
+    return new Version.parse(
+        pubspecLock['packages'][packageName]['version'] as String);
   } catch (_) {}
   return null;
 }
@@ -36,7 +38,7 @@ Future<Version> extractPackagePubspecLockVersion(
 Future<Version> extractPubspecYamlVersion(String packageRoot) async {
   try {
     Map pubspecYaml = await getPackageYaml(packageRoot);
-    return new Version.parse(pubspecYaml['version']);
+    return new Version.parse(pubspecYaml['version'] as String);
   } catch (_) {}
   return null;
 }
