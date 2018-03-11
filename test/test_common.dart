@@ -1,3 +1,7 @@
-//import 'package:path/path.dart';
+import 'package:path/path.dart';
 
-String testOutTopPath = 'test_out'; // join('test', 'out');
+// relative to project folder
+String outSubPath = join('.dart_tool', 'tekartik_pub', 'test_out');
+
+// relative to current folder
+String testOutTopPath = outSubPath;

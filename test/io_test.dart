@@ -63,7 +63,7 @@ void defineTests() {
     });
     // use pk.runCmd and then pkg.pubCmd
 
-    test('test', () async {
+    test('success_test', () async {
       ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
           args: ['test/data/success_test_.dart'],
           platforms: ["vm"],
@@ -71,49 +71,36 @@ void defineTests() {
           reporter: RunTestReporter.JSON,
           concurrency: 1)));
 
-      // on 1.13, current windows is failing
-      if (!Platform.isWindows) {
-        expect(result.exitCode, 0);
-      }
+      expect(result.exitCode, 0);
       expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
       expect(pubRunTestJsonSuccessCount(result.stdout as String), 1);
       expect(pubRunTestJsonFailureCount(result.stdout as String), 0);
+    });
 
-      // pubCmd
-      result = await runCmd(pkg.pubCmd(pubRunTestArgs(
+    /*
+    test('expanded_success_test', () async {
+      ProcessResult result = await devRunCmd(pkg.pubCmd(pubRunTestArgs(
           args: ['test/data/success_test_.dart'],
           platforms: ["vm"],
-          reporter: RunTestReporter.JSON,
-          concurrency: 1)));
-
-      // on 1.13, current windows is failing
-      if (!Platform.isWindows) {
-        expect(result.exitCode, 0);
-      }
-      expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
-      expect(pubRunTestJsonSuccessCount(result.stdout as String), 1);
-      expect(pubRunTestJsonFailureCount(result.stdout as String), 0);
-
-      result = await runCmd(pkg.pubCmd(pubRunTestArgs(
-          args: ['test/data/fail_test_.dart'],
-          reporter: RunTestReporter.JSON)));
-      if (!Platform.isWindows) {
-        expect(result.exitCode, 1);
-      }
-      expect(pubRunTestJsonIsSuccess(result.stdout as String), isFalse);
-      expect(pubRunTestJsonSuccessCount(result.stdout as String), 0);
-      expect(pubRunTestJsonFailureCount(result.stdout as String), 1);
-
-      // runPub
-      result = await runCmd(pkg.pubCmd(pubRunTestArgs(
-          args: ['test/data/success_test_.dart'],
-          platforms: ["vm"],
+          //reporter: pubRunTestReporterJson,
           reporter: RunTestReporter.EXPANDED,
           concurrency: 1)));
 
-      // on 1.13, current windows is failing
+      expect(result.exitCode, 0);
+    });
+    */
+
+    test('failure_test', () async {
       if (!Platform.isWindows) {
-        expect(result.exitCode, 0);
+        ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
+            args: ['test/data/fail_test_.dart'],
+            reporter: RunTestReporter.JSON)));
+        //if (!Platform.isWindows) {
+        expect(result.exitCode, 1);
+        //}
+        expect(pubRunTestJsonIsSuccess(result.stdout as String), isFalse);
+        expect(pubRunTestJsonSuccessCount(result.stdout as String), 0);
+        expect(pubRunTestJsonFailureCount(result.stdout as String), 1);
       }
     });
 

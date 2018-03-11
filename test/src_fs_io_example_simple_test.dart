@@ -8,6 +8,7 @@ import 'package:tekartik_pub/src/pub_fs_io.dart';
 import 'package:fs_shim/fs_io.dart';
 import 'package:fs_shim/utils/entity.dart';
 import 'package:tekartik_pub/script.dart';
+import 'test_common.dart';
 
 class TestScript extends Script {}
 
@@ -16,8 +17,7 @@ Directory get pkgDir =>
 Directory get simplePkgDir =>
     childDirectory(pkgDir, join('example', 'simple')) as Directory;
 Directory get outDir =>
-    childDirectory(pkgDir, join('test', 'out', joinAll(testDescriptions)))
-        as Directory;
+    new Directory(join(outSubPath, joinAll(testDescriptions)));
 
 main() {
   group('src_fs_io_example_simple', () {
@@ -71,11 +71,9 @@ main() {
     });
 
     test('test', () async {
+      await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
       ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs()));
-      // on 1.13, current windows is failing
-      if (!Platform.isWindows) {
-        expect(result.exitCode, 0);
-      }
+      expect(result.exitCode, 0);
     });
 
     test('build', () async {

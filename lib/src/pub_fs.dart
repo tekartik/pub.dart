@@ -121,7 +121,7 @@ Future<Directory> getPubPackageDir(FileSystemEntity resolver) async {
   if (!(await resolver.fs.isDirectory(resolver.path))) {
     path = resolver.fs.pathContext.dirname(path);
   }
-  Directory dir = resolver.fs.newDirectory(normalize(absolute(path)));
+  Directory dir = resolver.fs.newDirectory(normalize(path));
 
   while (true) {
     // Find the project root path

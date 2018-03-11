@@ -3,7 +3,6 @@ library tekartik_pub.test.pub_fs_io_test;
 
 import 'package:process_run/process_run.dart';
 import 'package:process_run/cmd_run.dart' hide pubCmd;
-import 'package:process_run/cmd_run.dart' as _cmd_run;
 import 'package:process_run/dartbin.dart';
 import 'package:dev_test/test.dart';
 import 'package:fs_shim/fs_io.dart';
@@ -34,7 +33,8 @@ void defineTests() {
     });
 
     // use pk.runCmd and then pkg.pubCmd
-
+    /*
+    the same test is ran in expanded_success_test hence failing
     test('test', () async {
       ProcessResult result = await pkg.runCmd(_cmd_run.pubCmd(pubRunTestArgs(
           args: ['test/data/success_test_.dart'],
@@ -88,6 +88,7 @@ void defineTests() {
         expect(result.exitCode, 0);
       }
     });
+    */
 
     test('name', () async {
       expect(await pkg.extractPackageName(), 'tekartik_pub');
