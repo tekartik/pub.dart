@@ -3,16 +3,17 @@ version: 0.8.1
 description: Pub and package helpers
 homepage: https://github.com/tekartik/pub.dart
 environment:
-  sdk: '>=1.0.0 <2.0.0'
+  sdk: '>=1.24.3 <2.0.0'
 dependencies:
   process_run: '>=0.5.4'
   yaml: any
-  fs_shim: '>=0.7.3'
+  fs_shim: '>=0.8.2'
   pub_semver: any
   args: any
 dev_dependencies:
   fs_shim_test:
     git: git://github.com/tekartik/fs_shim_test.dart
+    version: '>=0.4.0'
   dev_test: any
   test: any
 test_dependencies:

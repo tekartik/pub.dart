@@ -107,7 +107,7 @@ test2:lib/
       expect(await pkg.extractPackage(null), isNull);
       FsPubPackage testPackage = await pkg.extractPackage("test");
       expect(testPackage.name, "test");
-      expect(top.fs.pathContext.split(testPackage.dir.path),
+      expect(top.fs.path.split(testPackage.dir.path),
           contains('pub.dartlang.org'));
       FsPubPackage test2Package = await pkg.extractPackage("test2");
       expect(test2Package.name, "test2");

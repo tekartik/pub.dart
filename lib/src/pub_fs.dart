@@ -119,7 +119,7 @@ Future<bool> isPubPackageDir(Directory dir) async {
 Future<Directory> getPubPackageDir(FileSystemEntity resolver) async {
   String path = resolver.path;
   if (!(await resolver.fs.isDirectory(resolver.path))) {
-    path = resolver.fs.pathContext.dirname(path);
+    path = resolver.fs.path.dirname(path);
   }
   Directory dir = resolver.fs.newDirectory(normalize(path));
 
