@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.2
+
+* Last dart1 support
+
 ## 0.8.0
 
 * strong mode suppport

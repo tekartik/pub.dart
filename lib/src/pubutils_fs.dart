@@ -94,7 +94,7 @@ bool pubspecYamlHasAnyDependencies(Map yaml, List<String> dependencies) {
 /// result must be run with reporter:json
 bool pubRunTestJsonIsSuccess(String stdout) {
   try {
-    Map map = JSON.decode(LineSplitter.split(stdout).last) as Map;
+    Map map = json.decode(LineSplitter.split(stdout).last) as Map;
     return map['success'] as bool;
   } catch (_) {
     return false;
@@ -107,7 +107,7 @@ int pubRunTestJsonSuccessCount(String stdout) {
   int count = 0;
   for (String line in LineSplitter.split(stdout)) {
     try {
-      var map = JSON.decode(line);
+      var map = json.decode(line);
       //print(map);
       if (map is Map) {
         // {testID: 0, result: success, hidden: true, type: testDone, time: 199}
@@ -147,7 +147,7 @@ int pubRunTestJsonFailureCount(String stdout) {
   int count = 0;
   for (String line in LineSplitter.split(stdout)) {
     try {
-      var map = JSON.decode(line);
+      var map = json.decode(line);
       //print(map);
       if (map is Map) {
         // {"testID":2,"result":"failure","hidden":false,"type":"testDone","time":346}

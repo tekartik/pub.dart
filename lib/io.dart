@@ -27,7 +27,7 @@ export 'src/pubutils_fs.dart'
         pubRunTestJsonSuccessCount;
 export 'src/rpubpath.dart' show recursivePubPath;
 
-bool _DEBUG = false;
+// bool _DEBUG = false;
 
 class PubPackage extends common.PubPackage {
   io.Directory get dir => unwrapIoDirectory(fsPubPackage.dir);

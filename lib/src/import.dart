@@ -15,6 +15,7 @@ export '../../utils/read_write.dart';
 export 'package:path/path.dart'
     show basename, dirname, isRelative, join, normalize;
 export 'dart:async';
-export 'dart:convert';
+export 'package:dart2_constant/convert.dart';
+export 'dart:convert' show LineSplitter;
 
 export 'package:pub_semver/pub_semver.dart';

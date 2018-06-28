@@ -58,8 +58,14 @@ void defineTests() {
     Map yaml = getPackageYamlSync(packageRoot);
     expect(
         await pubspecYamlGetDependenciesPackageName(yaml),
-        unorderedEquals(
-            ['pub_semver', 'process_run', 'yaml', 'fs_shim', 'args']));
+        unorderedEquals([
+          'pub_semver',
+          'process_run',
+          'yaml',
+          'fs_shim',
+          'args',
+          'dart2_constant'
+        ]));
     expect(
         await pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
 

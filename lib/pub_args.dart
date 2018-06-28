@@ -192,6 +192,25 @@ List<String> pubRunTestRunnerArgs([TestRunnerArgs args]) {
   return (testArgs);
 }
 
+/// list of argument for pub run test or pbr test --
+List<String> testRunnerArgs(
+    {Iterable<String> args,
+    RunTestReporter reporter,
+    bool color,
+    int concurrency,
+    List<String> platforms,
+    String name}) {
+  List<String> testArgs = [];
+  testArgs.addAll(pubRunTestRunnerArgs(new TestRunnerArgs(
+      args: args,
+      reporter: reporter,
+      color: color,
+      concurrency: concurrency,
+      platforms: platforms,
+      name: name)));
+  return (testArgs);
+}
+
 /// list of argument for pubCmd
 List<String> pubRunTestArgs(
     {Iterable<String> args,
