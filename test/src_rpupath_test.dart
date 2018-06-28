@@ -1,45 +1,34 @@
 @TestOn("vm")
-library tekartik_pub.test.pub_test;
+library tekartik_pub.test.src_rpubpath_test;
 
-import 'dart:mirrors';
 import 'package:path/path.dart';
 import 'package:dev_test/test.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
-import 'dart:async';
 
-class _TestUtils {
-  static final String scriptPath =
-      (reflectClass(_TestUtils).owner as LibraryMirror).uri.toFilePath();
-}
-
-String get testScriptPath => _TestUtils.scriptPath;
-String get packageRoot => dirname(dirname(testScriptPath));
+import 'test_common.dart';
 
 void main() => defineTests();
 
-Future<String> get _pubPackageRoot => getPubPackageRoot(testScriptPath);
-
 void defineTests() {
   test('rpubpath', () async {
-    String pubPackageRoot = await _pubPackageRoot;
     //clearOutFolderSync();
     List<String> paths = [];
-    await recursivePubPath([pubPackageRoot]).listen((String path) {
+    await recursivePubPath([packageRoot]).listen((String path) {
       paths.add(path);
     }).asFuture();
-    expect(paths, [pubPackageRoot]);
+    expect(paths, [packageRoot]);
 
     // with criteria
     paths = [];
-    await recursivePubPath([pubPackageRoot], dependencies: ['test'])
+    await recursivePubPath([packageRoot], dependencies: ['test'])
         .listen((String path) {
       paths.add(path);
     }).asFuture();
-    expect(paths, [pubPackageRoot]);
+    expect(paths, [packageRoot]);
 
     paths = [];
-    await recursivePubPath([pubPackageRoot], dependencies: ['unittest'])
+    await recursivePubPath([packageRoot], dependencies: ['unittest'])
         .listen((String path) {
       paths.add(path);
     }).asFuture();

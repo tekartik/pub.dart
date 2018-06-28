@@ -18,6 +18,7 @@ final FsPubPackageFactory ioFactory = new FsPubPackageFactory((fs.Directory dir,
         [String name]) =>
     new IoFsPubPackage(dir as Directory, name));
 
+// deprecated
 class IoFsPubPackage extends FsPubPackage
     implements PubPackageDir, PubPackageName {
   IoFsPubPackage(Directory dir, [String name])

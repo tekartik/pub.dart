@@ -1,51 +1,45 @@
 @TestOn("vm")
 library tekartik_pub.test.pub_test;
 
-import 'dart:async';
 import 'dart:io';
-import 'dart:mirrors';
 
 import 'package:dev_test/test.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
-import 'package:process_run/dartbin.dart';
-import 'package:process_run/process_run.dart';
 import 'package:tekartik_pub/src/pub_io.dart';
-//import 'package:process_run/src/process_cmd.dart';
 
-class _TestUtils {
-  static final String scriptPath =
-      (reflectClass(_TestUtils).owner as LibraryMirror).uri.toFilePath();
-}
-
-String get testScriptPath => _TestUtils.scriptPath;
-
-String get packageRoot => dirname(dirname(testScriptPath));
+import 'test_common.dart';
 
 void main() => defineTests();
-
-Future<String> get _pubPackageRoot => getPubPackageRoot(testScriptPath);
 
 void defineTests() {
   //useVMConfiguration();
   group('src_pub_io', () {
     test('version', () async {
-      ProcessResult result =
-          await run(dartExecutable, pubArguments(['--version']));
+      ProcessResult result = await runCmd(pubCmd(['--version']));
       expect(result.stdout.startsWith("Pub"), isTrue);
     });
 
     _testIsPubPackageRoot(String path, bool expected) async {
-      expect(await isPubPackageRoot(path), expected);
-      expect(isPubPackageRootSync(path), expected);
+      expect(await isPubPackageRoot(path), expected, reason: path);
+      expect(isPubPackageRootSync(path), expected, reason: path);
     }
 
-    test('root', () async {
-      await _testIsPubPackageRoot(dirname(testScriptPath), false);
+    test('isPubPackageRoot', () async {
+      await _testIsPubPackageRoot(join(packageRoot, 'test'), false);
+      await _testIsPubPackageRoot('.', true);
+      await _testIsPubPackageRoot(absolute(packageRoot), true);
+      await _testIsPubPackageRoot(normalize(absolute(packageRoot)), true);
+      await _testIsPubPackageRoot(packageRoot, true);
       await _testIsPubPackageRoot(
-          dirname(dirname(dirname(testScriptPath))), false);
-      await _testIsPubPackageRoot(dirname(dirname(testScriptPath)), true);
-      expect(await _pubPackageRoot, dirname(dirname(testScriptPath)));
+          dirname(normalize(absolute(packageRoot))), false);
+    });
+
+    test('getPubPackageRoot', () async {
+      expect(await getPubPackageRoot(join(packageRoot, 'test')), packageRoot);
+      expect(await getPubPackageRoot(join(packageRoot, 'test', 'data')),
+          packageRoot);
+      expect(await getPubPackageRoot(packageRoot), packageRoot);
       try {
         await getPubPackageRoot(join('/', 'dummy', 'path'));
         fail('no');
@@ -84,7 +78,7 @@ void defineTests() {
       */
 
       test('name', () async {
-        IoPubPackage pkg = new IoPubPackage(await _pubPackageRoot);
+        IoPubPackage pkg = new IoPubPackage(packageRoot);
         expect(pkg.name, 'tekartik_pub');
       });
     });

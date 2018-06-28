@@ -2,3 +2,5 @@ name: tekartik_pub_example_simple
 dev_dependencies:
   test: any
   dev_test: any
+  build_runner: '>=0.9.0'
+  build_test: '>=0.10.2'

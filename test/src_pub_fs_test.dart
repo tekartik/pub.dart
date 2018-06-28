@@ -118,6 +118,7 @@ test2:lib/
       pkg = new FsPubPackage(top);
       //expect(await pkg.extractVersion(), isNull);
       await childFile(pkg.dir, pubspecYamlBasename).writeAsString('''
+name: tekartik_pub_test_extract_version
 version: 1.0.0
 ''');
       expect(await pkg.extractVersion(), new Version(1, 0, 0));

@@ -6,8 +6,6 @@ import 'package:fs_shim/fs_io.dart' as fs;
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:process_run/cmd_run.dart' as cmd_run;
-import 'package:process_run/dartbin.dart' as _dartbin;
-import 'package:process_run/process_run.dart';
 
 import 'pub_args.dart';
 import 'pubspec.dart';
@@ -35,12 +33,6 @@ class PubPackage extends common.PubPackage {
   PubPackage._(FsPubPackage fsPubPackage) : super(fsPubPackage);
 
   PubPackage(String path) : this._(new IoFsPubPackage(new Directory(path)));
-
-  @deprecated
-  Future<ProcessResult> pubRun(List<String> args) {
-    return run(_dartbin.dartExecutable, _dartbin.pubArguments(args),
-        workingDirectory: path);
-  }
 
   String get name {
     if (super.name == null) {

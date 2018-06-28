@@ -6,15 +6,13 @@ import 'package:path/path.dart';
 import 'package:tekartik_pub/io.dart';
 import 'dart:io';
 import 'package:fs_shim/utils/io/entity.dart';
-import 'package:tekartik_pub/script.dart';
 import 'package:process_run/cmd_run.dart';
 
-class TestScript extends Script {}
+import 'test_common.dart';
 
-Directory get pkgDir => new File(getScriptPath(TestScript)).parent.parent;
-Directory get simplePkgDir => childDirectory(pkgDir, join('example', 'simple'));
-Directory get outDir =>
-    childDirectory(pkgDir, join('test', 'out', joinAll(testDescriptions)));
+String get pkgDir => '.';
+String get simplePkgDir => join(pkgDir, 'example', 'simple');
+String get outDir => join(testOutTopPath, joinAll(testDescriptions));
 
 main() {
   group('io_example_simple', () {
@@ -23,10 +21,10 @@ main() {
     // Order is important in the tests here
 
     setUpAll(() async {
-      PubPackage simplePkg = new PubPackage(simplePkgDir.path);
+      PubPackage simplePkg = new PubPackage(simplePkgDir);
       // clone the package in a temp output location
 
-      pkg = await simplePkg.clone(outDir.path, delete: true);
+      pkg = await simplePkg.clone(outDir, delete: true);
     });
 
     // fastest test
@@ -76,12 +74,20 @@ main() {
     });
 
     test('build', () async {
+      await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
+
       File buildIndexHtmlFile =
           childFile(pkg.dir, join('build', 'web', 'index.html'));
       if (await buildIndexHtmlFile.exists()) {
         await buildIndexHtmlFile.delete();
       }
-      ProcessResult result = await runCmd(pkg.pubCmd(pubBuildArgs()));
+      ProcessResult result = await runCmd(pkg.pubCmd([
+        'run',
+        'build_runner',
+        'build',
+        '--output',
+        'web:${join('build', 'web')}'
+      ]));
 
       expect(result.exitCode, 0);
       expect(await buildIndexHtmlFile.exists(), isTrue);

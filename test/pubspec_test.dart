@@ -7,13 +7,9 @@ import 'package:tekartik_pub/pubspec.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:path/path.dart';
 
-import 'package:tekartik_pub/script.dart';
 import 'package:tekartik_pub/io.dart';
 
-class TestScript extends Script {}
-
-String get testScriptPath => getScriptPath(TestScript);
-String get packageRoot => dirname(dirname(testScriptPath));
+import 'test_common.dart';
 
 main() {
   group('activate_package', () {

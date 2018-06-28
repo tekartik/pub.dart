@@ -7,15 +7,9 @@ import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/src/pub_fs_io.dart';
 import 'package:fs_shim/fs_io.dart';
 import 'package:fs_shim/utils/entity.dart';
-import 'package:tekartik_pub/script.dart';
 import 'test_common.dart';
 
-class TestScript extends Script {}
-
-Directory get pkgDir =>
-    new File(getScriptPath(TestScript)).parent.parent as Directory;
-Directory get simplePkgDir =>
-    childDirectory(pkgDir, join('example', 'simple')) as Directory;
+String get simplePkgDir => join(packageRoot, 'example', 'simple');
 Directory get outDir =>
     new Directory(join(outSubPath, joinAll(testDescriptions)));
 
@@ -26,7 +20,8 @@ main() {
     // Order is important in the tests here
 
     setUpAll(() async {
-      IoFsPubPackage simplePkg = new IoFsPubPackage(simplePkgDir);
+      IoFsPubPackage simplePkg =
+          new IoFsPubPackage(new Directory(simplePkgDir));
       // clone the package in a temp output location
 
       pkg = await simplePkg.clone(outDir, delete: true) as IoFsPubPackage;
@@ -82,7 +77,14 @@ main() {
       if (await buildIndexHtmlFile.exists()) {
         await buildIndexHtmlFile.delete();
       }
-      ProcessResult result = await runCmd(pkg.pubCmd(pubBuildArgs()));
+      ProcessResult result = await runCmd(pkg.pubCmd([
+        'run',
+        'build_runner',
+        'build',
+        '--output',
+        'web:${join('build', 'web')}'
+      ]));
+      // ProcessResult result = await runCmd(pkg.pubCmd(pubBuildArgs()));
 
       expect(result.exitCode, 0);
       expect(await buildIndexHtmlFile.exists(), isTrue);
