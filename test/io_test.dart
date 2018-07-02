@@ -1,27 +1,23 @@
 @TestOn("vm")
 library tekartik_pub.test.pub_fs_io_test;
 
+import 'dart:io';
+
 import 'package:dev_test/test.dart';
-import 'package:fs_shim_test/test_io.dart';
+import 'package:path/path.dart';
+
 import 'package:process_run/cmd_run.dart' hide pubCmd;
 import 'package:tekartik_pub/io.dart';
-
-class TestScript extends Script {}
-
-String get testScriptPath => getScriptPath(TestScript);
-
-Directory get pkgDir => new File(testScriptPath).parent.parent as Directory;
+import 'test_common_io.dart';
 
 void main() => defineTests();
 
-Future<String> get _pubPackageRoot => getPubPackageRoot(testScriptPath);
-
-String get packageRoot => dirname(dirname(testScriptPath));
+String get packageRoot => '.';
 
 void defineTests() {
   //useVMConfiguration();
   group('io', () {
-    PubPackage pkg = new PubPackage(pkgDir.path);
+    PubPackage pkg = new PubPackage('.');
 
     test('equals', () {
       PubPackage pkg1 = new PubPackage(packageRoot);
@@ -51,11 +47,9 @@ void defineTests() {
     }
 
     test('root', () async {
-      await _testIsPubPackageRoot(dirname(testScriptPath), false);
-      await _testIsPubPackageRoot(
-          dirname(dirname(dirname(testScriptPath))), false);
-      await _testIsPubPackageRoot(dirname(dirname(testScriptPath)), true);
-      expect(await _pubPackageRoot, dirname(dirname(testScriptPath)));
+      await _testIsPubPackageRoot('test', false);
+      await _testIsPubPackageRoot('..', false);
+      await _testIsPubPackageRoot('.', true);
       try {
         await getPubPackageRoot(join('/', 'dummy', 'path'));
         fail('no');
