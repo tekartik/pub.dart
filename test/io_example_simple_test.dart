@@ -14,6 +14,8 @@ String get pkgDir => '.';
 String get simplePkgDir => join(pkgDir, 'example', 'simple');
 String get outDir => join(testOutTopPath, joinAll(testDescriptions));
 
+var longTimeout = new Timeout(new Duration(minutes: 2));
+
 main() {
   group('io_example_simple', () {
     PubPackage pkg;
@@ -33,7 +35,7 @@ main() {
           await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
       // Called first to depedencies have changed
       expect(result.stdout, contains('Changed '));
-    });
+    }, timeout: longTimeout);
 
     test('get', () async {
       ProcessResult result = await runCmd(pkg.pubCmd(pubGetArgs()));
@@ -48,7 +50,7 @@ main() {
       result =
           await runCmd(pkg.pubCmd(pubGetArgs(offline: true, dryRun: true)));
       expect(result.stdout, contains('No dependencies'));
-    });
+    }, timeout: longTimeout);
 
     test('upgrade', () async {
       ProcessResult result = await runCmd(pkg.pubCmd(pubUpgradeArgs()));
@@ -63,7 +65,7 @@ main() {
       result =
           await runCmd(pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)));
       expect(result.stdout, contains('No dependencies'));
-    });
+    }, timeout: longTimeout);
 
     test('test', () async {
       ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs()));
@@ -71,7 +73,7 @@ main() {
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
       }
-    });
+    }, timeout: longTimeout);
 
     test('build', () async {
       await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
@@ -91,13 +93,13 @@ main() {
 
       expect(result.exitCode, 0);
       expect(await buildIndexHtmlFile.exists(), isTrue);
-    });
+    }, timeout: longTimeout);
 
     test('deps', () async {
       ProcessResult result =
           await runCmd(pkg.pubCmd(pubDepsArgs(style: pubDepsStyleCompact)));
       expect(result.exitCode, 0);
       expect(result.stdout, contains('dev_test'));
-    });
+    }, timeout: longTimeout);
   });
 }
