@@ -27,6 +27,10 @@ dev_dependencies:
       url: git://github.com/tekartik/platform.dart
       path: platform_io
       ref: dart2
+  chrome_travis:
+    git:
+      url: git://github.com/tekartik/chrome_travis.dart
+      ref: dart2
 test_dependencies:
 - process_run
 dependency_overrides:
