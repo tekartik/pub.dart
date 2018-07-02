@@ -19,12 +19,12 @@ void defineTests() {
     test('pubBuildArgs', () {
       expect(pubBuildArgs(), ['build']);
       expect(pubBuildArgs(output: 'out'), ['build', '--output', 'out']);
-      expect(pubBuildArgs(mode: BuildMode.DEBUG), ['build', '--mode', 'debug']);
-      expect(pubBuildArgs(mode: BuildMode.RELEASE),
+      expect(pubBuildArgs(mode: BuildMode.debug), ['build', '--mode', 'debug']);
+      expect(pubBuildArgs(mode: BuildMode.release),
           ['build', '--mode', 'release']);
-      expect(pubBuildArgs(format: BuildFormat.JSON),
+      expect(pubBuildArgs(format: BuildFormat.json),
           ['build', '--format', 'json']);
-      expect(pubBuildArgs(format: BuildFormat.TEXT),
+      expect(pubBuildArgs(format: BuildFormat.text),
           ['build', '--format', 'text']);
       expect(pubBuildArgs(args: ['web']), ['build', 'web']);
       expect(pubBuildArgs(directories: ['web']), ['build', 'web']);
@@ -36,7 +36,7 @@ void defineTests() {
           pubRunTestArgs(
               args: ['arg1', 'arg2'],
               platforms: ['platform1', 'platform2'],
-              reporter: RunTestReporter.JSON,
+              reporter: RunTestReporter.json,
               color: true,
               concurrency: 2,
               name: 'name'),
@@ -65,7 +65,7 @@ void defineTests() {
           pubRunTestRunnerArgs(new TestRunnerArgs(
               args: ['arg1', 'arg2'],
               platforms: ['platform1', 'platform2'],
-              reporter: RunTestReporter.COMPACT,
+              reporter: RunTestReporter.compact,
               color: true,
               concurrency: 2,
               name: 'name')),
@@ -88,7 +88,7 @@ void defineTests() {
 
     test('runTestReporterFromString', () {
       expect(runTestReporterFromString(null), isNull);
-      expect(runTestReporterFromString("json"), RunTestReporter.JSON);
+      expect(runTestReporterFromString("json"), RunTestReporter.json);
     });
 
     test('pubGetArgs', () {

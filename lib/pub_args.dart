@@ -2,23 +2,32 @@ library tekartik_io_tools.pub_args;
 
 // 2016-09-25 Use this
 
-enum RunTestReporter { COMPACT, EXPANDED, JSON }
+// 2018-07-02 uppercase deprecated
+enum RunTestReporter { COMPACT, EXPANDED, JSON, compact, expanded, json }
 
-enum BuildMode { DEBUG, RELEASE }
-enum BuildFormat { TEXT, JSON }
+enum BuildMode { DEBUG, RELEASE, debug, release }
+enum BuildFormat { TEXT, JSON, text, json }
 
 final Map<BuildMode, String> _buildModeValueMap = new Map.fromIterables(
-    [BuildMode.DEBUG, BuildMode.RELEASE], ["debug", "release"]);
+    [BuildMode.DEBUG, BuildMode.RELEASE, BuildMode.debug, BuildMode.release],
+    ["debug", "release", "debug", "release"]);
 
 final Map<BuildFormat, String> _buildFormatValueMap = new Map.fromIterables(
-    [BuildFormat.TEXT, BuildFormat.JSON], ["text", "json"]);
+    [BuildFormat.TEXT, BuildFormat.JSON, BuildFormat.text, BuildFormat.json],
+    ["text", "json", "text", "json"]);
 
 final Map<RunTestReporter, String> _runTestReporterValueMap =
     new Map.fromIterables([
   RunTestReporter.COMPACT,
   RunTestReporter.EXPANDED,
-  RunTestReporter.JSON
+  RunTestReporter.JSON,
+  RunTestReporter.compact,
+  RunTestReporter.expanded,
+  RunTestReporter.json,
 ], [
+  "compact",
+  "expanded",
+  "json",
   "compact",
   "expanded",
   "json"

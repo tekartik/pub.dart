@@ -41,6 +41,8 @@ class PubPackage extends common.PubPackage {
     return super.name;
   }
 
+  ProcessCmd pbrCmd(List<String> args) => _pbrCmd(args);
+
   ProcessCmd pubCmd(List<String> args) => _pubCmd(args);
 
   ProcessCmd dartCmd(List<String> args) => _dartCmd(args);
@@ -83,6 +85,10 @@ class PubPackage extends common.PubPackage {
 
   ProcessCmd _pubCmd(List<String> args) {
     return cmd_run.pubCmd(args)..workingDirectory = path;
+  }
+
+  ProcessCmd _pbrCmd(List<String> args) {
+    return _pubCmd(<String>['run', 'build_runner']..addAll(args));
   }
 
   ProcessCmd _dartCmd(List<String> args) {

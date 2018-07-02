@@ -5,9 +5,9 @@ import 'dart:io';
 
 import 'package:dev_test/test.dart';
 import 'package:path/path.dart';
-
 import 'package:process_run/cmd_run.dart' hide pubCmd;
 import 'package:tekartik_pub/io.dart';
+
 import 'test_common_io.dart';
 
 void main() => defineTests();
@@ -59,18 +59,32 @@ void defineTests() {
 
     test('success_test', () async {
       ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
-          args: ['test/data/success_test_.dart'],
+          args: ['test/data/success_test.dart'],
           platforms: ["vm"],
           //reporter: pubRunTestReporterJson,
           reporter: RunTestReporter.JSON,
           concurrency: 1)));
 
-      expect(result.exitCode, 0);
+      expect(result.exitCode, 0, reason: result.stdout?.toString());
       expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
       expect(pubRunTestJsonSuccessCount(result.stdout as String), 1);
       expect(pubRunTestJsonFailureCount(result.stdout as String), 0);
     });
 
+    test('pbr_success_test', () async {
+      ProcessResult result =
+          await runCmd(pkg.pbrCmd(['test', '--']..addAll(testRunnerArgs(
+              args: ['test/data/success_test.dart'],
+              platforms: ["vm"],
+              //reporter: pubRunTestReporterJson,
+              reporter: RunTestReporter.JSON,
+              concurrency: 1))));
+
+      expect(result.exitCode, 0, reason: result.stdout?.toString());
+      expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
+      expect(pubRunTestJsonSuccessCount(result.stdout as String), 1);
+      expect(pubRunTestJsonFailureCount(result.stdout as String), 0);
+    });
     /*
     test('expanded_success_test', () async {
       ProcessResult result = await devRunCmd(pkg.pubCmd(pubRunTestArgs(
@@ -85,16 +99,49 @@ void defineTests() {
     */
 
     test('failure_test', () async {
-      if (!Platform.isWindows) {
-        ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
-            args: ['test/data/fail_test_.dart'],
-            reporter: RunTestReporter.JSON)));
-        //if (!Platform.isWindows) {
-        expect(result.exitCode, 1);
-        //}
-        expect(pubRunTestJsonIsSuccess(result.stdout as String), isFalse);
-        expect(pubRunTestJsonSuccessCount(result.stdout as String), 0);
-        expect(pubRunTestJsonFailureCount(result.stdout as String), 1);
+      var failTestPath = join('test', 'data', 'fail_test.dart');
+      try {
+        if (!Platform.isWindows) {
+          await new File(join('test', 'data', 'fail_test_.dart'))
+              .copy(failTestPath);
+          ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
+              args: [failTestPath], reporter: RunTestReporter.JSON)));
+          //if (!Platform.isWindows) {
+          expect(result.exitCode, 1);
+          //}
+          expect(pubRunTestJsonIsSuccess(result.stdout as String), isFalse);
+          expect(pubRunTestJsonSuccessCount(result.stdout as String), 0);
+          expect(pubRunTestJsonFailureCount(result.stdout as String), 1);
+        }
+      } finally {
+        try {
+          await new File(failTestPath).delete();
+        } catch (_) {}
+        ;
+      }
+    });
+
+    test('pbr_failure_test', () async {
+      var failTestPath = join('test', 'data', 'fail_test.dart');
+      try {
+        if (!Platform.isWindows) {
+          await new File(join('test', 'data', 'fail_test_.dart'))
+              .copy(failTestPath);
+          ProcessResult result = await runCmd(pkg.pbrCmd(['test', '--']..addAll(
+              testRunnerArgs(
+                  args: [failTestPath], reporter: RunTestReporter.JSON))));
+          //if (!Platform.isWindows) {
+          expect(result.exitCode, 1);
+          //}
+          expect(pubRunTestJsonIsSuccess(result.stdout as String), isFalse);
+          expect(pubRunTestJsonSuccessCount(result.stdout as String), 0);
+          expect(pubRunTestJsonFailureCount(result.stdout as String), 1);
+        }
+      } finally {
+        try {
+          await new File(failTestPath).delete();
+        } catch (_) {}
+        ;
       }
     });
 
