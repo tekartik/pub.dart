@@ -13,6 +13,8 @@ String get simplePkgDir => join(packageRoot, 'example', 'simple');
 Directory get outDir =>
     new Directory(join(outSubPath, joinAll(testDescriptions)));
 
+var longTimeout = new Timeout(new Duration(minutes: 2));
+
 main() {
   group('src_fs_io_example_simple', () {
     IoFsPubPackage pkg;
@@ -33,7 +35,7 @@ main() {
           await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
       // Called first to depedencies have changed
       expect(result.stdout, contains('Changed '));
-    });
+    }, timeout: longTimeout);
 
     test('get', () async {
       ProcessResult result = await runCmd(pkg.pubCmd(pubGetArgs()));
@@ -48,7 +50,7 @@ main() {
       result =
           await runCmd(pkg.pubCmd(pubGetArgs(offline: true, dryRun: true)));
       expect(result.stdout, contains('No dependencies'));
-    });
+    }, timeout: longTimeout);
 
     test('upgrade', () async {
       ProcessResult result = await runCmd(pkg.pubCmd(pubUpgradeArgs()));
@@ -63,13 +65,13 @@ main() {
       result =
           await runCmd(pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)));
       expect(result.stdout, contains('No dependencies'));
-    });
+    }, timeout: longTimeout);
 
     test('test', () async {
       await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
       ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs()));
       expect(result.exitCode, 0);
-    });
+    }, timeout: longTimeout);
 
     test('build', () async {
       File buildIndexHtmlFile =
@@ -88,7 +90,7 @@ main() {
 
       expect(result.exitCode, 0);
       expect(await buildIndexHtmlFile.exists(), isTrue);
-    });
+    }, timeout: longTimeout);
 
     test('deps', () async {
       ProcessResult result =
