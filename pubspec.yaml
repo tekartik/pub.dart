@@ -13,7 +13,9 @@ dependencies:
   dart2_constant: '>=1.0.1'
 dev_dependencies:
   fs_shim_test:
-    git: git://github.com/tekartik/fs_shim_test.dart
+    git:
+      url: git://github.com/tekartik/fs_shim_test.dart
+      ref: dart1
     version: '>=0.4.0'
   dev_test: any
   test: any
