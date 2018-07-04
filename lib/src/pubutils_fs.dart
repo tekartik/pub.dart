@@ -53,7 +53,8 @@ Version pubspecYamlGetVersion(Map yaml) =>
 
 Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   if (yaml.containsKey('test_dependencies')) {
-    Iterable<String> list = yaml['test_dependencies'] as Iterable<String>;
+    Iterable<String> list =
+        (yaml['test_dependencies'] as Iterable)?.cast<String>();
     if (list == null) {
       list = [];
     }
@@ -63,7 +64,7 @@ Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
 }
 
 Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
-  return (yaml['dependencies'] as Map).keys as Iterable<String>;
+  return ((yaml['dependencies'] as Map)?.keys as Iterable)?.cast<String>();
 }
 
 Version pubspecLockGetVersion(Map yaml, String packageName) =>
