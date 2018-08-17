@@ -33,13 +33,11 @@ dev_dependencies:
       ref: dart2
 test_dependencies:
 - process_run
-dependency_overrides:
+
+# dependency_overrides:
 #  process_run:
 #    git: git://github.com/tekartik/process_run.dart
 #  fs_shim:
 #    git: git://github.com/tekartik/fs_shim.dart
 #  fs_shim:
 #    path: /media/ssd/devx/git/github.com/tekartik/fs_shim.dart
-executables:
-  pubget: pubget
-  pubupgrade: pubupgrade
