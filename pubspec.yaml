@@ -1,5 +1,5 @@
 name: tekartik_pub
-version: 0.9.0
+version: 0.10.0
 description: Pub and package helpers
 homepage: https://github.com/tekartik/pub.dart
 environment:
