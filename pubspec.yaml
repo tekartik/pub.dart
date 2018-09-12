@@ -1,5 +1,5 @@
 name: tekartik_pub
-version: 0.10.0
+version: 0.10.1
 description: Pub and package helpers
 homepage: https://github.com/tekartik/pub.dart
 environment:
@@ -10,7 +10,7 @@ dependencies:
   fs_shim: '>=0.10.0'
   pub_semver: any
   args: any
-  dart2_constant: '>=1.0.1'
+
 dev_dependencies:
   tekartik_fs_test:
     git:
