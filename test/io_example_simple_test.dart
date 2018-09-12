@@ -15,6 +15,7 @@ String get simplePkgDir => join(pkgDir, 'example', 'simple');
 String get outDir => join(testOutTopPath, joinAll(testDescriptions));
 
 var longTimeout = new Timeout(new Duration(minutes: 2));
+var veryLongTimeout = new Timeout(new Duration(minutes: 5));
 
 main() {
   group('io_example_simple', () {
@@ -65,7 +66,7 @@ main() {
       result =
           await runCmd(pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)));
       expect(result.stdout, contains('No dependencies'));
-    }, timeout: longTimeout);
+    }, timeout: veryLongTimeout);
 
     test('test', () async {
       ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs()));
