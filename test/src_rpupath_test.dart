@@ -53,7 +53,6 @@ void defineTests() {
           'yaml',
           'fs_shim',
           'args',
-          'dart2_constant'
         ]));
     expect(
         await pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
