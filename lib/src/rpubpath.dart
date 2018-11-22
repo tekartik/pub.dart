@@ -105,6 +105,43 @@ Future<List<String>> recursiveDartEntities(String dir) async {
   return entities;
 }
 
+/// find the path at the top level that contains dart file
+/// and does not contain sub project
+Future<List<String>> findTargetDartDirectories(String dir) async {
+  var targets = <String>[];
+  for (var entity in await Directory(dir).list(followLinks: false).toList()) {
+    var entityBasename = basename(entity.path);
+    var subDir = join(dir, entityBasename);
+    if (FileSystemEntity.isDirectorySync(subDir)) {
+      bool _isToBeIgnored(String baseName) {
+        if (baseName == '.' || baseName == '..') {
+          return false;
+        }
+
+        return baseName.startsWith('.');
+      }
+
+      if (!_isToBeIgnored(entityBasename)) {
+        var paths = (await recursiveDartEntities(subDir))
+            .map((path) => join(subDir, path))
+            .toList(growable: false);
+
+        if (containsPubPackage(paths)) {
+          continue;
+        }
+        if (!containsDartFiles(paths)) {
+          continue;
+        }
+        // devPrint('$subDir sub: ${listTruncate(paths, 100)}');
+        targets.add(entityBasename);
+      }
+
+      //devPrint(entities);
+    }
+  }
+  return targets;
+}
+
 Future<List<String>> _recursiveDartEntities(String dir, String base) async {
   var entities = <String>[]; // dir];
   // list of basename
@@ -113,19 +150,20 @@ Future<List<String>> _recursiveDartEntities(String dir, String base) async {
       .toList(growable: false);
   for (var basename_ in list) {
     var fullpath = join(dir, basename_);
+    String subBase;
     if (base == null) {
-      base = basename_;
+      subBase = basename_;
     } else {
-      base = join(base, basename_);
+      subBase = join(base, basename_);
     }
 
     if (FileSystemEntity.isDirectorySync(fullpath)) {
       if (!_isToBeIgnored(basename_)) {
-        entities.add(base);
-        entities.addAll(await _recursiveDartEntities(fullpath, base));
+        entities.add(subBase);
+        entities.addAll(await _recursiveDartEntities(fullpath, subBase));
       }
     } else {
-      entities.add(base);
+      entities.add(subBase);
     }
   }
   return entities;

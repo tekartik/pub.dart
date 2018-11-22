@@ -5,11 +5,12 @@ import 'package:args/args.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 
-const String argHelp = 'help';
-const String argOneByOne = 'one';
-const String argOffline = "offline";
+const String argHelpFlag = 'help';
+const String argFixFlag = 'fix';
+const String argOneByOneFlag = 'one';
+const String argOfflineFlag = "offline";
 const String argPackagesDir = "packages-dir";
-const String argForceRecursive = "force-recursive";
+const String argForceRecursiveFlag = "force-recursive";
 
 class PubGetOptions {
   bool forceRecursive;
@@ -21,11 +22,11 @@ class PubGetOptions {
 // chmod +x ...
 main(List<String> arguments) async {
   ArgParser parser = ArgParser(allowTrailingOptions: true);
-  parser.addFlag(argHelp, abbr: 'h', help: 'Usage help', negatable: false);
-  parser.addFlag(argOneByOne,
+  parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
+  parser.addFlag(argOneByOneFlag,
       abbr: 'o', help: 'One at a time', defaultsTo: Platform.isWindows);
-  parser.addFlag(argOffline, help: 'offline get', negatable: false);
-  parser.addFlag(argForceRecursive,
+  parser.addFlag(argOfflineFlag, help: 'offline get', negatable: false);
+  parser.addFlag(argForceRecursiveFlag,
       abbr: 'f',
       help: 'Force going recursive even in dart project',
       negatable: false);
@@ -34,16 +35,16 @@ main(List<String> arguments) async {
 
   ArgResults argResults = parser.parse(arguments);
 
-  bool help = argResults[argHelp] as bool;
+  bool help = argResults[argHelpFlag] as bool;
   if (help) {
     print(parser.usage);
     return;
   }
 
-  bool oneByOne = argResults[argOneByOne];
-  bool offline = argResults[argOffline];
+  bool oneByOne = argResults[argOneByOneFlag];
+  bool offline = argResults[argOfflineFlag];
   bool packagesDir = argResults[argPackagesDir];
-  bool forceRecursive = argResults[argForceRecursive];
+  bool forceRecursive = argResults[argForceRecursiveFlag];
 
   List<String> rest = argResults.rest;
   // if no default to current folder

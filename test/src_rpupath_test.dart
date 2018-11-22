@@ -46,6 +46,7 @@ void defineTests() {
   test('recursiveDartEntities', () async {
     var paths = await recursiveDartEntities('.');
     expect(paths, contains('test'));
+    expect(paths, isNot(contains('.dart_tool')));
     expect(paths, contains(join('test', 'io_test.dart')));
     expect(paths, contains(join('test', 'data', 'fail_test_.dart')));
   });
