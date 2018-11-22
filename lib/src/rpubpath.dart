@@ -15,7 +15,7 @@ String _pubspecDotPackagesPath(String packageRoot) =>
 Map getPackageYamlSync(String packageRoot) {
   String pubspecYaml = "pubspec.yaml";
   String pubspecYamlPath = join(packageRoot, pubspecYaml);
-  String content = new File(pubspecYamlPath).readAsStringSync();
+  String content = File(pubspecYamlPath).readAsStringSync();
   return loadYaml(content) as Map;
 }
 
@@ -24,13 +24,13 @@ Future<Map> getPackageYaml(String packageRoot) =>
 
 Future<Map> _getYaml(String packageRoot, String name) async {
   String yamlPath = join(packageRoot, name);
-  String content = await new File(yamlPath).readAsString();
+  String content = await File(yamlPath).readAsString();
   return loadYaml(content) as Map;
 }
 
 Future<Map> getDotPackagesYaml(String packageRoot) async {
   String yamlPath = _pubspecDotPackagesPath(packageRoot);
-  String content = await new File(yamlPath).readAsString();
+  String content = await File(yamlPath).readAsString();
 
   Map map = {};
   Iterable<String> lines = LineSplitter.split(content);
@@ -92,19 +92,97 @@ bool _isToBeIgnored(String baseName) {
   if (baseName == '.' || baseName == '..') {
     return false;
   }
+  if (baseName == 'node_modules') {
+    return false;
+  }
 
   return baseName.startsWith('.');
 }
 
+Future<List<String>> recursiveDartEntities(String dir) async {
+  var entities = await _recursiveDartEntities(dir, null);
+
+  return entities;
+}
+
+/// find the path at the top level that contains dart file
+/// and does not contain sub project
+Future<List<String>> findTargetDartDirectories(String dir) async {
+  var targets = <String>[];
+  for (var entity in await Directory(dir).list(followLinks: false).toList()) {
+    var entityBasename = basename(entity.path);
+    var subDir = join(dir, entityBasename);
+    if (FileSystemEntity.isDirectorySync(subDir)) {
+      bool _isToBeIgnored(String baseName) {
+        if (baseName == '.' || baseName == '..') {
+          return false;
+        }
+
+        return baseName.startsWith('.');
+      }
+
+      if (!_isToBeIgnored(entityBasename) &&
+          !(await isPubPackageRoot(subDir))) {
+        var paths = (await recursiveDartEntities(subDir))
+            .map((path) => join(subDir, path))
+            .toList(growable: false);
+
+        if (containsPubPackage(paths)) {
+          continue;
+        }
+        if (!containsDartFiles(paths)) {
+          continue;
+        }
+        // devPrint('$subDir sub: ${listTruncate(paths, 100)}');
+        targets.add(entityBasename);
+      }
+
+      //devPrint(entities);
+    }
+  }
+  return targets;
+}
+
+Future<List<String>> _recursiveDartEntities(String dir, String base) async {
+  var entities = <String>[]; // dir];
+  // list of basename
+  var list = (await Directory(dir).list(followLinks: false).toList())
+      .map((fileSystemEntity) => basename(fileSystemEntity.path))
+      .toList(growable: false);
+  for (var basename_ in list) {
+    var fullpath = join(dir, basename_);
+    String subBase;
+    if (base == null) {
+      subBase = basename_;
+    } else {
+      subBase = join(base, basename_);
+    }
+
+    if (FileSystemEntity.isDirectorySync(fullpath)) {
+      if (!_isToBeIgnored(basename_)) {
+        entities.add(subBase);
+        entities.addAll(await _recursiveDartEntities(fullpath, subBase));
+      }
+    } else {
+      entities.add(subBase);
+    }
+  }
+  return entities;
+}
+
+/// if [forceRecursive] is true, we folder going deeper even if the current
+/// path is a dart project
 Stream<String> recursivePubPath(List<String> dirs,
-    {List<String> dependencies}) {
-  StreamController<String> ctlr = new StreamController();
+    {List<String> dependencies, bool forceRecursive}) {
+  StreamController<String> ctlr = StreamController();
 
   Future _handleDir(String dir) async {
     // Ignore folder starting with .
     // don't event go below
     if (!_isToBeIgnored(basename(dir))) {
+      bool goRecursive = true;
       if (await isPubPackageRoot(dir)) {
+        goRecursive = forceRecursive == true;
         if (dependencies is List && !dependencies.isEmpty) {
           Map yaml = getPackageYamlSync(dir);
           if (yamlHasAnyDependencies(yaml, dependencies)) {
@@ -114,9 +192,11 @@ Stream<String> recursivePubPath(List<String> dirs,
           // add package path
           ctlr.add(dir);
         }
-      } else {
+      }
+
+      if (goRecursive) {
         List<Future> sub = [];
-        return new Directory(dir)
+        return Directory(dir)
             .list()
             .listen((FileSystemEntity fse) {
               if (FileSystemEntity.isDirectorySync(fse.path)) {
@@ -148,4 +228,24 @@ Stream<String> recursivePubPath(List<String> dirs,
   });
 
   return ctlr.stream;
+}
+
+bool containsPubPackage(Iterable<String> paths) {
+  for (var path in paths) {
+    if (FileSystemEntity.isDirectorySync(path)) {
+      if (isPubPackageRootSync(path)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool containsDartFiles(Iterable<String> paths) {
+  for (var path in paths) {
+    if (extension(path) == '.dart' && FileSystemEntity.isFileSync(path)) {
+      return true;
+    }
+  }
+  return false;
 }

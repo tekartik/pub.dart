@@ -1,22 +1,26 @@
 #!/usr/bin/env dart
 import 'package:args/args.dart';
-import 'package:tekartik_pub/io.dart';
+import 'package:process_run/cmd_run.dart' hide runCmd;
+import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
-import 'pubget.dart';
+import 'package:tekartik_pub/io.dart';
+import 'package:tekartik_pub/src/rpubpath.dart';
+
+class PubAnalyzeOptions extends PubBinOptions {
+  bool forceRecursive;
+  bool oneByOne;
+}
 
 // chmod +x ...
 main(List<String> arguments) async {
   ArgParser parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
-  addCommonOptions(parser);
-  parser.addFlag(argOfflineFlag, help: 'offline get', negatable: false);
+
   parser.addFlag(argForceRecursiveFlag,
       abbr: 'f',
       help: 'Force going recursive even in dart project',
       defaultsTo: true);
-  parser.addFlag(argPackagesDirFlag,
-      help: 'generates packages dir', negatable: false);
-
+  addCommonOptions(parser);
   ArgResults argResults = parser.parse(arguments);
 
   bool help = argResults[argHelpFlag] as bool;
@@ -26,27 +30,25 @@ main(List<String> arguments) async {
   }
 
   bool oneByOne = argResults[argOneByOneFlag];
-  bool offline = argResults[argOfflineFlag];
-  bool packagesDir = argResults[argPackagesDirFlag];
   bool forceRecursive = argResults[argForceRecursiveFlag];
   bool dryRun = argResults[argDryRunFlag];
+
   List<String> rest = argResults.rest;
   // if no default to current folder
   if (rest.length == 0) {
     rest = ['.'];
   }
-
-  await pubUpgrade(
+  await pubAnalyze(
       rest,
-      PubGetOptions()
+      PubAnalyzeOptions()
         ..oneByOne = oneByOne
         ..forceRecursive = forceRecursive
-        ..packagesDir = packagesDir
-        ..offline = offline
         ..dryRun = dryRun);
 }
 
-pubUpgrade(List<String> directories, PubGetOptions options) async {
+Future<int> pubAnalyze(
+    List<String> directories, PubAnalyzeOptions options) async {
+  List<Future> futures = [];
   List<String> pkgPaths = [];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
@@ -55,21 +57,34 @@ pubUpgrade(List<String> directories, PubGetOptions options) async {
   }).asFuture();
 
   for (String dir in pkgPaths) {
-    PubPackage pkg = PubPackage(dir);
     ProcessCmd cmd;
+
     if (await isFlutterPackageRoot(dir)) {
       if (!isFlutterSupported) {
         continue;
       }
-      cmd = FlutterCmd(['packages', 'upgrade'])..workingDirectory = dir;
+      cmd = FlutterCmd(['analyze'])..workingDirectory = dir;
     } else {
-      cmd = pkg.pubCmd(pubUpgradeArgs(
-          offline: options.offline, packagesDir: options.packagesDir));
+      // list of dir to check
+      var targets = await findTargetDartDirectories(dir);
+      if (targets.isEmpty) {
+        continue;
+      }
+      cmd = DartAnalyzerCmd(['--fatal-warnings']..addAll(targets))
+        ..workingDirectory = dir;
+      /*
+      cmd = DartAnalyzerCmd()pkg
+          .pubCmd(pubUpgradeArgs(offline: options.offline, packagesDir: options.packagesDir));
+          */
+      //continue;
     }
 
     var future = runCmd(cmd, options: options);
-    if (options.oneByOne) {
+    if (options.oneByOne == true) {
       await future;
     }
+    futures.add(future);
   }
+  await Future.wait(futures);
+  return futures.length;
 }

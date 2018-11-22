@@ -6,6 +6,8 @@ import 'package:fs_shim/fs_io.dart' as fs;
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:process_run/cmd_run.dart' as cmd_run;
+import 'package:tekartik_common_utils/common_utils_import.dart';
+import 'package:tekartik_common_utils/map_utils.dart';
 
 import 'pub_args.dart';
 import 'pubspec.dart';
@@ -32,7 +34,7 @@ class PubPackage extends common.PubPackage {
 
   PubPackage._(FsPubPackage fsPubPackage) : super(fsPubPackage);
 
-  PubPackage(String path) : this._(new IoFsPubPackage(new Directory(path)));
+  PubPackage(String path) : this._(IoFsPubPackage(Directory(path)));
 
   String get name {
     if (super.name == null) {
@@ -56,7 +58,7 @@ class PubPackage extends common.PubPackage {
     FsPubPackage fsDependencyPubPackage =
         await fsPubPackage.extractPackage(dependency);
     if (fsDependencyPubPackage != null) {
-      return new PubPackage._(fsDependencyPubPackage);
+      return PubPackage._(fsDependencyPubPackage);
     }
     return null;
   }
@@ -84,7 +86,7 @@ class PubPackage extends common.PubPackage {
           name: name));
 
   ProcessCmd _pubCmd(List<String> args) {
-    return cmd_run.pubCmd(args)..workingDirectory = path;
+    return cmd_run.PubCmd(args)..workingDirectory = path;
   }
 
   ProcessCmd _pbrCmd(List<String> args) {
@@ -92,7 +94,7 @@ class PubPackage extends common.PubPackage {
   }
 
   ProcessCmd _dartCmd(List<String> args) {
-    return cmd_run.dartCmd(args)..workingDirectory = path;
+    return cmd_run.DartCmd(args)..workingDirectory = path;
   }
 
   @deprecated
@@ -117,9 +119,9 @@ class PubPackage extends common.PubPackage {
   /// Clone a package content
   ///
   /// if [delete] is true, content will be deleted first
-  Future<PubPackage> clone(String dir, {bool delete: false}) async {
-    return new PubPackage._(
-        await fsPubPackage.clone(new fs.Directory(dir), delete: delete));
+  Future<PubPackage> clone(String dir, {bool delete = false}) async {
+    return PubPackage._(
+        await fsPubPackage.clone(fs.Directory(dir), delete: delete));
   }
 }
 
@@ -138,6 +140,11 @@ bool isPubPackageRootSync(String dirPath) {
   return io.FileSystemEntity.isFileSync(pubspecYamlPath);
 }
 
+Future<bool> isFlutterPackageRoot(String dirPath) async {
+  var map = await getPubspecYaml(dirPath);
+  return mapValueFromParts(map, ['dependencies', 'flutter']) != null;
+}
+
 /// throws if no project found
 Future<String> getPubPackageRoot(String resolverPath) async {
   String dirPath = normalize(absolute(resolverPath));
@@ -150,7 +157,7 @@ Future<String> getPubPackageRoot(String resolverPath) async {
     String parentDirPath = dirname(dirPath);
 
     if (parentDirPath == dirPath) {
-      throw new Exception("No project found for path '$resolverPath");
+      throw Exception("No project found for path '$resolverPath");
     }
     dirPath = parentDirPath;
   }
@@ -167,11 +174,11 @@ String getPubPackageRootSync(String resolverPath) {
     String parentDirPath = dirname(dirPath);
 
     if (parentDirPath == dirPath) {
-      throw new Exception("No project found for path '$resolverPath");
+      throw Exception("No project found for path '$resolverPath");
     }
     dirPath = parentDirPath;
   }
 }
 
 Future<Map> getPubspecYaml(String dirPath) =>
-    fs.getPubspecYaml(wrapIoDirectory(new io.Directory(dirPath)));
+    fs.getPubspecYaml(wrapIoDirectory(io.Directory(dirPath)));

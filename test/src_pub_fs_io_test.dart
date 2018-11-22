@@ -15,7 +15,7 @@ void defineTests() {
   group('src_pub_fs_io', () {
     pub_fs_test.defineTests(fileSystemTestContextIo);
 
-    IoFsPubPackage pkg = new IoFsPubPackage(new Directory('.'));
+    IoFsPubPackage pkg = IoFsPubPackage(Directory('.'));
 
     test('version', () async {
       ProcessResult result = await runCmd(pkg.pubCmd(pubArgs(version: true)));

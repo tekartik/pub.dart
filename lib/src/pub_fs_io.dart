@@ -14,9 +14,9 @@ export '../pub_args.dart';
 export 'pub_fs.dart';
 //export 'pub.dart';
 
-final FsPubPackageFactory ioFactory = new FsPubPackageFactory((fs.Directory dir,
+final FsPubPackageFactory ioFactory = FsPubPackageFactory((fs.Directory dir,
         [String name]) =>
-    new IoFsPubPackage(dir as Directory, name));
+    IoFsPubPackage(dir as Directory, name));
 
 // deprecated
 class IoFsPubPackage extends FsPubPackage
@@ -25,7 +25,7 @@ class IoFsPubPackage extends FsPubPackage
       : super.created(ioFactory, dir, name);
 
   ProcessCmd pubCmd(List<String> args) {
-    return _cmd.pubCmd(args)..workingDirectory = dir.path;
+    return _cmd.PubCmd(args)..workingDirectory = dir.path;
   }
 
   /// main entry point

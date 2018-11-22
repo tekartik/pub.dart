@@ -11,7 +11,7 @@ import 'package:tekartik_pub/src/pubutils_fs.dart';
 
 void main() {
   test('pubspecYamlGetVersion', () {
-    expect(pubspecYamlGetVersion({'version': '1.0.0'}), new Version(1, 0, 0));
+    expect(pubspecYamlGetVersion({'version': '1.0.0'}), Version(1, 0, 0));
   });
 
   test('pubspecYamlGetTestDependenciesPackageName', () async {

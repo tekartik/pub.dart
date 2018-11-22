@@ -11,10 +11,11 @@ import 'package:process_run/cmd_run.dart';
 import 'test_common.dart';
 
 String get pkgDir => '.';
-String get simplePkgDir => join(pkgDir, 'example', 'simple');
+String get simplePkgDir => join(pkgDir, 'example_packages', 'simple');
 String get outDir => join(testOutTopPath, joinAll(testDescriptions));
 
-var longTimeout = new Timeout(new Duration(minutes: 2));
+var longTimeout = Timeout(Duration(minutes: 2));
+var veryLongTimeout = Timeout(Duration(minutes: 5));
 
 main() {
   group('io_example_simple', () {
@@ -23,7 +24,7 @@ main() {
     // Order is important in the tests here
 
     setUpAll(() async {
-      PubPackage simplePkg = new PubPackage(simplePkgDir);
+      PubPackage simplePkg = PubPackage(simplePkgDir);
       // clone the package in a temp output location
 
       pkg = await simplePkg.clone(outDir, delete: true);
@@ -65,7 +66,7 @@ main() {
       result =
           await runCmd(pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)));
       expect(result.stdout, contains('No dependencies'));
-    }, timeout: longTimeout);
+    }, timeout: veryLongTimeout);
 
     test('test', () async {
       ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs()));

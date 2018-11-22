@@ -8,16 +8,16 @@ enum RunTestReporter { COMPACT, EXPANDED, JSON, compact, expanded, json }
 enum BuildMode { DEBUG, RELEASE, debug, release }
 enum BuildFormat { TEXT, JSON, text, json }
 
-final Map<BuildMode, String> _buildModeValueMap = new Map.fromIterables(
+final Map<BuildMode, String> _buildModeValueMap = Map.fromIterables(
     [BuildMode.DEBUG, BuildMode.RELEASE, BuildMode.debug, BuildMode.release],
     ["debug", "release", "debug", "release"]);
 
-final Map<BuildFormat, String> _buildFormatValueMap = new Map.fromIterables(
+final Map<BuildFormat, String> _buildFormatValueMap = Map.fromIterables(
     [BuildFormat.TEXT, BuildFormat.JSON, BuildFormat.text, BuildFormat.json],
     ["text", "json", "text", "json"]);
 
 final Map<RunTestReporter, String> _runTestReporterValueMap =
-    new Map.fromIterables([
+    Map.fromIterables([
   RunTestReporter.COMPACT,
   RunTestReporter.EXPANDED,
   RunTestReporter.JSON,
@@ -210,7 +210,7 @@ List<String> testRunnerArgs(
     List<String> platforms,
     String name}) {
   List<String> testArgs = [];
-  testArgs.addAll(pubRunTestRunnerArgs(new TestRunnerArgs(
+  testArgs.addAll(pubRunTestRunnerArgs(TestRunnerArgs(
       args: args,
       reporter: reporter,
       color: color,
@@ -229,7 +229,7 @@ List<String> pubRunTestArgs(
     List<String> platforms,
     String name}) {
   List<String> testArgs = ['run', 'test'];
-  testArgs.addAll(pubRunTestRunnerArgs(new TestRunnerArgs(
+  testArgs.addAll(pubRunTestRunnerArgs(TestRunnerArgs(
       args: args,
       reporter: reporter,
       color: color,

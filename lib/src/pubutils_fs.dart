@@ -36,8 +36,7 @@ Future<Map> getPubspecYaml(Directory packageDir) =>
     _getYaml(packageDir, "pubspec.yaml");
 
 Future<Map> _getYaml(Directory packageDir, String name) async {
-  String yamlPath = join(packageDir.path, name);
-  String content = await childFile(packageDir, yamlPath).readAsString();
+  String content = await childFile(packageDir, name).readAsString();
   return loadYaml(content) as Map;
 }
 
@@ -49,7 +48,7 @@ Uri dotPackagesGetLibUri(Map yaml, String packageName) {
 String pubspecYamlGetPackageName(Map yaml) => yaml['name'] as String;
 
 Version pubspecYamlGetVersion(Map yaml) =>
-    new Version.parse(yaml['version'] as String);
+    Version.parse(yaml['version'] as String);
 
 Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   if (yaml.containsKey('test_dependencies')) {
@@ -68,7 +67,7 @@ Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
 }
 
 Version pubspecLockGetVersion(Map yaml, String packageName) =>
-    new Version.parse(yaml['packages'][packageName]['version'] as String);
+    Version.parse(yaml['packages'][packageName]['version'] as String);
 
 bool pubspecYamlHasAnyDependencies(Map yaml, List<String> dependencies) {
   bool _hasDependencies(String kind, String dependency) {
