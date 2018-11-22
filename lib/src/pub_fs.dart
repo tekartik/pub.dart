@@ -27,8 +27,8 @@ class FsPubPackageFactory {
   FsPubPackageFactory(this.create);
 }
 
-final FsPubPackageFactory defaultFsPubPackageFactory = new FsPubPackageFactory(
-    (Directory dir, [String name]) => new FsPubPackage(dir, name));
+final FsPubPackageFactory defaultFsPubPackageFactory = FsPubPackageFactory(
+    (Directory dir, [String name]) => FsPubPackage(dir, name));
 
 // abstract?
 class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
@@ -84,12 +84,12 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
   /// Clone a package content
   ///
   /// if [delete] is true, content will be deleted first
-  Future<FsPubPackage> clone(Directory toDir, {bool delete: false}) async {
+  Future<FsPubPackage> clone(Directory toDir, {bool delete = false}) async {
     Directory src = dir;
     Directory dst = toDir;
     if (await isPubPackageDir(src)) {
       await copyDirectory(src, dst,
-          options: new CopyOptions(
+          options: CopyOptions(
               recursive: true,
               delete: delete, // delete before copying
               exclude: [
@@ -100,7 +100,7 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
                 'build'
               ]));
     } else {
-      throw new ArgumentError('not a pub directory');
+      throw ArgumentError('not a pub directory');
     }
     return factory.create(dst);
   }
@@ -131,7 +131,7 @@ Future<Directory> getPubPackageDir(FileSystemEntity resolver) async {
     Directory parent = dir.parent;
 
     if (parent.path == dir.path) {
-      throw new Exception("No project found for path '$resolver");
+      throw Exception("No project found for path '$resolver");
     }
     dir = parent;
   }

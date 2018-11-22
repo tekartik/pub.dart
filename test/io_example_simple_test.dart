@@ -14,8 +14,8 @@ String get pkgDir => '.';
 String get simplePkgDir => join(pkgDir, 'example', 'simple');
 String get outDir => join(testOutTopPath, joinAll(testDescriptions));
 
-var longTimeout = new Timeout(new Duration(minutes: 2));
-var veryLongTimeout = new Timeout(new Duration(minutes: 5));
+var longTimeout = Timeout(Duration(minutes: 2));
+var veryLongTimeout = Timeout(Duration(minutes: 5));
 
 main() {
   group('io_example_simple', () {
@@ -24,7 +24,7 @@ main() {
     // Order is important in the tests here
 
     setUpAll(() async {
-      PubPackage simplePkg = new PubPackage(simplePkgDir);
+      PubPackage simplePkg = PubPackage(simplePkgDir);
       // clone the package in a temp output location
 
       pkg = await simplePkg.clone(outDir, delete: true);

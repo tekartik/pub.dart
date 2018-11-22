@@ -41,7 +41,7 @@ void defineTests(FileSystemTestContext ctx) {
       Directory top = await ctx.prepare();
       Directory src = childDirectory(top, 'src');
       Directory dst = childDirectory(top, 'dst');
-      pkg = new FsPubPackage(src);
+      pkg = FsPubPackage(src);
 
       try {
         await pkg.clone(dst);
@@ -97,7 +97,7 @@ void defineTests(FileSystemTestContext ctx) {
     test('extractPackage', () async {
       // extractPackage
       Directory top = await ctx.prepare();
-      pkg = new FsPubPackage(top);
+      pkg = FsPubPackage(top);
       expect(await pkg.extractPackage(null), isNull);
       expect(await pkg.extractPackage("test"), isNull);
       await childFile(pkg.dir, dotPackagesBasename).writeAsString('''
@@ -115,13 +115,13 @@ test2:lib/
 
     test('extractVersion', () async {
       Directory top = await ctx.prepare();
-      pkg = new FsPubPackage(top);
+      pkg = FsPubPackage(top);
       //expect(await pkg.extractVersion(), isNull);
       await childFile(pkg.dir, pubspecYamlBasename).writeAsString('''
 name: tekartik_pub_test_extract_version
 version: 1.0.0
 ''');
-      expect(await pkg.extractVersion(), new Version(1, 0, 0));
+      expect(await pkg.extractVersion(), Version(1, 0, 0));
 
       // pkg = new FsPubPackage(top);
       // expect(await pkg.extractVersion(), isNull);

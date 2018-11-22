@@ -10,10 +10,9 @@ import 'package:fs_shim/utils/entity.dart';
 import 'test_common.dart';
 
 String get simplePkgDir => join(packageRoot, 'example', 'simple');
-Directory get outDir =>
-    new Directory(join(outSubPath, joinAll(testDescriptions)));
+Directory get outDir => Directory(join(outSubPath, joinAll(testDescriptions)));
 
-var longTimeout = new Timeout(new Duration(minutes: 2));
+var longTimeout = Timeout(Duration(minutes: 2));
 
 main() {
   group('src_fs_io_example_simple', () {
@@ -22,8 +21,7 @@ main() {
     // Order is important in the tests here
 
     setUpAll(() async {
-      IoFsPubPackage simplePkg =
-          new IoFsPubPackage(new Directory(simplePkgDir));
+      IoFsPubPackage simplePkg = IoFsPubPackage(Directory(simplePkgDir));
       // clone the package in a temp output location
 
       pkg = await simplePkg.clone(outDir, delete: true) as IoFsPubPackage;

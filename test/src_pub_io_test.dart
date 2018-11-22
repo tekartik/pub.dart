@@ -16,7 +16,7 @@ void defineTests() {
   //useVMConfiguration();
   group('src_pub_io', () {
     test('version', () async {
-      ProcessResult result = await runCmd(pubCmd(['--version']));
+      ProcessResult result = await runCmd(PubCmd(['--version']));
       expect(result.stdout.startsWith("Pub"), isTrue);
     });
 
@@ -78,7 +78,7 @@ void defineTests() {
       */
 
       test('name', () async {
-        IoPubPackage pkg = new IoPubPackage(packageRoot);
+        IoPubPackage pkg = IoPubPackage(packageRoot);
         expect(pkg.name, 'tekartik_pub');
       });
     });

@@ -18,7 +18,7 @@ bool _isToBeIgnored(String baseName) {
 
 Stream<Directory> recursivePubDir(List<Directory> dirs,
     {List<String> dependencies}) {
-  StreamController<Directory> ctlr = new StreamController();
+  StreamController<Directory> ctlr = StreamController();
 
   Future _handleDir(Directory dir) async {
     FileSystem fs = dir.fs;
@@ -38,7 +38,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
       } else {
         List<Future> sub = [];
         await dir.list().listen((FileSystemEntity fse) {
-          sub.add(new Future.sync(() async {
+          sub.add(Future.sync(() async {
             if (await fs.isDirectory(fse.path)) {
               await _handleDir(fs.newDirectory(fse.path));
             }
@@ -51,7 +51,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
 
   List<Future> futures = [];
   for (Directory dir in dirs) {
-    futures.add(new Future.sync(() async {
+    futures.add(Future.sync(() async {
       if (await dir.fs.isDirectory(dir.path)) {
         await _handleDir(dir);
       } else {

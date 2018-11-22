@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.3
+
+* allow `--force-recursive` for `pubget` and `pubupgrade` and handle flutter
+
 ## 0.8.2
 
 * Last dart1 support

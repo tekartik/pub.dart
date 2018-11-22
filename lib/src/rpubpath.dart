@@ -15,7 +15,7 @@ String _pubspecDotPackagesPath(String packageRoot) =>
 Map getPackageYamlSync(String packageRoot) {
   String pubspecYaml = "pubspec.yaml";
   String pubspecYamlPath = join(packageRoot, pubspecYaml);
-  String content = new File(pubspecYamlPath).readAsStringSync();
+  String content = File(pubspecYamlPath).readAsStringSync();
   return loadYaml(content) as Map;
 }
 
@@ -24,13 +24,13 @@ Future<Map> getPackageYaml(String packageRoot) =>
 
 Future<Map> _getYaml(String packageRoot, String name) async {
   String yamlPath = join(packageRoot, name);
-  String content = await new File(yamlPath).readAsString();
+  String content = await File(yamlPath).readAsString();
   return loadYaml(content) as Map;
 }
 
 Future<Map> getDotPackagesYaml(String packageRoot) async {
   String yamlPath = _pubspecDotPackagesPath(packageRoot);
-  String content = await new File(yamlPath).readAsString();
+  String content = await File(yamlPath).readAsString();
 
   Map map = {};
   Iterable<String> lines = LineSplitter.split(content);
@@ -96,15 +96,19 @@ bool _isToBeIgnored(String baseName) {
   return baseName.startsWith('.');
 }
 
+/// if [forceRecursive] is true, we folder going deeper even if the current
+/// path is a dart project
 Stream<String> recursivePubPath(List<String> dirs,
-    {List<String> dependencies}) {
-  StreamController<String> ctlr = new StreamController();
+    {List<String> dependencies, bool forceRecursive}) {
+  StreamController<String> ctlr = StreamController();
 
   Future _handleDir(String dir) async {
     // Ignore folder starting with .
     // don't event go below
     if (!_isToBeIgnored(basename(dir))) {
+      bool goRecursive = true;
       if (await isPubPackageRoot(dir)) {
+        goRecursive = forceRecursive == true;
         if (dependencies is List && !dependencies.isEmpty) {
           Map yaml = getPackageYamlSync(dir);
           if (yamlHasAnyDependencies(yaml, dependencies)) {
@@ -114,9 +118,11 @@ Stream<String> recursivePubPath(List<String> dirs,
           // add package path
           ctlr.add(dir);
         }
-      } else {
+      }
+
+      if (goRecursive) {
         List<Future> sub = [];
-        return new Directory(dir)
+        return Directory(dir)
             .list()
             .listen((FileSystemEntity fse) {
               if (FileSystemEntity.isDirectorySync(fse.path)) {

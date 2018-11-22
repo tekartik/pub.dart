@@ -10,13 +10,13 @@ import 'package:tekartik_fs_test/test_common.dart';
 export 'package:dev_test/test.dart';
 
 final FileSystemTestContextIo fileSystemTestContextIo =
-    new FileSystemTestContextIo();
+    FileSystemTestContextIo();
 
 class FileSystemTestContextIo extends FileSystemTestContext {
   @override
   final PlatformContext platform = platformContextIo;
   @override
-  final FileSystemIo fs = new FileSystemIo();
+  final FileSystemIo fs = FileSystemIo();
   String outTopPath;
 
   FileSystemTestContextIo() {

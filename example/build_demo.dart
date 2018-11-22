@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:process_run/cmd_run.dart';
 
 main() async {
-  PubPackage pkg = new PubPackage(Directory.current.path);
+  PubPackage pkg = PubPackage(Directory.current.path);
 
   // Run all tests
   ProcessResult result = await runCmd(

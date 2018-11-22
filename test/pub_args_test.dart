@@ -62,7 +62,7 @@ void defineTests() {
     test('pubRunTestRunnerArgs', () {
       expect(pubRunTestRunnerArgs(), []);
       expect(
-          pubRunTestRunnerArgs(new TestRunnerArgs(
+          pubRunTestRunnerArgs(TestRunnerArgs(
               args: ['arg1', 'arg2'],
               platforms: ['platform1', 'platform2'],
               reporter: RunTestReporter.compact,
