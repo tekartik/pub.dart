@@ -2,7 +2,7 @@
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:tekartik_pub/io.dart';
-import 'package:process_run/cmd_run.dart';
+import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'pubget.dart';
 
 // chmod +x ...
@@ -38,9 +38,19 @@ main(List<String> arguments) async {
     rest = ['.'];
   }
 
+  await pubUpgrade(
+      rest,
+      PubGetOptions()
+        ..oneByOne = oneByOne
+        ..forceRecursive = forceRecursive
+        ..packagesDir = packagesDir
+        ..offline = offline);
+}
+
+pubUpgrade(List<String> directories, PubGetOptions options) async {
   List<String> pkgPaths = [];
   // Also Handle recursive projects
-  await recursivePubPath(rest, forceRecursive: forceRecursive)
+  await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
   }).asFuture();
@@ -48,30 +58,19 @@ main(List<String> arguments) async {
   for (String dir in pkgPaths) {
     PubPackage pkg = PubPackage(dir);
     ProcessCmd cmd;
-    if (await isFlutterPackageRoot(dir) && isFlutterSupported) {
-      cmd = FlutterCmd(['packages', 'upgrade']);
+    if (await isFlutterPackageRoot(dir)) {
+      if (!isFlutterSupported) {
+        continue;
+      }
+      cmd = FlutterCmd(['packages', 'upgrade'])..workingDirectory = dir;
     } else {
-      cmd = pkg
-          .pubCmd(pubUpgradeArgs(offline: offline, packagesDir: packagesDir));
+      cmd = pkg.pubCmd(pubUpgradeArgs(
+          offline: options.offline, packagesDir: options.packagesDir));
     }
 
-    ProcessResult result;
-    if (oneByOne) {
-      stdout.writeln('[$dir]');
-      result = await runCmd(cmd, verbose: true);
-      if (result.exitCode != 0) {
-        exit(result.exitCode);
-      }
-    } else {
-      runCmd(cmd).then((ProcessResult result) {
-        stdout.writeln('[$dir]');
-        stdout.writeln('\$ $cmd');
-        stdout.write(result.stdout);
-        stderr.write(result.stderr);
-        if (result.exitCode != 0) {
-          exit(result.exitCode);
-        }
-      });
+    var future = runCmd(cmd, oneByOne: options.oneByOne);
+    if (options.oneByOne) {
+      await future;
     }
   }
 }

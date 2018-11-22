@@ -11,7 +11,7 @@ import 'package:process_run/cmd_run.dart';
 import 'test_common.dart';
 
 String get pkgDir => '.';
-String get simplePkgDir => join(pkgDir, 'example', 'simple');
+String get simplePkgDir => join(pkgDir, 'example_packages', 'simple');
 String get outDir => join(testOutTopPath, joinAll(testDescriptions));
 
 var longTimeout = Timeout(Duration(minutes: 2));

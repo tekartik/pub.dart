@@ -9,7 +9,8 @@ main() async {
 
   // Run all tests
   ProcessResult result = await runCmd(
-      pkg.pubCmd(pubBuildArgs(directories: [join('example', 'simple')])),
+      pkg.pubCmd(
+          pubBuildArgs(directories: [join('example_packages', 'simple')])),
       verbose: true);
   print('exitCode: ${result.exitCode}');
 }

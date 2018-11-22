@@ -9,7 +9,7 @@ import 'package:fs_shim/fs_io.dart';
 import 'package:fs_shim/utils/entity.dart';
 import 'test_common.dart';
 
-String get simplePkgDir => join(packageRoot, 'example', 'simple');
+String get simplePkgDir => join(packageRoot, 'example_packages', 'simple');
 Directory get outDir => Directory(join(outSubPath, joinAll(testDescriptions)));
 
 var longTimeout = Timeout(Duration(minutes: 2));

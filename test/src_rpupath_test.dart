@@ -43,6 +43,13 @@ void defineTests() {
     expect(failed, isTrue);
   });
 
+  test('recursiveDartEntities', () async {
+    var paths = await recursiveDartEntities('.');
+    expect(paths, contains('test'));
+    expect(paths, contains(join('test', 'io_test.dart')));
+    expect(paths, contains(join('test', 'data', 'fail_test_.dart')));
+  });
+
   test('extract', () async {
     Map yaml = getPackageYamlSync(packageRoot);
     expect(
@@ -53,6 +60,7 @@ void defineTests() {
           'yaml',
           'fs_shim',
           'args',
+          'tekartik_common_utils',
         ]));
     expect(
         await pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);

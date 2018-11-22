@@ -92,8 +92,43 @@ bool _isToBeIgnored(String baseName) {
   if (baseName == '.' || baseName == '..') {
     return false;
   }
+  if (baseName == 'node_modules') {
+    return false;
+  }
 
   return baseName.startsWith('.');
+}
+
+Future<List<String>> recursiveDartEntities(String dir) async {
+  var entities = await _recursiveDartEntities(dir, null);
+
+  return entities;
+}
+
+Future<List<String>> _recursiveDartEntities(String dir, String base) async {
+  var entities = <String>[]; // dir];
+  // list of basename
+  var list = (await Directory(dir).list(followLinks: false).toList())
+      .map((fileSystemEntity) => basename(fileSystemEntity.path))
+      .toList(growable: false);
+  for (var basename_ in list) {
+    var fullpath = join(dir, basename_);
+    if (base == null) {
+      base = basename_;
+    } else {
+      base = join(base, basename_);
+    }
+
+    if (FileSystemEntity.isDirectorySync(fullpath)) {
+      if (!_isToBeIgnored(basename_)) {
+        entities.add(base);
+        entities.addAll(await _recursiveDartEntities(fullpath, base));
+      }
+    } else {
+      entities.add(base);
+    }
+  }
+  return entities;
 }
 
 /// if [forceRecursive] is true, we folder going deeper even if the current
@@ -154,4 +189,24 @@ Stream<String> recursivePubPath(List<String> dirs,
   });
 
   return ctlr.stream;
+}
+
+bool containsPubPackage(Iterable<String> paths) {
+  for (var path in paths) {
+    if (FileSystemEntity.isDirectorySync(path)) {
+      if (isPubPackageRootSync(path)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool containsDartFiles(Iterable<String> paths) {
+  for (var path in paths) {
+    if (extension(path) == '.dart' && FileSystemEntity.isFileSync(path)) {
+      return true;
+    }
+  }
+  return false;
 }
