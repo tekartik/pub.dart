@@ -53,7 +53,7 @@ void defineTests() {
 
   test('findTargetDartDirectories', () async {
     var paths = await findTargetDartDirectories('.');
-    expect(paths, ['bin', 'example', 'lib', 'test']);
+    expect(paths, unorderedEquals(['bin', 'example', 'lib', 'test']));
   });
 
   test('extract', () async {
