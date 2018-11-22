@@ -1,18 +1,9 @@
 #!/usr/bin/env dart
-import 'dart:io';
-
 import 'package:args/args.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 
-const String argHelpFlag = 'help';
-const String argFixFlag = 'fix';
-const String argOneByOneFlag = 'one';
-const String argOfflineFlag = "offline";
-const String argPackagesDir = "packages-dir";
-const String argForceRecursiveFlag = "force-recursive";
-
-class PubGetOptions {
+class PubGetOptions extends PubBinOptions {
   bool forceRecursive;
   bool oneByOne;
   bool offline;
@@ -23,15 +14,15 @@ class PubGetOptions {
 main(List<String> arguments) async {
   ArgParser parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
-  parser.addFlag(argOneByOneFlag,
-      abbr: 'o', help: 'One at a time', defaultsTo: Platform.isWindows);
+
   parser.addFlag(argOfflineFlag, help: 'offline get', negatable: false);
   parser.addFlag(argForceRecursiveFlag,
       abbr: 'f',
       help: 'Force going recursive even in dart project',
-      negatable: false);
-  parser.addFlag(argPackagesDir,
+      defaultsTo: true);
+  parser.addFlag(argPackagesDirFlag,
       help: 'generates packages dir', negatable: false);
+  addCommonOptions(parser);
 
   ArgResults argResults = parser.parse(arguments);
 
@@ -43,8 +34,9 @@ main(List<String> arguments) async {
 
   bool oneByOne = argResults[argOneByOneFlag];
   bool offline = argResults[argOfflineFlag];
-  bool packagesDir = argResults[argPackagesDir];
+  bool packagesDir = argResults[argPackagesDirFlag];
   bool forceRecursive = argResults[argForceRecursiveFlag];
+  bool dryRun = argResults[argDryRunFlag];
 
   List<String> rest = argResults.rest;
   // if no default to current folder
@@ -58,7 +50,8 @@ main(List<String> arguments) async {
         ..oneByOne = oneByOne
         ..forceRecursive = forceRecursive
         ..packagesDir = packagesDir
-        ..offline = offline);
+        ..offline = offline
+        ..dryRun = dryRun);
 }
 
 pubGet(List<String> directories, PubGetOptions options) async {
@@ -81,7 +74,7 @@ pubGet(List<String> directories, PubGetOptions options) async {
       cmd = pkg.pubCmd(pubGetArgs(
           offline: options.offline, packagesDir: options.packagesDir));
     }
-    var future = runCmd(cmd, oneByOne: options.oneByOne);
+    var future = runCmd(cmd, options: options);
     if (options.oneByOne) {
       await future;
     }

@@ -51,6 +51,11 @@ void defineTests() {
     expect(paths, contains(join('test', 'data', 'fail_test_.dart')));
   });
 
+  test('findTargetDartDirectories', () async {
+    var paths = await findTargetDartDirectories('.');
+    expect(paths, ['bin', 'example', 'lib', 'test']);
+  });
+
   test('extract', () async {
     Map yaml = getPackageYamlSync(packageRoot);
     expect(

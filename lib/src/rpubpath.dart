@@ -121,7 +121,8 @@ Future<List<String>> findTargetDartDirectories(String dir) async {
         return baseName.startsWith('.');
       }
 
-      if (!_isToBeIgnored(entityBasename)) {
+      if (!_isToBeIgnored(entityBasename) &&
+          !(await isPubPackageRoot(subDir))) {
         var paths = (await recursiveDartEntities(subDir))
             .map((path) => join(subDir, path))
             .toList(growable: false);

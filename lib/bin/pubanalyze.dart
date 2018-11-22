@@ -1,14 +1,12 @@
 #!/usr/bin/env dart
-import 'dart:io';
 import 'package:args/args.dart';
+import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
-import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:tekartik_pub/src/rpubpath.dart';
-import 'pubget.dart';
 
-class PubAnalyzeOptions {
+class PubAnalyzeOptions extends PubBinOptions {
   bool forceRecursive;
   bool oneByOne;
 }
@@ -17,13 +15,12 @@ class PubAnalyzeOptions {
 main(List<String> arguments) async {
   ArgParser parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
-  parser.addFlag(argOneByOneFlag,
-      abbr: 'o', help: 'One at a time', defaultsTo: Platform.isWindows);
+
   parser.addFlag(argForceRecursiveFlag,
       abbr: 'f',
       help: 'Force going recursive even in dart project',
       defaultsTo: true);
-
+  addCommonOptions(parser);
   ArgResults argResults = parser.parse(arguments);
 
   bool help = argResults[argHelpFlag] as bool;
@@ -34,6 +31,8 @@ main(List<String> arguments) async {
 
   bool oneByOne = argResults[argOneByOneFlag];
   bool forceRecursive = argResults[argForceRecursiveFlag];
+  bool dryRun = argResults[argDryRunFlag];
+
   List<String> rest = argResults.rest;
   // if no default to current folder
   if (rest.length == 0) {
@@ -43,7 +42,8 @@ main(List<String> arguments) async {
       rest,
       PubAnalyzeOptions()
         ..oneByOne = oneByOne
-        ..forceRecursive = forceRecursive);
+        ..forceRecursive = forceRecursive
+        ..dryRun = dryRun);
 }
 
 Future<int> pubAnalyze(
@@ -63,7 +63,7 @@ Future<int> pubAnalyze(
       if (!isFlutterSupported) {
         continue;
       }
-      cmd = FlutterCmd(['analyze']);
+      cmd = FlutterCmd(['analyze'])..workingDirectory = dir;
     } else {
       // list of dir to check
       var targets = await findTargetDartDirectories(dir);
@@ -79,7 +79,7 @@ Future<int> pubAnalyze(
       //continue;
     }
 
-    var future = runCmd(cmd, oneByOne: options.oneByOne == true);
+    var future = runCmd(cmd, options: options);
     if (options.oneByOne == true) {
       await future;
     }

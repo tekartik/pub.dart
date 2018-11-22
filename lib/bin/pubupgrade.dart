@@ -1,5 +1,4 @@
 #!/usr/bin/env dart
-import 'dart:io';
 import 'package:args/args.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
@@ -9,14 +8,13 @@ import 'pubget.dart';
 main(List<String> arguments) async {
   ArgParser parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
-  parser.addFlag(argOneByOneFlag,
-      abbr: 'o', help: 'One at a time', defaultsTo: Platform.isWindows);
+  addCommonOptions(parser);
   parser.addFlag(argOfflineFlag, help: 'offline get', negatable: false);
   parser.addFlag(argForceRecursiveFlag,
       abbr: 'f',
       help: 'Force going recursive even in dart project',
-      negatable: false);
-  parser.addFlag(argPackagesDir,
+      defaultsTo: true);
+  parser.addFlag(argPackagesDirFlag,
       help: 'generates packages dir', negatable: false);
 
   ArgResults argResults = parser.parse(arguments);
@@ -29,9 +27,9 @@ main(List<String> arguments) async {
 
   bool oneByOne = argResults[argOneByOneFlag];
   bool offline = argResults[argOfflineFlag];
-  bool packagesDir = argResults[argPackagesDir];
+  bool packagesDir = argResults[argPackagesDirFlag];
   bool forceRecursive = argResults[argForceRecursiveFlag];
-
+  bool dryRun = argResults[argDryRunFlag];
   List<String> rest = argResults.rest;
   // if no default to current folder
   if (rest.length == 0) {
@@ -44,7 +42,8 @@ main(List<String> arguments) async {
         ..oneByOne = oneByOne
         ..forceRecursive = forceRecursive
         ..packagesDir = packagesDir
-        ..offline = offline);
+        ..offline = offline
+        ..dryRun = dryRun);
 }
 
 pubUpgrade(List<String> directories, PubGetOptions options) async {
@@ -68,7 +67,7 @@ pubUpgrade(List<String> directories, PubGetOptions options) async {
           offline: options.offline, packagesDir: options.packagesDir));
     }
 
-    var future = runCmd(cmd, oneByOne: options.oneByOne);
+    var future = runCmd(cmd, options: options);
     if (options.oneByOne) {
       await future;
     }

@@ -1,13 +1,11 @@
 #!/usr/bin/env dart
-import 'dart:io';
 import 'package:args/args.dart';
+import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
-import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:tekartik_pub/src/rpubpath.dart';
-import 'pubget.dart';
 
-class PubFmtOptions {
+class PubFmtOptions extends PubBinOptions {
   bool forceRecursive;
   bool oneByOne;
   bool fix;
@@ -17,8 +15,7 @@ class PubFmtOptions {
 main(List<String> arguments) async {
   ArgParser parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
-  parser.addFlag(argOneByOneFlag,
-      abbr: 'o', help: 'One at a time', defaultsTo: Platform.isWindows);
+
   parser.addFlag(
     argForceRecursiveFlag,
     abbr: 'f',
@@ -31,6 +28,7 @@ main(List<String> arguments) async {
     help: 'Fix code',
     defaultsTo: true,
   );
+  addCommonOptions(parser);
 
   ArgResults argResults = parser.parse(arguments);
 
@@ -42,6 +40,8 @@ main(List<String> arguments) async {
 
   bool oneByOne = argResults[argOneByOneFlag];
   bool forceRecursive = argResults[argForceRecursiveFlag];
+  bool dryRun = argResults[argDryRunFlag];
+
   List<String> rest = argResults.rest;
   // if no default to current folder
   if (rest.length == 0) {
@@ -51,7 +51,8 @@ main(List<String> arguments) async {
       rest,
       PubFmtOptions()
         ..oneByOne = oneByOne
-        ..forceRecursive = forceRecursive);
+        ..forceRecursive = forceRecursive
+        ..dryRun = dryRun);
 }
 
 Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
@@ -75,7 +76,7 @@ Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
     }
     args.addAll(targets);
     var cmd = DartFmtCmd(args)..workingDirectory = dir;
-    var future = runCmd(cmd, oneByOne: options.oneByOne);
+    var future = runCmd(cmd, options: options);
     if (options.oneByOne == true) {
       await future;
     }
