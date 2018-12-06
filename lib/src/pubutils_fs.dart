@@ -32,12 +32,16 @@ String _pubspecDotPackagesPath(String packageRoot) =>
 @deprecated
 Future<Map> getPackageYaml(Directory packageDir) => getPubspecYaml(packageDir);
 
+// 2018-12 to deprecate
 Future<Map> getPubspecYaml(Directory packageDir) =>
+    getPubspecYamlMap(packageDir);
+
+Future<Map<String, dynamic>> getPubspecYamlMap(Directory packageDir) =>
     _getYaml(packageDir, "pubspec.yaml");
 
-Future<Map> _getYaml(Directory packageDir, String name) async {
+Future<Map<String, dynamic>> _getYaml(Directory packageDir, String name) async {
   String content = await childFile(packageDir, name).readAsString();
-  return loadYaml(content) as Map;
+  return (loadYaml(content) as Map)?.cast<String, dynamic>();
 }
 
 Uri dotPackagesGetLibUri(Map yaml, String packageName) {

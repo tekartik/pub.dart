@@ -31,6 +31,9 @@ main(List<String> arguments) async {
     print(parser.usage);
     return;
   }
+  if (parseCommonOptions(argResults)) {
+    return;
+  }
 
   bool oneByOne = argResults[argOneByOneFlag];
   bool offline = argResults[argOfflineFlag];

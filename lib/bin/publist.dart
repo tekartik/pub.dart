@@ -1,12 +1,10 @@
 #!/usr/bin/env dart
 import 'package:args/args.dart';
-import 'package:process_run/cmd_run.dart' hide runCmd;
-import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
-import 'package:tekartik_pub/src/rpubpath.dart';
+import 'package:tekartik_pub/pubspec_yaml.dart';
 
-class PubAnalyzeOptions extends PubBinOptions {
+class PubListOptions extends PubBinOptions {
   bool forceRecursive;
   bool oneByOne;
 }
@@ -15,16 +13,17 @@ class PubAnalyzeOptions extends PubBinOptions {
 main(List<String> arguments) async {
   ArgParser parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
-
   parser.addFlag(argForceRecursiveFlag,
       abbr: 'f',
       help: 'Force going recursive even in dart project',
       defaultsTo: true);
   addCommonOptions(parser);
+
   ArgResults argResults = parser.parse(arguments);
 
   bool help = argResults[argHelpFlag] as bool;
   if (help) {
+    print('List recursively pub package');
     print(parser.usage);
     return;
   }
@@ -41,17 +40,16 @@ main(List<String> arguments) async {
   if (rest.length == 0) {
     rest = ['.'];
   }
-  await pubAnalyze(
+
+  await pubList(
       rest,
-      PubAnalyzeOptions()
+      PubListOptions()
         ..oneByOne = oneByOne
         ..forceRecursive = forceRecursive
         ..dryRun = dryRun);
 }
 
-Future<int> pubAnalyze(
-    List<String> directories, PubAnalyzeOptions options) async {
-  List<Future> futures = [];
+pubList(List<String> directories, PubListOptions options) async {
   List<String> pkgPaths = [];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
@@ -60,34 +58,28 @@ Future<int> pubAnalyze(
   }).asFuture();
 
   for (String dir in pkgPaths) {
+    PubPackage pkg = PubPackage(dir);
+    var pubspecYaml = PubspecYaml.fromMap(await pkg.getPubspecYamlMap());
+    try {
+      print(pubspecYaml);
+    } catch (e) {
+      print(pubspecYaml.name);
+    }
+    /*
     ProcessCmd cmd;
-
     if (await isFlutterPackageRoot(dir)) {
       if (!isFlutterSupported) {
         continue;
       }
-      cmd = FlutterCmd(['analyze'])..workingDirectory = dir;
+      cmd = FlutterCmd(['packages', 'get'])..workingDirectory = dir;
     } else {
-      // list of dir to check
-      var targets = await findTargetDartDirectories(dir);
-      if (targets.isEmpty) {
-        continue;
-      }
-      cmd = DartAnalyzerCmd(['--fatal-warnings']..addAll(targets))
-        ..workingDirectory = dir;
-      /*
-      cmd = DartAnalyzerCmd()pkg
-          .pubCmd(pubUpgradeArgs(offline: options.offline, packagesDir: options.packagesDir));
-          */
-      //continue;
+      cmd = pkg.pubCmd(pubGetArgs(
+          offline: options.offline, packagesDir: options.packagesDir));
     }
-
     var future = runCmd(cmd, options: options);
-    if (options.oneByOne == true) {
-      await future;
+    */
+    if (options.oneByOne) {
+      // await future;
     }
-    futures.add(future);
   }
-  await Future.wait(futures);
-  return futures.length;
 }
