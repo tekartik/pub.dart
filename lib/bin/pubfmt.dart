@@ -4,6 +4,7 @@ import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
+import 'dart:async';
 
 class PubFmtOptions extends PubBinOptions {
   bool forceRecursive;

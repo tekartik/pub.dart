@@ -3,6 +3,7 @@ import 'package:args/args.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/pubspec_yaml.dart';
+import 'dart:async';
 
 class PubListOptions extends PubBinOptions {
   bool forceRecursive;
@@ -49,7 +50,7 @@ main(List<String> arguments) async {
         ..dryRun = dryRun);
 }
 
-pubList(List<String> directories, PubListOptions options) async {
+Future pubList(List<String> directories, PubListOptions options) async {
   List<String> pkgPaths = [];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
