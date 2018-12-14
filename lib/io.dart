@@ -50,6 +50,8 @@ class PubPackage extends common.PubPackage {
   ProcessCmd dartCmd(List<String> args) => _dartCmd(args);
 
   Future<Map> getPubspecYaml() => fsPubPackage.getPubspecYaml();
+  Future<Map<String, dynamic>> getPubspecYamlMap() =>
+      fsPubPackage.getPubspecYamlMap();
 
   Future<Iterable<String>> extractPubspecDependencies() =>
       fsPubPackage.extractPubspecDependencies();

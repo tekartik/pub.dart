@@ -43,3 +43,16 @@ Recursively call `pub upgrade`
 ### From local path
 
     pub global activate -s path .
+
+## command line version test
+
+    dart bin/publist.dart --version
+    dart bin/pubget.dart --version
+    dart bin/pubupgrade.dart --version
+    dart bin/pubfmt.dart --version
+    dart bin/pubanalyze.dart --version
+    
+    dart bin/publist.dart
+    dart bin/pubget.dart
+    dart bin/pubupgrade.dart --offline
+        

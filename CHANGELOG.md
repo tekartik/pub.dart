@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.6
+
+* add `publist`
+
 ## 0.10.3
 
 * allow `--force-recursive` for `pubget` and `pubupgrade` and handle flutter

@@ -8,11 +8,18 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:path/path.dart';
 
 import 'package:tekartik_pub/io.dart';
+import 'package:tekartik_pub/pubspec_yaml.dart';
 
 import 'test_common.dart';
 
 main() {
   group('activate_package', () {
+    test('PubspecYaml', () async {
+      var pubspecYaml = PubspecYaml.fromMap(
+          await PubPackage(packageRoot).getPubspecYamlMap());
+      expect(pubspecYaml.name, 'tekartik_pub');
+      expect(pubspecYaml.version, greaterThan(Version(0, 10, 0)));
+    });
     test('pubspec.yaml', () async {
       Version version = await extractPubspecYamlVersion(packageRoot);
       expect(version, greaterThan(Version(0, 1, 0)));

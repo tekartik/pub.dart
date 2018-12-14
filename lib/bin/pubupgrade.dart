@@ -3,6 +3,7 @@ import 'package:args/args.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'pubget.dart';
+import 'dart:async';
 
 // chmod +x ...
 main(List<String> arguments) async {
@@ -22,6 +23,9 @@ main(List<String> arguments) async {
   bool help = argResults[argHelpFlag] as bool;
   if (help) {
     print(parser.usage);
+    return;
+  }
+  if (parseCommonOptions(argResults)) {
     return;
   }
 
@@ -46,7 +50,7 @@ main(List<String> arguments) async {
         ..dryRun = dryRun);
 }
 
-pubUpgrade(List<String> directories, PubGetOptions options) async {
+Future pubUpgrade(List<String> directories, PubGetOptions options) async {
   List<String> pkgPaths = [];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)

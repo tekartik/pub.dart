@@ -50,6 +50,10 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
   Future<Map> getPackageYaml() => pub.getPubspecYaml(dir);
   Future<Map> getPubspecYaml() => pub.getPubspecYaml(dir);
 
+  // Get the pubspec as a map
+  Future<Map<String, dynamic>> getPubspecYamlMap() =>
+      pub.getPubspecYamlMap(dir);
+
   Future<String> extractPackageName() async {
     return pubspecYamlGetPackageName(await getPubspecYaml());
   }

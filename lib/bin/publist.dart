@@ -1,40 +1,30 @@
 #!/usr/bin/env dart
 import 'package:args/args.dart';
-import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
-import 'package:tekartik_pub/src/rpubpath.dart';
+import 'package:tekartik_pub/pubspec_yaml.dart';
 import 'dart:async';
 
-class PubFmtOptions extends PubBinOptions {
+class PubListOptions extends PubBinOptions {
   bool forceRecursive;
   bool oneByOne;
-  bool fix;
 }
 
 // chmod +x ...
 main(List<String> arguments) async {
   ArgParser parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
-
-  parser.addFlag(
-    argForceRecursiveFlag,
-    abbr: 'f',
-    help: 'Force going recursive even in dart project',
-    defaultsTo: true,
-  );
-  parser.addFlag(
-    argFixFlag,
-    abbr: 'x',
-    help: 'Fix code',
-    defaultsTo: true,
-  );
+  parser.addFlag(argForceRecursiveFlag,
+      abbr: 'f',
+      help: 'Force going recursive even in dart project',
+      defaultsTo: true);
   addCommonOptions(parser);
 
   ArgResults argResults = parser.parse(arguments);
 
   bool help = argResults[argHelpFlag] as bool;
   if (help) {
+    print('List recursively pub package');
     print(parser.usage);
     return;
   }
@@ -51,16 +41,16 @@ main(List<String> arguments) async {
   if (rest.length == 0) {
     rest = ['.'];
   }
-  await pubFmt(
+
+  await pubList(
       rest,
-      PubFmtOptions()
+      PubListOptions()
         ..oneByOne = oneByOne
         ..forceRecursive = forceRecursive
         ..dryRun = dryRun);
 }
 
-Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
-  List<Future> futures = [];
+Future pubList(List<String> directories, PubListOptions options) async {
   List<String> pkgPaths = [];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
@@ -69,23 +59,28 @@ Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
   }).asFuture();
 
   for (String dir in pkgPaths) {
-    // list of dir to check
-    var targets = await findTargetDartDirectories(dir);
-    if (targets.isEmpty) {
-      continue;
+    PubPackage pkg = PubPackage(dir);
+    var pubspecYaml = PubspecYaml.fromMap(await pkg.getPubspecYamlMap());
+    try {
+      print(pubspecYaml);
+    } catch (e) {
+      print(pubspecYaml.name);
     }
-    var args = ['-w'];
-    if (options.fix == true) {
-      args.add('--fix');
+    /*
+    ProcessCmd cmd;
+    if (await isFlutterPackageRoot(dir)) {
+      if (!isFlutterSupported) {
+        continue;
+      }
+      cmd = FlutterCmd(['packages', 'get'])..workingDirectory = dir;
+    } else {
+      cmd = pkg.pubCmd(pubGetArgs(
+          offline: options.offline, packagesDir: options.packagesDir));
     }
-    args.addAll(targets);
-    var cmd = DartFmtCmd(args)..workingDirectory = dir;
     var future = runCmd(cmd, options: options);
-    if (options.oneByOne == true) {
-      await future;
+    */
+    if (options.oneByOne) {
+      // await future;
     }
-    futures.add(future);
   }
-  await Future.wait(futures);
-  return futures.length;
 }
