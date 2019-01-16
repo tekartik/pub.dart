@@ -5,10 +5,10 @@ import 'package:dev_test/test.dart';
 import 'package:fs_shim/fs.dart';
 import 'package:fs_shim/utils/copy.dart';
 import 'package:fs_shim/utils/entity.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:tekartik_fs_test/test_common.dart';
 import 'package:tekartik_pub/src/pub_fs.dart';
 import 'package:tekartik_pub/src/pubutils_fs.dart';
-import 'package:pub_semver/pub_semver.dart';
 
 void main() => defineTests(memoryFileSystemTestContext);
 

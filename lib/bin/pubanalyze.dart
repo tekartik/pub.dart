@@ -8,14 +8,13 @@ import 'package:tekartik_pub/src/rpubpath.dart';
 
 class PubAnalyzeOptions extends PubBinOptions {
   bool forceRecursive;
-  bool oneByOne;
   bool fatalInfos;
 }
 
 const String argFatalInfosFlag = "fatal-infos";
 
 // chmod +x ...
-main(List<String> arguments) async {
+Future main(List<String> arguments) async {
   ArgParser parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
 
@@ -44,7 +43,7 @@ main(List<String> arguments) async {
 
   List<String> rest = argResults.rest;
   // if no default to current folder
-  if (rest.length == 0) {
+  if (rest.isEmpty) {
     rest = ['.'];
   }
   await pubAnalyze(

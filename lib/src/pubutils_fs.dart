@@ -1,7 +1,8 @@
 library tekartik_pub.src.pubutils_fs;
 
-import 'import.dart';
 import 'package:yaml/yaml.dart';
+
+import 'import.dart';
 
 const String pubspecYamlBasename = 'pubspec.yaml';
 const String dotPackagesBasename = '.packages';

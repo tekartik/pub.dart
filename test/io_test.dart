@@ -1,6 +1,7 @@
 @TestOn("vm")
 library tekartik_pub.test.pub_fs_io_test;
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dev_test/test.dart';
@@ -42,7 +43,7 @@ void defineTests() {
       expect(result.stdout, startsWith("Pub"));
     });
 
-    _testIsPubPackageRoot(String path, bool expected) async {
+    Future _testIsPubPackageRoot(String path, bool expected) async {
       expect(await isPubPackageRoot(path), expected);
       expect(isPubPackageRootSync(path), expected);
     }
@@ -54,7 +55,7 @@ void defineTests() {
       try {
         await getPubPackageRoot(join('/', 'dummy', 'path'));
         fail('no');
-      } catch (e) {}
+      } catch (_) {}
     });
     // use pk.runCmd and then pkg.pubCmd
 
@@ -77,7 +78,6 @@ void defineTests() {
         try {
           await File(testPath).delete();
         } catch (_) {}
-        ;
       }
     }, timeout: Timeout(Duration(minutes: 2)));
 
@@ -101,7 +101,6 @@ void defineTests() {
         try {
           await File(testPath).delete();
         } catch (_) {}
-        ;
       }
     }, skip: true, timeout: Timeout(Duration(minutes: 2)));
 
@@ -125,7 +124,6 @@ void defineTests() {
         try {
           await File(testPath).delete();
         } catch (_) {}
-        ;
       }
     }, timeout: Timeout(Duration(minutes: 2)));
     /*
@@ -160,7 +158,6 @@ void defineTests() {
         try {
           await File(failTestPath).delete();
         } catch (_) {}
-        ;
       }
     }, timeout: Timeout(Duration(minutes: 2)));
 
@@ -184,7 +181,6 @@ void defineTests() {
         try {
           await File(failTestPath).delete();
         } catch (_) {}
-        ;
       }
     }, skip: true, timeout: Timeout(Duration(minutes: 2)));
 
@@ -211,7 +207,6 @@ void defineTests() {
         try {
           await File(failTestPath).delete();
         } catch (_) {}
-        ;
       }
     }, timeout: Timeout(Duration(minutes: 2)));
 
@@ -227,7 +222,7 @@ void defineTests() {
       expect(await isFlutterPackageRoot(packageRoot), isFalse);
       var dir = Directory(join(outSubPath, 'is_flutter_package_root'));
       await dir.create(recursive: true);
-      await File(join(dir.path, 'pubspec.yaml')).writeAsStringSync('''
+      await File(join(dir.path, 'pubspec.yaml')).writeAsString('''
 dependencies:
   flutter:
     sdk: flutter

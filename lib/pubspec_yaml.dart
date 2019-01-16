@@ -7,6 +7,8 @@ abstract class PubspecYaml {
   factory PubspecYaml.fromMap(Map<String, dynamic> pubspecYamlMap) {
     return PubspecYamlImpl(pubspecYamlMap);
   }
+
   String get name;
+
   Version get version;
 }

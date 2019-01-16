@@ -1,5 +1,6 @@
-import 'src/pub_fs.dart';
 import 'dart:async';
+
+import 'src/pub_fs.dart';
 
 class PubPackage {
   PubPackage(this._fsPubPackage);

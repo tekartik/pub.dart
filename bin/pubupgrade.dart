@@ -1,6 +1,8 @@
 #!/usr/bin/env dart
 library tekartik_script.bin.pubupgrade;
 
-import 'package:tekartik_pub/bin/pubupgrade.dart' as _;
+import 'dart:async';
 
-main(List<String> arguments) => _.main(arguments);
+import 'package:tekartik_pub/bin/pubupgrade.dart' as pubupgrade;
+
+Future main(List<String> arguments) => pubupgrade.main(arguments);

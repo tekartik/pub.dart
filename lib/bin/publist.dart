@@ -1,17 +1,17 @@
 #!/usr/bin/env dart
+import 'dart:async';
+
 import 'package:args/args.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/pubspec_yaml.dart';
-import 'dart:async';
 
 class PubListOptions extends PubBinOptions {
   bool forceRecursive;
-  bool oneByOne;
 }
 
 // chmod +x ...
-main(List<String> arguments) async {
+Future main(List<String> arguments) async {
   ArgParser parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
   parser.addFlag(argForceRecursiveFlag,
@@ -38,7 +38,7 @@ main(List<String> arguments) async {
 
   List<String> rest = argResults.rest;
   // if no default to current folder
-  if (rest.length == 0) {
+  if (rest.isEmpty) {
     rest = ['.'];
   }
 

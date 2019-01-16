@@ -1,6 +1,8 @@
 #!/usr/bin/env dart
 library tekartik_script.bin.pubfmt;
 
-import 'package:tekartik_pub/bin/pubanalyze.dart' as _;
+import 'dart:async';
 
-main(List<String> arguments) => _.main(arguments);
+import 'package:tekartik_pub/bin/pubanalyze.dart' as pubanalyze;
+
+Future main(List<String> arguments) => pubanalyze.main(arguments);

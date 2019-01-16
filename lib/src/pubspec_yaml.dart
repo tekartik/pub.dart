@@ -8,7 +8,9 @@ class PubspecYamlImpl implements PubspecYaml {
 
   PubspecYamlImpl(this.pubspecYamlMap);
 
+  @override
   String get name => pubspecYamlMap['name'] as String;
+
   String get versionText => pubspecYamlMap['version'] as String;
 
   Version _parseVersion(String text) {
@@ -18,6 +20,7 @@ class PubspecYamlImpl implements PubspecYaml {
     return parseVersion(text);
   }
 
+  @override
   Version get version => _parseVersion(versionText);
 
   bool get isFlutter {
