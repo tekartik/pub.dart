@@ -1,6 +1,8 @@
 #!/usr/bin/env dart
 library tekartik_script.bin.pubget;
 
-import 'package:tekartik_pub/bin/pubget.dart' as _;
+import 'dart:async';
 
-main(List<String> arguments) => _.main(arguments);
+import 'package:tekartik_pub/bin/pubget.dart' as pubget;
+
+Future main(List<String> arguments) => pubget.main(arguments);

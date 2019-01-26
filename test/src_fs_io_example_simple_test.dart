@@ -2,19 +2,21 @@
 library tekartik_pub.test.example_simple_test.dart;
 
 import 'package:dev_test/test.dart';
+import 'package:fs_shim/fs_io.dart';
+import 'package:fs_shim/utils/entity.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/src/pub_fs_io.dart';
-import 'package:fs_shim/fs_io.dart';
-import 'package:fs_shim/utils/entity.dart';
+
 import 'test_common.dart';
 
 String get simplePkgDir => join(packageRoot, 'example_packages', 'simple');
+
 Directory get outDir => Directory(join(outSubPath, joinAll(testDescriptions)));
 
 var longTimeout = Timeout(Duration(minutes: 2));
 
-main() {
+void main() {
   group('src_fs_io_example_simple', () {
     IoFsPubPackage pkg;
 
@@ -31,7 +33,7 @@ main() {
     test('get_offline', () async {
       ProcessResult result =
           await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
-      // Called first to depedencies have changed
+      // Called first to dependencies have changed
       expect(result.stdout, contains('Changed '));
     }, timeout: longTimeout);
 

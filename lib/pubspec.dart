@@ -1,13 +1,15 @@
 library tekartik_pub.pubspec;
 
-import 'package:pub_semver/pub_semver.dart';
-import 'dart:io';
-import 'package:path/path.dart';
-import 'package:yaml/yaml.dart';
 import 'dart:async';
-import 'src/rpubpath.dart';
+import 'dart:io';
+
+import 'package:path/path.dart';
+import 'package:pub_semver/pub_semver.dart';
+import 'package:yaml/yaml.dart';
+
 import 'io.dart';
 import 'src/pubutils_fs.dart' show pubspecYamlGetPackageName;
+import 'src/rpubpath.dart';
 
 // packages:
 //   pubglobalupdate:
@@ -63,7 +65,7 @@ Future<Version> extractPackageVersion(String packageRoot) async {
 // return as package name
 Future<Iterable<String>> extractPubspecDependencies(String packageRoot) async {
   Map yaml = await getPackageYaml(packageRoot);
-  Iterable<String> list = await pubspecYamlGetTestDependenciesPackageName(yaml);
+  Iterable<String> list = pubspecYamlGetTestDependenciesPackageName(yaml);
   if (list == null) {
     list = pubspecYamlGetDependenciesPackageName(yaml);
   }

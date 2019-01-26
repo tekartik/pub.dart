@@ -36,6 +36,7 @@ class PubPackage extends common.PubPackage {
 
   PubPackage(String path) : this._(IoFsPubPackage(Directory(path)));
 
+  @override
   String get name {
     if (super.name == null) {
       super.name = extractPubspecYamlNameSync(path);
@@ -50,6 +51,7 @@ class PubPackage extends common.PubPackage {
   ProcessCmd dartCmd(List<String> args) => _dartCmd(args);
 
   Future<Map> getPubspecYaml() => fsPubPackage.getPubspecYaml();
+
   Future<Map<String, dynamic>> getPubspecYamlMap() =>
       fsPubPackage.getPubspecYamlMap();
 
@@ -134,7 +136,8 @@ final String _pubspecYaml = "pubspec.yaml";
 /// @deprecated
 Future<bool> isPubPackageRoot(String dirPath) async {
   String pubspecYamlPath = join(dirPath, _pubspecYaml);
-  return await FileSystemEntity.isFile(pubspecYamlPath);
+  // ignore: avoid_slow_async_io
+  return FileSystemEntity.isFile(pubspecYamlPath);
 }
 
 bool isPubPackageRootSync(String dirPath) {

@@ -1,6 +1,8 @@
 #!/usr/bin/env dart
 library tekartik_script.bin.publist;
 
-import 'package:tekartik_pub/bin/publist.dart' as _;
+import 'dart:async';
 
-main(List<String> arguments) => _.main(arguments);
+import 'package:tekartik_pub/bin/publist.dart' as publist;
+
+Future main(List<String> arguments) => publist.main(arguments);

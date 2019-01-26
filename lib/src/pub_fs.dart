@@ -1,14 +1,14 @@
-import 'package:process_run/cmd_run.dart';
-//import 'pub.dart';
-//export 'pub.dart';
-import 'pub_package_fs.dart';
-//import 'pubspec.dart';
-import 'package:fs_shim/fs.dart';
-import 'package:fs_shim/utils/entity.dart';
-import 'package:fs_shim/utils/copy.dart';
 import 'dart:async';
+
+import 'package:fs_shim/fs.dart';
+import 'package:fs_shim/utils/copy.dart';
+import 'package:fs_shim/utils/entity.dart';
+import 'package:process_run/cmd_run.dart';
+
 import 'import.dart';
 import 'import.dart' as pub;
+import 'pub_package_fs.dart';
+
 export 'pubutils_fs.dart'
     show
         getPubspecYaml,
@@ -37,10 +37,11 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
   FileSystem get fs => dir.fs;
   @override
   Directory dir;
+
   FsPubPackage(Directory dir, [String name])
       : this.created(defaultFsPubPackageFactory, dir, name);
 
-  FsPubPackage.created(this.factory, Directory dir, [this.name]) : dir = dir;
+  FsPubPackage.created(this.factory, this.dir, [this.name]);
   @override
   String name;
 
@@ -48,6 +49,7 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
 
   @deprecated
   Future<Map> getPackageYaml() => pub.getPubspecYaml(dir);
+
   Future<Map> getPubspecYaml() => pub.getPubspecYaml(dir);
 
   // Get the pubspec as a map

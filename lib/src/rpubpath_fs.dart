@@ -3,10 +3,12 @@
 library tekartik_pub.src.rpubpath_fs;
 
 import 'dart:async';
+
 import 'package:fs_shim/fs.dart';
 import 'package:path/path.dart';
-import 'pub_fs.dart';
+
 import 'import.dart';
+import 'pub_fs.dart';
 
 bool _isToBeIgnored(String baseName) {
   if (baseName == '.' || baseName == '..') {
@@ -26,7 +28,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
     // don't event go below
     if (!_isToBeIgnored(basename(dir.path))) {
       if (await isPubPackageDir(dir)) {
-        if (dependencies is List && !dependencies.isEmpty) {
+        if (dependencies is List && dependencies.isNotEmpty) {
           Map yaml = await getPubspecYaml(dir);
           if (pubspecYamlHasAnyDependencies(yaml, dependencies)) {
             ctlr.add(dir);

@@ -1,9 +1,11 @@
-import 'dart:io';
 import 'dart:async';
+import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:process_run/cmd_run.dart' as cmd_run;
 import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:pub_semver/pub_semver.dart';
+
 export 'package:process_run/cmd_run.dart' hide runCmd;
 
 const String argHelpFlag = 'help';

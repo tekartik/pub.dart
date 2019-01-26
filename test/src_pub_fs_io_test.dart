@@ -5,8 +5,9 @@ import 'package:dev_test/test.dart';
 import 'package:fs_shim/fs_io.dart';
 import 'package:process_run/cmd_run.dart' hide pubCmd;
 import 'package:tekartik_pub/src/pub_fs_io.dart';
-import 'test_common_io.dart';
+
 import 'src_pub_fs_test.dart' as pub_fs_test;
+import 'test_common_io.dart';
 
 void main() => defineTests();
 

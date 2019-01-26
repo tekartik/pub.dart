@@ -1,11 +1,12 @@
 library tekartik_pub.src.rpubpath;
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+
 import 'package:path/path.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:yaml/yaml.dart';
-import 'dart:convert';
 
 //String _pubspecYamlPath(String packageRoot) =>
 //    join(packageRoot, 'pubspec.yaml');
@@ -183,7 +184,7 @@ Stream<String> recursivePubPath(List<String> dirs,
       bool goRecursive = true;
       if (await isPubPackageRoot(dir)) {
         goRecursive = forceRecursive == true;
-        if (dependencies is List && !dependencies.isEmpty) {
+        if (dependencies is List && dependencies.isNotEmpty) {
           Map yaml = getPackageYamlSync(dir);
           if (yamlHasAnyDependencies(yaml, dependencies)) {
             ctlr.add(dir);

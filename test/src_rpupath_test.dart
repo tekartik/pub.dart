@@ -1,8 +1,8 @@
 @TestOn("vm")
 library tekartik_pub.test.src_rpubpath_test;
 
-import 'package:path/path.dart';
 import 'package:dev_test/test.dart';
+import 'package:path/path.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 
@@ -59,7 +59,7 @@ void defineTests() {
   test('extract', () async {
     Map yaml = getPackageYamlSync(packageRoot);
     expect(
-        await pubspecYamlGetDependenciesPackageName(yaml),
+        pubspecYamlGetDependenciesPackageName(yaml),
         unorderedEquals([
           'pub_semver',
           'process_run',
@@ -68,24 +68,22 @@ void defineTests() {
           'args',
           'tekartik_common_utils',
         ]));
-    expect(
-        await pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
 
     yaml = {};
-    expect(await pubspecYamlGetTestDependenciesPackageName(yaml), isNull);
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), isNull);
     yaml = {'test_dependencies': null};
-    expect(await pubspecYamlGetTestDependenciesPackageName(yaml), []);
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), []);
     yaml = {'test_dependencies': []};
-    expect(await pubspecYamlGetTestDependenciesPackageName(yaml), []);
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), []);
     yaml = {
       'test_dependencies': ['process_run']
     };
-    expect(
-        await pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
 
     yaml = {
       'dependencies': {'process_run': 'any'}
     };
-    expect(await pubspecYamlGetDependenciesPackageName(yaml), ['process_run']);
+    expect(pubspecYamlGetDependenciesPackageName(yaml), ['process_run']);
   });
 }

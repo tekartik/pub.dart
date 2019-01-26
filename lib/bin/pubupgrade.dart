@@ -1,12 +1,14 @@
 #!/usr/bin/env dart
-import 'package:args/args.dart';
-import 'package:tekartik_pub/io.dart';
-import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
-import 'pubget.dart';
 import 'dart:async';
 
+import 'package:args/args.dart';
+import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
+import 'package:tekartik_pub/io.dart';
+
+import 'pubget.dart';
+
 // chmod +x ...
-main(List<String> arguments) async {
+Future main(List<String> arguments) async {
   ArgParser parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
   addCommonOptions(parser);
@@ -36,7 +38,7 @@ main(List<String> arguments) async {
   bool dryRun = argResults[argDryRunFlag];
   List<String> rest = argResults.rest;
   // if no default to current folder
-  if (rest.length == 0) {
+  if (rest.isEmpty) {
     rest = ['.'];
   }
 
