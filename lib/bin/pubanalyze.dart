@@ -36,10 +36,10 @@ Future main(List<String> arguments) async {
     return;
   }
 
-  bool oneByOne = argResults[argOneByOneFlag];
-  bool forceRecursive = argResults[argForceRecursiveFlag];
-  bool dryRun = argResults[argDryRunFlag];
-  bool fatalInfos = argResults[argFatalInfosFlag];
+  bool oneByOne = argResults[argOneByOneFlag] as bool;
+  bool forceRecursive = argResults[argForceRecursiveFlag] as bool;
+  bool dryRun = argResults[argDryRunFlag] as bool;
+  bool fatalInfos = argResults[argFatalInfosFlag] as bool;
 
   List<String> rest = argResults.rest;
   // if no default to current folder
