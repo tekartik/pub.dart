@@ -1,5 +1,5 @@
 name: tekartik_pub
-version: 0.10.7+1
+version: 0.10.9
 description: Pub and package helpers
 homepage: https://github.com/tekartik/pub.dart
 environment:
@@ -14,7 +14,7 @@ dependencies:
     git:
       url: git://github.com/tekartik/common_utils.dart
       ref: dart2
-    version: '>=0.8.1'
+    version: '>=0.9.5'
 
 dev_dependencies:
   tekartik_fs_test:
@@ -24,7 +24,7 @@ dev_dependencies:
       path: fs_test
   dev_test: any
   test: '>=1.2.0'
-  build_runner: '>=0.9.0'
+  build_runner: '>=1.2.7'
   build_test: '>=0.10.2'
   async: '>=2.0.7'
   tekartik_platform_io:

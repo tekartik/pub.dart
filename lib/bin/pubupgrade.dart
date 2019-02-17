@@ -31,11 +31,11 @@ Future main(List<String> arguments) async {
     return;
   }
 
-  bool oneByOne = argResults[argOneByOneFlag];
-  bool offline = argResults[argOfflineFlag];
-  bool packagesDir = argResults[argPackagesDirFlag];
-  bool forceRecursive = argResults[argForceRecursiveFlag];
-  bool dryRun = argResults[argDryRunFlag];
+  bool oneByOne = argResults[argOneByOneFlag] as bool;
+  bool offline = argResults[argOfflineFlag] as bool;
+  bool packagesDir = argResults[argPackagesDirFlag] as bool;
+  bool forceRecursive = argResults[argForceRecursiveFlag] as bool;
+  bool dryRun = argResults[argDryRunFlag] as bool;
   List<String> rest = argResults.rest;
   // if no default to current folder
   if (rest.isEmpty) {

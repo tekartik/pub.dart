@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:path/path.dart';
+import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:yaml/yaml.dart';
 
@@ -106,6 +107,15 @@ Future<List<String>> recursiveDartEntities(String dir) async {
   return entities;
 }
 
+final List<String> _blackListedTargets = [
+  '.',
+  '..',
+  'build',
+  'packages',
+  'deploy',
+  'node_modules'
+];
+
 /// find the path at the top level that contains dart file
 /// and does not contain sub project
 Future<List<String>> findTargetDartDirectories(String dir) async {
@@ -115,11 +125,15 @@ Future<List<String>> findTargetDartDirectories(String dir) async {
     var subDir = join(dir, entityBasename);
     if (FileSystemEntity.isDirectorySync(subDir)) {
       bool _isToBeIgnored(String baseName) {
-        if (baseName == '.' || baseName == '..') {
-          return false;
+        if (_blackListedTargets.contains(baseName)) {
+          return true;
         }
 
-        return baseName.startsWith('.');
+        if (baseName.startsWith('.')) {
+          return true;
+        }
+
+        return false;
       }
 
       if (!_isToBeIgnored(entityBasename) &&
@@ -134,13 +148,13 @@ Future<List<String>> findTargetDartDirectories(String dir) async {
         if (!containsDartFiles(paths)) {
           continue;
         }
-        // devPrint('$subDir sub: ${listTruncate(paths, 100)}');
         targets.add(entityBasename);
       }
 
       //devPrint(entities);
     }
   }
+  // devPrint('targets: $targets');
   return targets;
 }
 

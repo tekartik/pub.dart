@@ -31,14 +31,20 @@ void defineTests() {
 
     test('version', () async {
       PubPackage pkg = PubPackage(packageRoot);
-      ProcessResult result = await runCmd(pkg.pubCmd(pubArgs(version: true)));
+
+      /// includeParentEnvironment = false to prevent Observatory server failed to start
+      ProcessResult result = await runCmd(
+          pkg.pubCmd(pubArgs(version: true))..includeParentEnvironment = false);
       //print(result);
       expect(result.stdout, startsWith("Pub"));
     });
 
     test('run', () async {
       PubPackage pkg = PubPackage(packageRoot);
-      ProcessResult result = await runCmd(pkg.pubCmd(pubArgs(version: true)));
+
+      /// includeParentEnvironment = false to prevent Observatory server failed to start
+      ProcessResult result = await runCmd(
+          pkg.pubCmd(pubArgs(version: true))..includeParentEnvironment = false);
       //print(result);
       expect(result.stdout, startsWith("Pub"));
     });
@@ -67,7 +73,7 @@ void defineTests() {
             args: [testPath],
             platforms: ["vm"],
             //reporter: pubRunTestReporterJson,
-            reporter: RunTestReporter.JSON,
+            reporter: RunTestReporter.json,
             concurrency: 1)));
 
         expect(result.exitCode, 0, reason: result.stdout?.toString());
@@ -90,7 +96,7 @@ void defineTests() {
                 args: [testPath],
                 platforms: ["vm"],
                 //reporter: pubRunTestReporterJson,
-                reporter: RunTestReporter.JSON,
+                reporter: RunTestReporter.json,
                 concurrency: 1))));
 
         expect(result.exitCode, 0, reason: result.stdout?.toString());
@@ -146,7 +152,7 @@ void defineTests() {
           await File(join('test', 'data', 'fail_test_.dart'))
               .copy(failTestPath);
           ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
-              args: [failTestPath], reporter: RunTestReporter.JSON)));
+              args: [failTestPath], reporter: RunTestReporter.json)));
           //if (!Platform.isWindows) {
           expect(result.exitCode, 1);
           //}
