@@ -1,8 +1,5 @@
 library tekartik_io_tools.pub_args;
 
-// 2016-09-25 Use this
-
-// 2018-07-02 uppercase deprecated
 enum RunTestReporter {
   @deprecated
   // ignore: constant_identifier_names
@@ -41,11 +38,9 @@ enum BuildFormat {
 }
 
 final Map<BuildMode, String> _buildModeValueMap = Map.fromIterables([
-  // ignore: deprecated_member_use
-  // ignore: deprecated_member_use_from_same_package
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
   BuildMode.DEBUG,
-  // ignore: deprecated_member_use
-  // ignore: deprecated_member_use_from_same_package
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
   BuildMode.RELEASE, BuildMode.debug, BuildMode.release
 ], [
   "debug",
@@ -55,11 +50,9 @@ final Map<BuildMode, String> _buildModeValueMap = Map.fromIterables([
 ]);
 
 final Map<BuildFormat, String> _buildFormatValueMap = Map.fromIterables([
-  // ignore: deprecated_member_use
-  // ignore: deprecated_member_use_from_same_package
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
   BuildFormat.TEXT,
-  // ignore: deprecated_member_use
-  // ignore: deprecated_member_use_from_same_package
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
   BuildFormat.JSON, BuildFormat.text, BuildFormat.json
 ], [
   "text",
@@ -70,14 +63,11 @@ final Map<BuildFormat, String> _buildFormatValueMap = Map.fromIterables([
 
 final Map<RunTestReporter, String> _runTestReporterValueMap =
     Map.fromIterables([
-  // ignore: deprecated_member_use
-  // ignore: deprecated_member_use_from_same_package
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
   RunTestReporter.COMPACT,
-  // ignore: deprecated_member_use
-  // ignore: deprecated_member_use_from_same_package
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
   RunTestReporter.EXPANDED,
-  // ignore: deprecated_member_use
-  // ignore: deprecated_member_use_from_same_package
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
   RunTestReporter.JSON,
   RunTestReporter.compact,
   RunTestReporter.expanded,
