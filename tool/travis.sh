@@ -3,7 +3,7 @@
 # Fast fail the script on failures.
 set -xe
 
-dartanalyzer --fatal-warnings .
+dartanalyzer --fatal-warnings --fatal-infos .
 
 pub run test -p vm,firefox
 pub run build_runner test -- -p vm,chrome

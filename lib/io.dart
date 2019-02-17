@@ -46,6 +46,7 @@ class PubPackage extends common.PubPackage {
 
   ProcessCmd pbrCmd(List<String> args) => _pbrCmd(args);
 
+  /// When running
   ProcessCmd pubCmd(List<String> args) => _pubCmd(args);
 
   ProcessCmd dartCmd(List<String> args) => _dartCmd(args);

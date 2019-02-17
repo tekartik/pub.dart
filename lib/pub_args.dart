@@ -3,23 +3,74 @@ library tekartik_io_tools.pub_args;
 // 2016-09-25 Use this
 
 // 2018-07-02 uppercase deprecated
-enum RunTestReporter { COMPACT, EXPANDED, JSON, compact, expanded, json }
+enum RunTestReporter {
+  @deprecated
+  // ignore: constant_identifier_names
+  COMPACT,
+  @deprecated
+// ignore: constant_identifier_names
+  EXPANDED,
 
-enum BuildMode { DEBUG, RELEASE, debug, release }
-enum BuildFormat { TEXT, JSON, text, json }
+  @deprecated
+// ignore: constant_identifier_names
+  JSON,
+  compact,
+  expanded,
+  json
+}
 
-final Map<BuildMode, String> _buildModeValueMap = Map.fromIterables(
-    [BuildMode.DEBUG, BuildMode.RELEASE, BuildMode.debug, BuildMode.release],
-    ["debug", "release", "debug", "release"]);
+enum BuildMode {
+  @deprecated
+  // ignore: constant_identifier_names
+  DEBUG,
+  @deprecated
+  // ignore: constant_identifier_names
+  RELEASE,
+  debug,
+  release
+}
+enum BuildFormat {
+  @deprecated
+  // ignore: constant_identifier_names
+  TEXT,
+  @deprecated
+  // ignore: constant_identifier_names
+  JSON,
+  text,
+  json
+}
 
-final Map<BuildFormat, String> _buildFormatValueMap = Map.fromIterables(
-    [BuildFormat.TEXT, BuildFormat.JSON, BuildFormat.text, BuildFormat.json],
-    ["text", "json", "text", "json"]);
+final Map<BuildMode, String> _buildModeValueMap = Map.fromIterables([
+  // ignore: deprecated_member_use
+  BuildMode.DEBUG,
+  // ignore: deprecated_member_use
+  BuildMode.RELEASE, BuildMode.debug, BuildMode.release
+], [
+  "debug",
+  "release",
+  "debug",
+  "release"
+]);
+
+final Map<BuildFormat, String> _buildFormatValueMap = Map.fromIterables([
+  // ignore: deprecated_member_use
+  BuildFormat.TEXT,
+  // ignore: deprecated_member_use
+  BuildFormat.JSON, BuildFormat.text, BuildFormat.json
+], [
+  "text",
+  "json",
+  "text",
+  "json"
+]);
 
 final Map<RunTestReporter, String> _runTestReporterValueMap =
     Map.fromIterables([
+  // ignore: deprecated_member_use
   RunTestReporter.COMPACT,
+  // ignore: deprecated_member_use
   RunTestReporter.EXPANDED,
+  // ignore: deprecated_member_use
   RunTestReporter.JSON,
   RunTestReporter.compact,
   RunTestReporter.expanded,
