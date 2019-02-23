@@ -1,9 +1,8 @@
 library tekartik_pub.src.import;
 
 export 'dart:async';
-export 'dart:convert' show LineSplitter;
+export 'dart:convert' show LineSplitter, json;
 
-export 'package:dart2_constant/convert.dart';
 export 'package:fs_shim/fs.dart';
 export 'package:fs_shim/utils/entity.dart';
 export 'package:path/path.dart'
