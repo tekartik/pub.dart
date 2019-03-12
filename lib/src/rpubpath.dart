@@ -91,11 +91,19 @@ bool yamlHasAnyDependencies(Map yaml, List<String> dependencies) {
 }
 
 bool _isToBeIgnored(String baseName) {
-  if (baseName == '.' || baseName == '..') {
+  if (baseName == '.') {
     return false;
   }
+
+  if (baseName == '..') {
+    return true;
+  }
   if (baseName == 'node_modules') {
-    return false;
+    return true;
+  }
+  // Ignore blacklisted too
+  if (_blackListedTargets.contains(baseName)) {
+    return true;
   }
 
   return baseName.startsWith('.');

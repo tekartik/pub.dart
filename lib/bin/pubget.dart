@@ -9,6 +9,7 @@ class PubGetOptions extends PubBinOptions {
   bool forceRecursive;
   bool offline;
   bool packagesDir;
+  bool verbose;
 }
 
 // chmod +x ...
@@ -41,6 +42,7 @@ Future main(List<String> arguments) async {
   bool packagesDir = argResults[argPackagesDirFlag] as bool;
   bool forceRecursive = argResults[argForceRecursiveFlag] as bool;
   bool dryRun = argResults[argDryRunFlag] as bool;
+  bool verbose = argResults[argVerboseFlag] as bool;
 
   List<String> rest = argResults.rest;
   // if no default to current folder
@@ -55,6 +57,7 @@ Future main(List<String> arguments) async {
         ..forceRecursive = forceRecursive
         ..packagesDir = packagesDir
         ..offline = offline
+        ..verbose = verbose
         ..dryRun = dryRun);
 }
 
@@ -66,6 +69,9 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
     pkgPaths.add(dir);
   }).asFuture();
 
+  if (options.verbose == true) {
+    print('found package(s): ${pkgPaths}');
+  }
   for (String dir in pkgPaths) {
     PubPackage pkg = PubPackage(dir);
     ProcessCmd cmd;
