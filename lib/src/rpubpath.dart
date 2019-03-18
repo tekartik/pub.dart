@@ -119,7 +119,8 @@ final List<String> _blackListedTargets = [
   '.',
   '..',
   'build',
-  'packages',
+  // 2018-03-18 removed
+  // 'packages',
   'deploy',
   'node_modules'
 ];
