@@ -14,7 +14,7 @@ String get simplePkgDir => join(packageRoot, 'example_packages', 'simple');
 
 Directory get outDir => Directory(join(outSubPath, joinAll(testDescriptions)));
 
-var longTimeout = Timeout(Duration(minutes: 2));
+var longTimeout = const Timeout(Duration(minutes: 2));
 
 void main() {
   group('src_fs_io_example_simple', () {

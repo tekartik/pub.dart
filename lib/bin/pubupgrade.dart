@@ -37,6 +37,8 @@ Future main(List<String> arguments) async {
   bool forceRecursive = argResults[argForceRecursiveFlag] as bool;
   bool dryRun = argResults[argDryRunFlag] as bool;
   List<String> rest = argResults.rest;
+  bool verbose = argResults[argVerboseFlag] as bool;
+
   // if no default to current folder
   if (rest.isEmpty) {
     rest = ['.'];
@@ -49,7 +51,8 @@ Future main(List<String> arguments) async {
         ..forceRecursive = forceRecursive
         ..packagesDir = packagesDir
         ..offline = offline
-        ..dryRun = dryRun);
+        ..dryRun = dryRun
+        ..verbose = verbose);
 }
 
 Future pubUpgrade(List<String> directories, PubGetOptions options) async {

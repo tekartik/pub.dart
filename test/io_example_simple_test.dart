@@ -17,8 +17,8 @@ String get simplePkgDir => join(pkgDir, 'example_packages', 'simple');
 
 String get outDir => join(testOutTopPath, joinAll(testDescriptions));
 
-var longTimeout = Timeout(Duration(minutes: 2));
-var veryLongTimeout = Timeout(Duration(minutes: 5));
+var longTimeout = const Timeout(Duration(minutes: 2));
+var veryLongTimeout = const Timeout(Duration(minutes: 5));
 
 void main() {
   group('io_example_simple', () {

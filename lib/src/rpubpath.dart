@@ -91,11 +91,19 @@ bool yamlHasAnyDependencies(Map yaml, List<String> dependencies) {
 }
 
 bool _isToBeIgnored(String baseName) {
-  if (baseName == '.' || baseName == '..') {
+  if (baseName == '.') {
     return false;
   }
+
+  if (baseName == '..') {
+    return true;
+  }
   if (baseName == 'node_modules') {
-    return false;
+    return true;
+  }
+  // Ignore blacklisted too
+  if (_blackListedTargets.contains(baseName)) {
+    return true;
   }
 
   return baseName.startsWith('.');
@@ -111,7 +119,8 @@ final List<String> _blackListedTargets = [
   '.',
   '..',
   'build',
-  'packages',
+  // 2018-03-18 removed
+  // 'packages',
   'deploy',
   'node_modules'
 ];
@@ -123,7 +132,7 @@ Future<List<String>> findTargetDartDirectories(String dir) async {
   for (var entity in await Directory(dir).list(followLinks: false).toList()) {
     var entityBasename = basename(entity.path);
     var subDir = join(dir, entityBasename);
-    if (FileSystemEntity.isDirectorySync(subDir)) {
+    if (isDirectoryNotLinkSynk(subDir)) {
       bool _isToBeIgnored(String baseName) {
         if (_blackListedTargets.contains(baseName)) {
           return true;
@@ -173,7 +182,7 @@ Future<List<String>> _recursiveDartEntities(String dir, String base) async {
       subBase = join(base, basename_);
     }
 
-    if (FileSystemEntity.isDirectorySync(fullpath)) {
+    if (isDirectoryNotLinkSynk(fullpath)) {
       if (!_isToBeIgnored(basename_)) {
         entities.add(subBase);
         entities.addAll(await _recursiveDartEntities(fullpath, subBase));
@@ -184,6 +193,10 @@ Future<List<String>> _recursiveDartEntities(String dir, String base) async {
   }
   return entities;
 }
+
+bool isDirectoryNotLinkSynk(String path) =>
+    FileSystemEntity.isDirectorySync(path) &&
+    !FileSystemEntity.isLinkSync(path);
 
 /// if [forceRecursive] is true, we folder going deeper even if the current
 /// path is a dart project
@@ -214,7 +227,7 @@ Stream<String> recursivePubPath(List<String> dirs,
         return Directory(dir)
             .list()
             .listen((FileSystemEntity fse) {
-              if (FileSystemEntity.isDirectorySync(fse.path)) {
+              if (isDirectoryNotLinkSynk(fse.path)) {
                 sub.add(_handleDir(fse.path));
               }
             })
@@ -228,7 +241,7 @@ Stream<String> recursivePubPath(List<String> dirs,
 
   List<Future> futures = [];
   for (String dir in dirs) {
-    if (FileSystemEntity.isDirectorySync(dir)) {
+    if (isDirectoryNotLinkSynk(dir)) {
       Future _handle = _handleDir(dir);
       if (_handle is Future) {
         futures.add(_handle);
@@ -247,7 +260,7 @@ Stream<String> recursivePubPath(List<String> dirs,
 
 bool containsPubPackage(Iterable<String> paths) {
   for (var path in paths) {
-    if (FileSystemEntity.isDirectorySync(path)) {
+    if (isDirectoryNotLinkSynk(path)) {
       if (isPubPackageRootSync(path)) {
         return true;
       }

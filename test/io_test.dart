@@ -85,7 +85,7 @@ void defineTests() {
           await File(testPath).delete();
         } catch (_) {}
       }
-    }, timeout: Timeout(Duration(minutes: 2)));
+    }, timeout: const Timeout(Duration(minutes: 2)));
 
     test('pbr_success_test_to_fix', () async {
       var testPath = join('test', 'success_test.dart');
@@ -108,7 +108,7 @@ void defineTests() {
           await File(testPath).delete();
         } catch (_) {}
       }
-    }, skip: true, timeout: Timeout(Duration(minutes: 2)));
+    }, skip: true, timeout: const Timeout(Duration(minutes: 2)));
 
     test('pbr_success_test', () async {
       var testPath = join('test', 'success_test.dart');
@@ -131,7 +131,7 @@ void defineTests() {
           await File(testPath).delete();
         } catch (_) {}
       }
-    }, timeout: Timeout(Duration(minutes: 2)));
+    }, timeout: const Timeout(Duration(minutes: 2)));
     /*
     test('expanded_success_test', () async {
       ProcessResult result = await devRunCmd(pkg.pubCmd(pubRunTestArgs(
@@ -165,7 +165,7 @@ void defineTests() {
           await File(failTestPath).delete();
         } catch (_) {}
       }
-    }, timeout: Timeout(Duration(minutes: 2)));
+    }, timeout: const Timeout(Duration(minutes: 2)));
 
     test('pbr_failure_test_to_fix', () async {
       var failTestPath = join('test', 'fail_test.dart');
@@ -188,7 +188,7 @@ void defineTests() {
           await File(failTestPath).delete();
         } catch (_) {}
       }
-    }, skip: true, timeout: Timeout(Duration(minutes: 2)));
+    }, skip: true, timeout: const Timeout(Duration(minutes: 2)));
 
     test('pbr_failure_test', () async {
       var failTestPath = join('test', 'fail_test.dart');
@@ -214,7 +214,7 @@ void defineTests() {
           await File(failTestPath).delete();
         } catch (_) {}
       }
-    }, timeout: Timeout(Duration(minutes: 2)));
+    }, timeout: const Timeout(Duration(minutes: 2)));
 
     test('getPubspecYaml', () async {
       Map map = await getPubspecYaml(packageRoot);

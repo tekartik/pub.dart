@@ -9,6 +9,7 @@ import 'package:pub_semver/pub_semver.dart';
 export 'package:process_run/cmd_run.dart' hide runCmd;
 
 const String argHelpFlag = 'help';
+const String argVerboseFlag = 'verbose';
 const String argVersionFlag = 'version';
 const String argFixFlag = 'fix';
 const String argOneByOneFlag = 'one';
@@ -29,6 +30,7 @@ void addCommonOptions(ArgParser parser) {
       abbr: 'o', help: 'One at a time', defaultsTo: Platform.isWindows);
   parser.addFlag(argDryRunFlag, abbr: 'd', help: "Don't execture the command");
   parser.addFlag(argVersionFlag, help: 'Version', negatable: false);
+  parser.addFlag(argVerboseFlag, abbr: 'v', help: 'Verbose', negatable: false);
 }
 
 bool parseCommonOptions(ArgResults argResults) {
