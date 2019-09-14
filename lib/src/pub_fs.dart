@@ -19,7 +19,8 @@ export 'pubutils_fs.dart'
         pubRunTestJsonIsSuccess,
         pubRunTestJsonSuccessCount;
 
-typedef FsPubPackage FsPubPackageFactoryCreate(Directory dir, [String name]);
+typedef FsPubPackageFactoryCreate = FsPubPackage Function(Directory dir,
+    [String name]);
 
 class FsPubPackageFactory {
   FsPubPackageFactoryCreate create;
