@@ -3,9 +3,9 @@ version: 0.10.13
 description: Pub and package helpers
 homepage: https://github.com/tekartik/pub.dart
 environment:
-  sdk: '>=2.1.0-dev <3.0.0'
+  sdk: '>=2.4.0-dev <3.0.0'
 dependencies:
-  process_run: '>=0.10.0+1'
+  process_run: '>=0.10.3'
   yaml: any
   fs_shim: '>=0.10.0'
   pub_semver: any
