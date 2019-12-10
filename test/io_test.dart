@@ -1,4 +1,4 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.pub_fs_io_test;
 
 import 'dart:async';
@@ -19,34 +19,34 @@ String get packageRoot => '.';
 void defineTests() {
   //useVMConfiguration();
   group('io', () {
-    PubPackage pkg = PubPackage('.');
+    final pkg = PubPackage('.');
 
     test('equals', () {
-      PubPackage pkg1 = PubPackage(packageRoot);
+      final pkg1 = PubPackage(packageRoot);
       expect(pkg1, pkg1);
-      PubPackage pkg2 = PubPackage(packageRoot);
+      final pkg2 = PubPackage(packageRoot);
       expect(pkg1.hashCode, pkg2.hashCode);
       expect(pkg1, pkg2);
     });
 
     test('version', () async {
-      PubPackage pkg = PubPackage(packageRoot);
+      final pkg = PubPackage(packageRoot);
 
       /// includeParentEnvironment = false to prevent Observatory server failed to start
-      ProcessResult result = await runCmd(
+      final result = await runCmd(
           pkg.pubCmd(pubArgs(version: true))..includeParentEnvironment = false);
       //print(result);
-      expect(result.stdout, startsWith("Pub"));
+      expect(result.stdout, startsWith('Pub'));
     });
 
     test('run', () async {
-      PubPackage pkg = PubPackage(packageRoot);
+      final pkg = PubPackage(packageRoot);
 
       /// includeParentEnvironment = false to prevent Observatory server failed to start
-      ProcessResult result = await runCmd(
+      final result = await runCmd(
           pkg.pubCmd(pubArgs(version: true))..includeParentEnvironment = false);
       //print(result);
-      expect(result.stdout, startsWith("Pub"));
+      expect(result.stdout, startsWith('Pub'));
     });
 
     Future _testIsPubPackageRoot(String path, bool expected) async {
@@ -69,9 +69,9 @@ void defineTests() {
       var testPath = join('test', 'success_test.dart');
       try {
         await File(join('test', 'data', 'success_test_.dart')).copy(testPath);
-        ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
+        final result = await runCmd(pkg.pubCmd(pubRunTestArgs(
             args: [testPath],
-            platforms: ["vm"],
+            platforms: ['vm'],
             //reporter: pubRunTestReporterJson,
             reporter: RunTestReporter.json,
             concurrency: 1)));
@@ -91,13 +91,16 @@ void defineTests() {
       var testPath = join('test', 'success_test.dart');
       try {
         await File(join('test', 'data', 'success_test_.dart')).copy(testPath);
-        ProcessResult result =
-            await runCmd(pkg.pbrCmd(['test', '--']..addAll(testRunnerArgs(
-                args: [testPath],
-                platforms: ["vm"],
-                //reporter: pubRunTestReporterJson,
-                reporter: RunTestReporter.json,
-                concurrency: 1))));
+        final result = await runCmd(pkg.pbrCmd([
+          'test',
+          '--',
+          ...testRunnerArgs(
+              args: [testPath],
+              platforms: ['vm'],
+              //reporter: pubRunTestReporterJson,
+              reporter: RunTestReporter.json,
+              concurrency: 1)
+        ]));
 
         expect(result.exitCode, 0, reason: result.stdout?.toString());
         expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
@@ -114,13 +117,16 @@ void defineTests() {
       var testPath = join('test', 'success_test.dart');
       try {
         await File(join('test', 'data', 'success_test_.dart')).copy(testPath);
-        ProcessResult result =
-            await runCmd(pkg.pbrCmd(['test', '--']..addAll(testRunnerArgs(
-                args: [testPath],
-                platforms: ["vm"],
-                //reporter: pubRunTestReporterJson,
-                //reporter: RunTestReporter.JSON,
-                concurrency: 1))));
+        final result = await runCmd(pkg.pbrCmd([
+          'test',
+          '--',
+          ...testRunnerArgs(
+              args: [testPath],
+              platforms: ['vm'],
+              //reporter: pubRunTestReporterJson,
+              //reporter: RunTestReporter.JSON,
+              concurrency: 1)
+        ]));
 
         expect(result.exitCode, 0, reason: result.stdout?.toString());
         //expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
@@ -134,9 +140,9 @@ void defineTests() {
     }, timeout: const Timeout(Duration(minutes: 2)));
     /*
     test('expanded_success_test', () async {
-      ProcessResult result = await devRunCmd(pkg.pubCmd(pubRunTestArgs(
+      final result =  await devRunCmd(pkg.pubCmd(pubRunTestArgs(
           args: ['test/data/success_test_.dart'],
-          platforms: ["vm"],
+          platforms: ['vm'],
           //reporter: pubRunTestReporterJson,
           reporter: RunTestReporter.EXPANDED,
           concurrency: 1)));
@@ -151,7 +157,7 @@ void defineTests() {
         if (!Platform.isWindows) {
           await File(join('test', 'data', 'fail_test_.dart'))
               .copy(failTestPath);
-          ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
+          final result = await runCmd(pkg.pubCmd(pubRunTestArgs(
               args: [failTestPath], reporter: RunTestReporter.json)));
           //if (!Platform.isWindows) {
           expect(result.exitCode, 1);
@@ -173,9 +179,12 @@ void defineTests() {
         if (!Platform.isWindows) {
           await File(join('test', 'data', 'fail_test_.dart'))
               .copy(failTestPath);
-          ProcessResult result = await runCmd(pkg.pbrCmd(['test', '--']..addAll(
-              testRunnerArgs(
-                  args: [failTestPath], reporter: RunTestReporter.json))));
+          final result = await runCmd(pkg.pbrCmd([
+            'test',
+            '--',
+            ...testRunnerArgs(
+                args: [failTestPath], reporter: RunTestReporter.json)
+          ]));
           //if (!Platform.isWindows) {
           expect(result.exitCode, 1);
           //}
@@ -196,11 +205,13 @@ void defineTests() {
         if (!Platform.isWindows) {
           await File(join('test', 'data', 'fail_test_.dart'))
               .copy(failTestPath);
-          ProcessResult result =
-              await runCmd(pkg.pbrCmd(['test', '--']..addAll(testRunnerArgs(
-                  args: [failTestPath],
-                  //reporter: RunTestReporter.JSON
-                ))));
+          final result = await runCmd(pkg.pbrCmd([
+            'test',
+            '--',
+            ...testRunnerArgs(args: [failTestPath])
+          ]
+              //reporter: RunTestReporter.JSON
+              ));
           //if (!Platform.isWindows) {
           expect(result.exitCode, 1);
           //}
@@ -217,8 +228,8 @@ void defineTests() {
     }, timeout: const Timeout(Duration(minutes: 2)));
 
     test('getPubspecYaml', () async {
-      Map map = await getPubspecYaml(packageRoot);
-      expect(map['name'], "tekartik_pub");
+      final map = await getPubspecYaml(packageRoot);
+      expect(map['name'], 'tekartik_pub');
     });
     test('name', () async {
       expect(await pkg.extractPackageName(), 'tekartik_pub');

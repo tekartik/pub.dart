@@ -1,4 +1,4 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.example_simple_test.dart;
 
 import 'dart:io';
@@ -27,7 +27,7 @@ void main() {
     // Order is important in the tests here
 
     setUpAll(() async {
-      PubPackage simplePkg = PubPackage(simplePkgDir);
+      final simplePkg = PubPackage(simplePkgDir);
       // clone the package in a temp output location
 
       pkg = await simplePkg.clone(outDir, delete: true);
@@ -35,14 +35,13 @@ void main() {
 
     // fastest test
     test('get_offline', () async {
-      ProcessResult result =
-          await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
+      final result = await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
       // Called first to dependencies have changed
       expect(result.stdout, contains('Changed '));
     }, timeout: longTimeout);
 
     test('get', () async {
-      ProcessResult result = await runCmd(pkg.pubCmd(pubGetArgs()));
+      var result = await runCmd(pkg.pubCmd(pubGetArgs()));
       expect(result.stdout, contains('Got dependencies'));
 
       // offline
@@ -57,7 +56,7 @@ void main() {
     }, timeout: longTimeout);
 
     test('upgrade', () async {
-      ProcessResult result = await runCmd(pkg.pubCmd(pubUpgradeArgs()));
+      var result = await runCmd(pkg.pubCmd(pubUpgradeArgs()));
       expect(result.stdout, contains('Resolving dependencies'));
 
       // offline
@@ -72,7 +71,7 @@ void main() {
     }, timeout: veryLongTimeout);
 
     test('test', () async {
-      ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs()));
+      final result = await runCmd(pkg.pubCmd(pubRunTestArgs()));
       // on 1.13, current windows is failing
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
@@ -82,12 +81,12 @@ void main() {
     test('build', () async {
       await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
 
-      File buildIndexHtmlFile =
+      final buildIndexHtmlFile =
           childFile(pkg.dir, join('build', 'web', 'index.html'));
       if (buildIndexHtmlFile.existsSync()) {
         await buildIndexHtmlFile.delete();
       }
-      ProcessResult result = await runCmd(pkg.pubCmd([
+      final result = await runCmd(pkg.pubCmd([
         'run',
         'build_runner',
         'build',
@@ -100,7 +99,7 @@ void main() {
     }, timeout: longTimeout);
 
     test('deps', () async {
-      ProcessResult result =
+      final result =
           await runCmd(pkg.pubCmd(pubDepsArgs(style: pubDepsStyleCompact)));
       expect(result.exitCode, 0);
       expect(result.stdout, contains('dev_test'));

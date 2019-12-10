@@ -8,15 +8,15 @@ const String pubspecYamlBasename = 'pubspec.yaml';
 const String dotPackagesBasename = '.packages';
 
 Future<Map> getDotPackagesYaml(Directory packageDir) async {
-  String yamlPath = _pubspecDotPackagesPath(packageDir.path);
-  String content = await childFile(packageDir, yamlPath).readAsString();
+  final yamlPath = _pubspecDotPackagesPath(packageDir.path);
+  final content = await childFile(packageDir, yamlPath).readAsString();
 
-  Map map = {};
-  Iterable<String> lines = LineSplitter.split(content);
-  for (String line in lines) {
+  final map = {};
+  final lines = LineSplitter.split(content);
+  for (var line in lines) {
     line = line.trim();
     if (!line.startsWith('#')) {
-      int separator = line.indexOf(":");
+      final separator = line.indexOf(':');
       if (separator != -1) {
         map[line.substring(0, separator)] = line.substring(separator + 1);
       }
@@ -38,10 +38,10 @@ Future<Map> getPubspecYaml(Directory packageDir) =>
     getPubspecYamlMap(packageDir);
 
 Future<Map<String, dynamic>> getPubspecYamlMap(Directory packageDir) =>
-    _getYaml(packageDir, "pubspec.yaml");
+    _getYaml(packageDir, 'pubspec.yaml');
 
 Future<Map<String, dynamic>> _getYaml(Directory packageDir, String name) async {
-  String content = await childFile(packageDir, name).readAsString();
+  final content = await childFile(packageDir, name).readAsString();
   return (loadYaml(content) as Map)?.cast<String, dynamic>();
 }
 
@@ -57,11 +57,9 @@ Version pubspecYamlGetVersion(Map yaml) =>
 
 Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   if (yaml.containsKey('test_dependencies')) {
-    Iterable<String> list =
-        (yaml['test_dependencies'] as Iterable)?.cast<String>();
-    if (list == null) {
-      list = [];
-    }
+    final list =
+        (yaml['test_dependencies'] as Iterable)?.cast<String>() ?? <String>[];
+
     return list;
   }
   return null;
@@ -76,7 +74,7 @@ Version pubspecLockGetVersion(Map yaml, String packageName) =>
 
 bool pubspecYamlHasAnyDependencies(Map yaml, List<String> dependencies) {
   bool _hasDependencies(String kind, String dependency) {
-    Map dependencies = yaml[kind] as Map;
+    final dependencies = yaml[kind] as Map;
     if (dependencies != null) {
       if (dependencies[dependency] != null) {
         return true;
@@ -85,7 +83,7 @@ bool pubspecYamlHasAnyDependencies(Map yaml, List<String> dependencies) {
     return false;
   }
 
-  for (String dependency in dependencies) {
+  for (final dependency in dependencies) {
     if (_hasDependencies('dependencies', dependency) ||
         _hasDependencies('dev_dependencies', dependency) ||
         _hasDependencies('dependency_overrides', dependency)) {
@@ -99,7 +97,7 @@ bool pubspecYamlHasAnyDependencies(Map yaml, List<String> dependencies) {
 /// result must be run with reporter:json
 bool pubRunTestJsonIsSuccess(String stdout) {
   try {
-    Map map = json.decode(LineSplitter.split(stdout).last) as Map;
+    final map = json.decode(LineSplitter.split(stdout).last) as Map;
     return map['success'] as bool;
   } catch (_) {
     return false;
@@ -109,8 +107,8 @@ bool pubRunTestJsonIsSuccess(String stdout) {
 int pubRunTestJsonSuccessCount(String stdout) {
   //int _warn;
   //print('# ${processResultToDebugString(result)}');
-  int count = 0;
-  for (String line in LineSplitter.split(stdout)) {
+  var count = 0;
+  for (final line in LineSplitter.split(stdout)) {
     try {
       var map = json.decode(line);
       //print(map);
@@ -139,23 +137,23 @@ int pubRunTestJsonSuccessCount(String stdout) {
 }
 
 /*
-{"protocolVersion":"0.1.0","runnerVersion":"0.12.6+2","type":"start","time":0}
-{"test":{"id":0,"name":"loading test/data/fail_test_.dart","groupIDs":[],"metadata":{"skip":false,"skipReason":null}},"type":"testStart","time":0}
-{"testID":0,"result":"success","hidden":true,"type":"testDone","time":180}
-{"group":{"id":1,"parentID":null,"name":null,"metadata":{"skip":false,"skipReason":null}},"type":"group","time":182}
-{"test":{"id":2,"name":"failed","groupIDs":[1],"metadata":{"skip":false,"skipReason":null}},"type":"testStart","time":183}
-{"testID":2,"error":"will fail","stackTrace":"package:test                   fail\ntest/data/fail_test_.dart 7:5  main.<fn>.<async>\n===== asynchronous gap ===========================\ndart:async                     _Completer.completeError\ntest/data/fail_test_.dart 8:4  main.<fn>.<async>\n===== asynchronous gap ===========================\ndart:async                     Future.Future.microtask\ntest/data/fail_test_.dart      main.<fn>\n","isFailure":true,"type":"error","time":345}
-{"testID":2,"result":"failure","hidden":false,"type":"testDone","time":346}
-{"success":false,"type":"done","time":348}
+{'protocolVersion':'0.1.0','runnerVersion':'0.12.6+2','type':'start','time':0}
+{'test':{'id':0,'name':'loading test/data/fail_test_.dart','groupIDs':[],'metadata':{'skip':false,'skipReason':null}},'type':'testStart','time':0}
+{'testID':0,'result':'success','hidden':true,'type':'testDone','time':180}
+{'group':{'id':1,'parentID':null,'name':null,'metadata':{'skip':false,'skipReason':null}},'type':'group','time':182}
+{'test':{'id':2,'name':'failed','groupIDs':[1],'metadata':{'skip':false,'skipReason':null}},'type':'testStart','time':183}
+{'testID':2,'error':'will fail','stackTrace':'package:test                   fail\ntest/data/fail_test_.dart 7:5  main.<fn>.<async>\n===== asynchronous gap ===========================\ndart:async                     _Completer.completeError\ntest/data/fail_test_.dart 8:4  main.<fn>.<async>\n===== asynchronous gap ===========================\ndart:async                     Future.Future.microtask\ntest/data/fail_test_.dart      main.<fn>\n','isFailure':true,'type':'error','time':345}
+{'testID':2,'result':'failure','hidden':false,'type':'testDone','time':346}
+{'success':false,'type':'done','time':348}
  */
 int pubRunTestJsonFailureCount(String stdout) {
-  int count = 0;
-  for (String line in LineSplitter.split(stdout)) {
+  var count = 0;
+  for (final line in LineSplitter.split(stdout)) {
     try {
       var map = json.decode(line);
-      //print(map);
+      print(map);
       if (map is Map) {
-        // {"testID":2,"result":"failure","hidden":false,"type":"testDone","time":346}
+        // {'testID':2,'result':'failure','hidden':false,'type':'testDone','time':346}
         if (map['testID'] != null) {
           if ((map['result'] == 'failure') && (map['hidden'] != true)) {
             count++;

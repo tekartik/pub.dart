@@ -20,16 +20,16 @@ bool _isToBeIgnored(String baseName) {
 
 Stream<Directory> recursivePubDir(List<Directory> dirs,
     {List<String> dependencies}) {
-  StreamController<Directory> ctlr = StreamController();
+  final ctlr = StreamController<Directory>();
 
   Future _handleDir(Directory dir) async {
-    FileSystem fs = dir.fs;
+    final fs = dir.fs;
     // Ignore folder starting with .
     // don't event go below
     if (!_isToBeIgnored(basename(dir.path))) {
       if (await isPubPackageDir(dir)) {
         if (dependencies is List && dependencies.isNotEmpty) {
-          Map yaml = await getPubspecYaml(dir);
+          final yaml = await getPubspecYaml(dir);
           if (pubspecYamlHasAnyDependencies(yaml, dependencies)) {
             ctlr.add(dir);
           }
@@ -38,7 +38,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
           ctlr.add(dir);
         }
       } else {
-        List<Future> sub = [];
+        final sub = <Future>[];
         await dir.list().listen((FileSystemEntity fse) {
           sub.add(Future.sync(() async {
             if (await fs.isDirectory(fse.path)) {
@@ -51,8 +51,8 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
     }
   }
 
-  List<Future> futures = [];
-  for (Directory dir in dirs) {
+  final futures = <Future>[];
+  for (final dir in dirs) {
     futures.add(Future.sync(() async {
       if (await dir.fs.isDirectory(dir.path)) {
         await _handleDir(dir);

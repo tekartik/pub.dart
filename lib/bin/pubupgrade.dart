@@ -9,7 +9,7 @@ import 'pubget.dart';
 
 // chmod +x ...
 Future main(List<String> arguments) async {
-  ArgParser parser = ArgParser(allowTrailingOptions: true);
+  final parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
   addCommonOptions(parser);
   parser.addFlag(argOfflineFlag, help: 'offline get', negatable: false);
@@ -20,9 +20,9 @@ Future main(List<String> arguments) async {
   parser.addFlag(argPackagesDirFlag,
       help: 'generates packages dir', negatable: false);
 
-  ArgResults argResults = parser.parse(arguments);
+  final argResults = parser.parse(arguments);
 
-  bool help = argResults[argHelpFlag] as bool;
+  final help = argResults[argHelpFlag] as bool;
   if (help) {
     print(parser.usage);
     return;
@@ -31,13 +31,13 @@ Future main(List<String> arguments) async {
     return;
   }
 
-  bool oneByOne = argResults[argOneByOneFlag] as bool;
-  bool offline = argResults[argOfflineFlag] as bool;
-  bool packagesDir = argResults[argPackagesDirFlag] as bool;
-  bool forceRecursive = argResults[argForceRecursiveFlag] as bool;
-  bool dryRun = argResults[argDryRunFlag] as bool;
-  List<String> rest = argResults.rest;
-  bool verbose = argResults[argVerboseFlag] as bool;
+  final oneByOne = argResults[argOneByOneFlag] as bool;
+  final offline = argResults[argOfflineFlag] as bool;
+  final packagesDir = argResults[argPackagesDirFlag] as bool;
+  final forceRecursive = argResults[argForceRecursiveFlag] as bool;
+  final dryRun = argResults[argDryRunFlag] as bool;
+  var rest = argResults.rest;
+  final verbose = argResults[argVerboseFlag] as bool;
 
   // if no default to current folder
   if (rest.isEmpty) {
@@ -56,15 +56,15 @@ Future main(List<String> arguments) async {
 }
 
 Future pubUpgrade(List<String> directories, PubGetOptions options) async {
-  List<String> pkgPaths = [];
+  final pkgPaths = <String>[];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
   }).asFuture();
 
-  for (String dir in pkgPaths) {
-    PubPackage pkg = PubPackage(dir);
+  for (final dir in pkgPaths) {
+    final pkg = PubPackage(dir);
     ProcessCmd cmd;
     if (await isFlutterPackageRoot(dir)) {
       if (!isFlutterSupported) {

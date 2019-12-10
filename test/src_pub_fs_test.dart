@@ -1,8 +1,7 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.pub_test;
 
 import 'package:dev_test/test.dart';
-import 'package:fs_shim/fs.dart';
 import 'package:fs_shim/utils/copy.dart';
 import 'package:fs_shim/utils/entity.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -19,11 +18,11 @@ void defineTests(FileSystemTestContext ctx) {
     FsPubPackage pkg;
 
     test('dir', () async {
-      Directory top = await ctx.prepare();
+      final top = await ctx.prepare();
 
       expect(await isPubPackageDir(top), isFalse);
 
-      Directory sub = await createDirectory(childDirectory(top, 'sub'));
+      final sub = await createDirectory(childDirectory(top, 'sub'));
       await createFile(childFile(top, pubspecYamlBasename));
 
       expect(await isPubPackageDir(top), isTrue);
@@ -38,9 +37,9 @@ void defineTests(FileSystemTestContext ctx) {
       expect((await getPubPackageDir(top)).path, top.path);
     });
     test('clone', () async {
-      Directory top = await ctx.prepare();
-      Directory src = childDirectory(top, 'src');
-      Directory dst = childDirectory(top, 'dst');
+      final top = await ctx.prepare();
+      final src = childDirectory(top, 'src');
+      final dst = childDirectory(top, 'dst');
       pkg = FsPubPackage(src);
 
       try {
@@ -60,13 +59,13 @@ void defineTests(FileSystemTestContext ctx) {
 
       await childFile(src, pubspecYamlBasename).create();
 
-      File dstPubspecYamlFile = childFile(dst, pubspecYamlBasename);
+      final dstPubspecYamlFile = childFile(dst, pubspecYamlBasename);
       expect(await dstPubspecYamlFile.exists(), isFalse);
       await pkg.clone(dst);
       expect(await dstPubspecYamlFile.exists(), isTrue);
 
-      Directory srcWebDir = childDirectory(src, 'web');
-      Directory dstWebDir = childDirectory(dst, 'web');
+      final srcWebDir = childDirectory(src, 'web');
+      final dstWebDir = childDirectory(dst, 'web');
 
       await srcWebDir.create();
       expect(await dstWebDir.exists(), isFalse);
@@ -88,7 +87,7 @@ void defineTests(FileSystemTestContext ctx) {
 
       await pkg.clone(dst, delete: true);
 
-      List<FileSystemEntity> list = await dst.list(recursive: true).toList();
+      final list = await dst.list(recursive: true).toList();
       expect(list.length, 1);
       expect(list.first.path, dstPubspecYamlFile.path);
       expect(await dstPubspecYamlFile.exists(), isTrue);
@@ -96,25 +95,25 @@ void defineTests(FileSystemTestContext ctx) {
 
     test('extractPackage', () async {
       // extractPackage
-      Directory top = await ctx.prepare();
+      final top = await ctx.prepare();
       pkg = FsPubPackage(top);
       expect(await pkg.extractPackage(null), isNull);
-      expect(await pkg.extractPackage("test"), isNull);
+      expect(await pkg.extractPackage('test'), isNull);
       await childFile(pkg.dir, dotPackagesBasename).writeAsString('''
 test:file:///home/alex/.pub-cache/hosted/pub.dartlang.org/test-0.12.7/lib/
 test2:lib/
 ''');
       expect(await pkg.extractPackage(null), isNull);
-      FsPubPackage testPackage = await pkg.extractPackage("test");
-      expect(testPackage.name, "test");
+      final testPackage = await pkg.extractPackage('test');
+      expect(testPackage.name, 'test');
       expect(top.fs.path.split(testPackage.dir.path),
           contains('pub.dartlang.org'));
-      FsPubPackage test2Package = await pkg.extractPackage("test2");
-      expect(test2Package.name, "test2");
+      final test2Package = await pkg.extractPackage('test2');
+      expect(test2Package.name, 'test2');
     });
 
     test('extractVersion', () async {
-      Directory top = await ctx.prepare();
+      final top = await ctx.prepare();
       pkg = FsPubPackage(top);
       //expect(await pkg.extractVersion(), isNull);
       await childFile(pkg.dir, pubspecYamlBasename).writeAsString('''
@@ -130,7 +129,7 @@ version: 1.0.0
     });
 
     test('pubRunTestJsonSuccessCount', () {
-      String out = '''
+      final out = '''
 {"protocolVersion":"0.1.0","runnerVersion":"0.12.7","type":"start","time":0}
 {"test":{"id":0,"name":"loading test/case/one_solo_test_case_test.dart","groupIDs":[],"metadata":{"skip":false,"skipReason":null}},"type":"testStart","time":0}
 {"testID":0,"result":"success","hidden":true,"type":"testDone","time":159}
@@ -146,7 +145,7 @@ version: 1.0.0
     });
 
     test('pubRunTestJsonFailureCount', () {
-      String out = '''
+      final out = '''
 {"protocolVersion":"0.1.0","runnerVersion":"0.12.6+2","type":"start","time":0}
 {"test":{"id":0,"name":"loading test/data/fail_test_.dart","groupIDs":[],"metadata":{"skip":false,"skipReason":null}},"type":"testStart","time":0}
 {"testID":0,"result":"success","hidden":true,"type":"testDone","time":180}

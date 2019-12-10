@@ -1,4 +1,4 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.pubspec_test;
 
 import 'package:dev_test/test.dart';
@@ -19,7 +19,7 @@ void main() {
       expect(pubspecYaml.version, greaterThan(Version(0, 10, 0)));
     });
     test('pubspec.yaml', () async {
-      Version version = await extractPubspecYamlVersion(packageRoot);
+      final version = await extractPubspecYamlVersion(packageRoot);
       expect(version, greaterThan(Version(0, 1, 0)));
       expect(await extractPackageVersion(packageRoot), version);
 
@@ -27,7 +27,7 @@ void main() {
     });
 
     test('pubspec.lock', () async {
-      Version processRunVersion =
+      final processRunVersion =
           await extractPackagePubspecLockVersion('process_run', packageRoot);
       expect(processRunVersion, greaterThanOrEqualTo(Version(0, 1, 1)));
 
@@ -37,9 +37,9 @@ void main() {
     });
 
     test('.packages', () async {
-      PubPackage selfPkg = PubPackage(packageRoot);
+      final selfPkg = PubPackage(packageRoot);
 
-      PubPackage pkg = await extractPackage(selfPkg.name, selfPkg.path);
+      var pkg = await extractPackage(selfPkg.name, selfPkg.path);
       expect(pkg, selfPkg);
       pkg = await extractPackage('process_run', selfPkg.path);
       //expect(pkg, selfPkg);

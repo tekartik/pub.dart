@@ -1,4 +1,4 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.src_rpubpath_test;
 
 import 'package:dev_test/test.dart';
@@ -13,7 +13,7 @@ void main() => defineTests();
 void defineTests() {
   test('rpubpath', () async {
     //clearOutFolderSync();
-    List<String> paths = [];
+    var paths = <String>[];
     await recursivePubPath([packageRoot]).listen((String path) {
       paths.add(path);
     }).asFuture();
@@ -34,7 +34,7 @@ void defineTests() {
     }).asFuture();
     expect(paths, []);
 
-    bool failed = false;
+    var failed = false;
     try {
       await recursivePubPath([join('/', 'dummy', 'path')]).last;
     } catch (e) {
@@ -57,7 +57,7 @@ void defineTests() {
   });
 
   test('extract', () async {
-    Map yaml = getPackageYamlSync(packageRoot);
+    var yaml = getPackageYamlSync(packageRoot);
     expect(
         pubspecYamlGetDependenciesPackageName(yaml),
         unorderedEquals([
