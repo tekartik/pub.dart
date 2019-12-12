@@ -1,4 +1,4 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.bin_pubanalyze_test;
 
 import 'package:path/path.dart';
@@ -10,7 +10,7 @@ import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:test/test.dart';
 
 ProcessCmd binCmd(String bin, List<String> arguments) {
-  return DartCmd([join('bin', '$bin.dart')]..addAll(arguments));
+  return DartCmd([join('bin', '$bin.dart'), ...arguments]);
 }
 
 Future<String> runOutput(ProcessCmd cmd) async {

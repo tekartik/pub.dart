@@ -6,7 +6,7 @@ class PubPackage {
   PubPackage(this._fsPubPackage);
 
   // implementation
-  FsPubPackage _fsPubPackage;
+  final FsPubPackage _fsPubPackage;
 
   FsPubPackage get fsPubPackage => _fsPubPackage;
 

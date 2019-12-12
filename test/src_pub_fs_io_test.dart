@@ -1,4 +1,4 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.pub_fs_io_test;
 
 import 'package:dev_test/test.dart';
@@ -16,11 +16,11 @@ void defineTests() {
   group('src_pub_fs_io', () {
     pub_fs_test.defineTests(fileSystemTestContextIo);
 
-    IoFsPubPackage pkg = IoFsPubPackage(Directory('.'));
+    final pkg = IoFsPubPackage(Directory('.'));
 
     test('version', () async {
-      ProcessResult result = await runCmd(pkg.pubCmd(pubArgs(version: true)));
-      expect(result.stdout.startsWith("Pub"), isTrue,
+      final result = await runCmd(pkg.pubCmd(pubArgs(version: true)));
+      expect(result.stdout.startsWith('Pub'), isTrue,
           reason: 'out: ${result.stdout}');
     });
 

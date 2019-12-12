@@ -12,7 +12,7 @@ class PubListOptions extends PubBinOptions {
 
 // chmod +x ...
 Future main(List<String> arguments) async {
-  ArgParser parser = ArgParser(allowTrailingOptions: true);
+  final parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
   parser.addFlag(argForceRecursiveFlag,
       abbr: 'f',
@@ -20,9 +20,9 @@ Future main(List<String> arguments) async {
       defaultsTo: true);
   addCommonOptions(parser);
 
-  ArgResults argResults = parser.parse(arguments);
+  final argResults = parser.parse(arguments);
 
-  bool help = argResults[argHelpFlag] as bool;
+  final help = argResults[argHelpFlag] as bool;
   if (help) {
     print('List recursively pub package');
     print(parser.usage);
@@ -32,11 +32,11 @@ Future main(List<String> arguments) async {
     return;
   }
 
-  bool oneByOne = argResults[argOneByOneFlag] as bool;
-  bool forceRecursive = argResults[argForceRecursiveFlag] as bool;
-  bool dryRun = argResults[argDryRunFlag] as bool;
+  final oneByOne = argResults[argOneByOneFlag] as bool;
+  final forceRecursive = argResults[argForceRecursiveFlag] as bool;
+  final dryRun = argResults[argDryRunFlag] as bool;
 
-  List<String> rest = argResults.rest;
+  var rest = argResults.rest;
   // if no default to current folder
   if (rest.isEmpty) {
     rest = ['.'];
@@ -51,15 +51,15 @@ Future main(List<String> arguments) async {
 }
 
 Future pubList(List<String> directories, PubListOptions options) async {
-  List<String> pkgPaths = [];
+  final pkgPaths = <String>[];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
   }).asFuture();
 
-  for (String dir in pkgPaths) {
-    PubPackage pkg = PubPackage(dir);
+  for (final dir in pkgPaths) {
+    final pkg = PubPackage(dir);
     var pubspecYaml = PubspecYaml.fromMap(await pkg.getPubspecYamlMap());
     try {
       print(pubspecYaml);

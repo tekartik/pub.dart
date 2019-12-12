@@ -1,9 +1,9 @@
 name: tekartik_pub
-version: 0.10.13
+version: 0.10.14
 description: Pub and package helpers
 homepage: https://github.com/tekartik/pub.dart
 environment:
-  sdk: '>=2.4.0-dev <3.0.0'
+  sdk: '>=2.6.0 <3.0.0'
 dependencies:
   process_run: '>=0.10.3'
   yaml: any

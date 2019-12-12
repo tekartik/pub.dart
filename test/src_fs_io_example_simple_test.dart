@@ -1,4 +1,4 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.example_simple_test.dart;
 
 import 'package:dev_test/test.dart';
@@ -23,7 +23,7 @@ void main() {
     // Order is important in the tests here
 
     setUpAll(() async {
-      IoFsPubPackage simplePkg = IoFsPubPackage(Directory(simplePkgDir));
+      final simplePkg = IoFsPubPackage(Directory(simplePkgDir));
       // clone the package in a temp output location
 
       pkg = await simplePkg.clone(outDir, delete: true) as IoFsPubPackage;
@@ -31,14 +31,13 @@ void main() {
 
     // fastest test
     test('get_offline', () async {
-      ProcessResult result =
-          await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
+      final result = await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
       // Called first to dependencies have changed
       expect(result.stdout, contains('Changed '));
     }, timeout: longTimeout);
 
     test('get', () async {
-      ProcessResult result = await runCmd(pkg.pubCmd(pubGetArgs()));
+      var result = await runCmd(pkg.pubCmd(pubGetArgs()));
       expect(result.stdout, contains('Got dependencies'));
 
       // offline
@@ -53,7 +52,7 @@ void main() {
     }, timeout: longTimeout);
 
     test('upgrade', () async {
-      ProcessResult result = await runCmd(pkg.pubCmd(pubUpgradeArgs()));
+      var result = await runCmd(pkg.pubCmd(pubUpgradeArgs()));
       expect(result.stdout, contains('Resolving dependencies'));
 
       // offline
@@ -69,31 +68,31 @@ void main() {
 
     test('test', () async {
       await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
-      ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs()));
+      final result = await runCmd(pkg.pubCmd(pubRunTestArgs()));
       expect(result.exitCode, 0);
     }, timeout: longTimeout);
 
     test('build', () async {
-      File buildIndexHtmlFile =
+      final buildIndexHtmlFile =
           childFile(pkg.dir, join('build', 'web', 'index.html')) as File;
       if (await buildIndexHtmlFile.exists()) {
         await buildIndexHtmlFile.delete();
       }
-      ProcessResult result = await runCmd(pkg.pubCmd([
+      final result = await runCmd(pkg.pubCmd([
         'run',
         'build_runner',
         'build',
         '--output',
         'web:${join('build', 'web')}'
       ]));
-      // ProcessResult result = await runCmd(pkg.pubCmd(pubBuildArgs()));
+      // final result =  await runCmd(pkg.pubCmd(pubBuildArgs()));
 
       expect(result.exitCode, 0);
       expect(await buildIndexHtmlFile.exists(), isTrue);
     }, timeout: longTimeout);
 
     test('deps', () async {
-      ProcessResult result =
+      final result =
           await runCmd(pkg.pubCmd(pubDepsArgs(style: pubDepsStyleCompact)));
       expect(result.exitCode, 0);
       expect(result.stdout, contains('dev_test'));

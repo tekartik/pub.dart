@@ -11,11 +11,11 @@ class PubAnalyzeOptions extends PubBinOptions {
   bool fatalInfos;
 }
 
-const String argFatalInfosFlag = "fatal-infos";
+const String argFatalInfosFlag = 'fatal-infos';
 
 // chmod +x ...
 Future main(List<String> arguments) async {
-  ArgParser parser = ArgParser(allowTrailingOptions: true);
+  final parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
 
   parser.addFlag(argForceRecursiveFlag,
@@ -25,9 +25,9 @@ Future main(List<String> arguments) async {
   parser.addFlag(argFatalInfosFlag,
       help: 'Treat infos as fatal', defaultsTo: true);
   addCommonOptions(parser);
-  ArgResults argResults = parser.parse(arguments);
+  final argResults = parser.parse(arguments);
 
-  bool help = argResults[argHelpFlag] as bool;
+  final help = argResults[argHelpFlag] as bool;
   if (help) {
     print(parser.usage);
     return;
@@ -36,12 +36,12 @@ Future main(List<String> arguments) async {
     return;
   }
 
-  bool oneByOne = argResults[argOneByOneFlag] as bool;
-  bool forceRecursive = argResults[argForceRecursiveFlag] as bool;
-  bool dryRun = argResults[argDryRunFlag] as bool;
-  bool fatalInfos = argResults[argFatalInfosFlag] as bool;
+  final oneByOne = argResults[argOneByOneFlag] as bool;
+  final forceRecursive = argResults[argForceRecursiveFlag] as bool;
+  final dryRun = argResults[argDryRunFlag] as bool;
+  final fatalInfos = argResults[argFatalInfosFlag] as bool;
 
-  List<String> rest = argResults.rest;
+  var rest = argResults.rest;
   // if no default to current folder
   if (rest.isEmpty) {
     rest = ['.'];
@@ -57,15 +57,15 @@ Future main(List<String> arguments) async {
 
 Future<int> pubAnalyze(
     List<String> directories, PubAnalyzeOptions options) async {
-  List<Future> futures = [];
-  List<String> pkgPaths = [];
+  final futures = <Future>[];
+  final pkgPaths = <String>[];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
   }).asFuture();
 
-  for (String dir in pkgPaths) {
+  for (final dir in pkgPaths) {
     ProcessCmd cmd;
 
     if (await isFlutterPackageRoot(dir)) {

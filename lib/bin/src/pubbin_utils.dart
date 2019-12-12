@@ -13,10 +13,10 @@ const String argVerboseFlag = 'verbose';
 const String argVersionFlag = 'version';
 const String argFixFlag = 'fix';
 const String argOneByOneFlag = 'one';
-const String argOfflineFlag = "offline";
-const String argPackagesDirFlag = "packages-dir";
-const String argForceRecursiveFlag = "force-recursive";
-const String argDryRunFlag = "dry-run";
+const String argOfflineFlag = 'offline';
+const String argPackagesDirFlag = 'packages-dir';
+const String argForceRecursiveFlag = 'force-recursive';
+const String argDryRunFlag = 'dry-run';
 
 final Version binVersion = Version(0, 1, 0);
 
@@ -34,7 +34,7 @@ void addCommonOptions(ArgParser parser) {
 }
 
 bool parseCommonOptions(ArgResults argResults) {
-  bool version = argResults[argVersionFlag] as bool;
+  final version = argResults[argVersionFlag] as bool;
   if (version) {
     stdout.write('$binVersion');
     return true;
