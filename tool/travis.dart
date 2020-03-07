@@ -9,7 +9,9 @@ dartanalyzer --fatal-warnings --fatal-infos .
 dartfmt -n --set-exit-if-changed .
 
 # Run tests
-pub run test -p vm,chrome
-pub run build_runner test -- -p chrome
+pub run test -p vm
+
+# No browser test
+# pub run build_runner test -- -p chrome
 ''');
 }
