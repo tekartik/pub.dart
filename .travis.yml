@@ -1,8 +1,7 @@
 language: dart
-#with_content_shell: true
 dart:
   - stable
-  - 2.6.1
+  - beta
   - dev
 sudo: required
 before_script:
