@@ -1,4 +1,5 @@
 #!/usr/bin/env dart
+
 library tekartik_script.bin.pubupgrade;
 
 import 'dart:async';
