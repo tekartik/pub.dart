@@ -74,9 +74,9 @@ Version pubspecLockGetVersion(Map yaml, String packageName) =>
 
 bool pubspecYamlHasAnyDependencies(Map yaml, List<String> dependencies) {
   bool _hasDependencies(String kind, String dependency) {
-    final dependencies = yaml[kind] as Map;
-    if (dependencies != null) {
-      if (dependencies[dependency] != null) {
+    final declaredDependencies = yaml[kind] as Map;
+    if (declaredDependencies != null) {
+      if (declaredDependencies.containsKey(dependency)) {
         return true;
       }
     }
