@@ -73,6 +73,7 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
   if (options.verbose == true) {
     print('found package(s): ${pkgPaths}');
   }
+  var futures = <Future>[];
   for (final dir in pkgPaths) {
     final pkg = PubPackage(dir);
     ProcessCmd cmd;
@@ -88,6 +89,10 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
     var future = runCmd(cmd, options: options);
     if (options.oneByOne) {
       await future;
+    } else {
+      futures.add(future);
+      await limitConcurrentTasks(futures);
     }
   }
+  await Future.wait(futures);
 }

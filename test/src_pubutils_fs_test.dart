@@ -46,4 +46,42 @@ void main() {
         })) as Map),
         ['one']);
   });
+
+  test('pubspecYamlHasAnyDependencies', () {
+    expect(
+        pubspecYamlHasAnyDependencies({
+          'dependencies': {'test': '>=1'}
+        }, [
+          'test'
+        ]),
+        isTrue);
+    expect(
+        pubspecYamlHasAnyDependencies({
+          'dependencies': {'test': '>=1'}
+        }, [
+          'other_test'
+        ]),
+        isFalse);
+    expect(
+        pubspecYamlHasAnyDependencies({
+          'dependencies': {'test': null}
+        }, [
+          'test'
+        ]),
+        isTrue);
+    expect(
+        pubspecYamlHasAnyDependencies({
+          'dev_dependencies': {'test': '>=1'}
+        }, [
+          'test'
+        ]),
+        isTrue);
+    expect(
+        pubspecYamlHasAnyDependencies({
+          'dependency_overrides': {'test': '>=1'}
+        }, [
+          'test'
+        ]),
+        isTrue);
+  });
 }

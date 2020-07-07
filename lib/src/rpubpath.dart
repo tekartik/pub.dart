@@ -66,27 +66,8 @@ Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   return null;
 }
 
-bool yamlHasAnyDependencies(Map yaml, List<String> dependencies) {
-  bool _hasDependencies(String kind, String dependency) {
-    final dependencies = yaml[kind] as Map;
-    if (dependencies != null) {
-      if (dependencies[dependency] != null) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  for (final dependency in dependencies) {
-    if (_hasDependencies('dependencies', dependency) ||
-        _hasDependencies('dev_dependencies', dependency) ||
-        _hasDependencies('dependency_overrides', dependency)) {
-      return true;
-    }
-  }
-
-  return false;
-}
+bool yamlHasAnyDependencies(Map yaml, List<String> dependencies) =>
+    pubspecYamlHasAnyDependencies(yaml, dependencies);
 
 bool _isToBeIgnored(String baseName) {
   if (baseName == '.') {

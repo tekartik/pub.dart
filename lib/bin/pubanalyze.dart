@@ -96,8 +96,10 @@ Future<int> pubAnalyze(
     var future = runCmd(cmd, options: options);
     if (options.oneByOne == true) {
       await future;
+    } else {
+      futures.add(future);
+      await limitConcurrentTasks(futures);
     }
-    futures.add(future);
   }
   await Future.wait(futures);
   return futures.length;

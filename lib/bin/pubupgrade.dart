@@ -63,7 +63,7 @@ Future pubUpgrade(List<String> directories, PubGetOptions options) async {
       .listen((String dir) {
     pkgPaths.add(dir);
   }).asFuture();
-
+  var futures = <Future>[];
   for (final dir in pkgPaths) {
     final pkg = PubPackage(dir);
     ProcessCmd cmd;
@@ -80,6 +80,10 @@ Future pubUpgrade(List<String> directories, PubGetOptions options) async {
     var future = runCmd(cmd, options: options);
     if (options.oneByOne) {
       await future;
+    } else {
+      futures.add(future);
+      await limitConcurrentTasks(futures);
     }
   }
+  await Future.wait(futures);
 }
