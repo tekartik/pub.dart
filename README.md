@@ -34,25 +34,3 @@ Recursively call `pub upgrade`
 
    pubupgrade
    
-## Activation
-
-### From git repository
-
-    pub global activate -s git git://github.com/tekartik/pub.dart
-
-### From local path
-
-    pub global activate -s path .
-
-## command line version test
-
-    dart bin/publist.dart --version
-    dart bin/pubget.dart --version
-    dart bin/pubupgrade.dart --version
-    dart bin/pubfmt.dart --version
-    dart bin/pubanalyze.dart --version
-    
-    dart bin/publist.dart
-    dart bin/pubget.dart
-    dart bin/pubupgrade.dart --offline
-        
