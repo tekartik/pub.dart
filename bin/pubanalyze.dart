@@ -1,6 +1,6 @@
 #!/usr/bin/env dart
 
-library tekartik_script.bin.pubfmt;
+library tekartik_script.bin.pubanalyze;
 
 import 'dart:async';
 
