@@ -2,8 +2,10 @@ name: tekartik_pub
 version: 0.11.1
 description: Pub and package helpers
 homepage: https://github.com/tekartik/pub.dart
+publish_to: none
+
 environment:
-  sdk: '>=2.8.0 <3.0.0'
+  sdk: '>=2.10.0-0 <3.0.0'
 dependencies:
   process_run: '>=0.10.3'
   yaml: any
@@ -22,7 +24,7 @@ dev_dependencies:
       url: git://github.com/tekartik/fs_shim.dart
       ref: dart2
       path: fs_test
-  dev_test: '>0.13.1+1'
+  dev_test: '>0.13.3+7'
   test: '>=1.2.0'
   build_runner: '>=1.2.7'
   build_test: '>=0.10.2'
@@ -40,6 +42,8 @@ test_dependencies:
 - process_run
 
 # dependency_overrides:
+#  dev_test:
+#    path: ../dev_test.dart/dev_test
 #  process_run:
 #    git: git://github.com/tekartik/process_run.dart
 #  fs_shim:
