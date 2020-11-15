@@ -1,4 +1,9 @@
 name: tekartik_pub_example_simple
+publish_to: none
+
+environment:
+  sdk: '>=2.10.0-0 <3.0.0'
+
 dev_dependencies:
   test: any
   dev_test: any
