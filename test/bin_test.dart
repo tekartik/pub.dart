@@ -10,7 +10,7 @@ import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:test/test.dart';
 
 ProcessCmd binCmd(String bin, List<String> arguments) {
-  return DartCmd([join('bin', '$bin.dart'), ...arguments]);
+  return DartCmd([join('example', 'bin', '$bin.dart'), ...arguments]);
 }
 
 Future<String> runOutput(ProcessCmd cmd) async {

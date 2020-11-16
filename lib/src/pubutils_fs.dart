@@ -3,6 +3,8 @@ library tekartik_pub.src.pubutils_fs;
 import 'package:yaml/yaml.dart';
 
 import 'import.dart';
+export 'package:dev_test/src/mixin/package.dart'
+    show pubspecYamlHasAnyDependencies, pubspecYamlGetVersion;
 
 const String pubspecYamlBasename = 'pubspec.yaml';
 const String dotPackagesBasename = '.packages';
@@ -52,9 +54,6 @@ Uri dotPackagesGetLibUri(Map yaml, String packageName) {
 // in dev tree
 String pubspecYamlGetPackageName(Map yaml) => yaml['name'] as String;
 
-Version pubspecYamlGetVersion(Map yaml) =>
-    Version.parse(yaml['version'] as String);
-
 Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   if (yaml.containsKey('test_dependencies')) {
     final list =
@@ -71,28 +70,6 @@ Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
 
 Version pubspecLockGetVersion(Map yaml, String packageName) =>
     Version.parse(yaml['packages'][packageName]['version'] as String);
-
-bool pubspecYamlHasAnyDependencies(Map yaml, List<String> dependencies) {
-  bool _hasDependencies(String kind, String dependency) {
-    final declaredDependencies = yaml[kind] as Map;
-    if (declaredDependencies != null) {
-      if (declaredDependencies.containsKey(dependency)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  for (final dependency in dependencies) {
-    if (_hasDependencies('dependencies', dependency) ||
-        _hasDependencies('dev_dependencies', dependency) ||
-        _hasDependencies('dependency_overrides', dependency)) {
-      return true;
-    }
-  }
-
-  return false;
-}
 
 /// result must be run with reporter:json
 bool pubRunTestJsonIsSuccess(String stdout) {
