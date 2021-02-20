@@ -42,7 +42,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
         await dir.list().listen((FileSystemEntity fse) {
           sub.add(Future.sync(() async {
             if (await fs.isDirectory(fse.path)) {
-              await _handleDir(fs.newDirectory(fse.path));
+              await _handleDir(fs.directory(fse.path));
             }
           }));
         }).asFuture();
