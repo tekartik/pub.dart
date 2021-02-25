@@ -1,18 +1,19 @@
 #!/usr/bin/env dart
+
+import 'dart:async';
+
 import 'package:args/args.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/pubspec_yaml.dart';
-import 'dart:async';
 
 class PubListOptions extends PubBinOptions {
   bool forceRecursive;
-  bool oneByOne;
 }
 
 // chmod +x ...
-main(List<String> arguments) async {
-  ArgParser parser = ArgParser(allowTrailingOptions: true);
+Future main(List<String> arguments) async {
+  final parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
   parser.addFlag(argForceRecursiveFlag,
       abbr: 'f',
@@ -20,9 +21,9 @@ main(List<String> arguments) async {
       defaultsTo: true);
   addCommonOptions(parser);
 
-  ArgResults argResults = parser.parse(arguments);
+  final argResults = parser.parse(arguments);
 
-  bool help = argResults[argHelpFlag] as bool;
+  final help = argResults[argHelpFlag] as bool;
   if (help) {
     print('List recursively pub package');
     print(parser.usage);
@@ -32,13 +33,13 @@ main(List<String> arguments) async {
     return;
   }
 
-  bool oneByOne = argResults[argOneByOneFlag];
-  bool forceRecursive = argResults[argForceRecursiveFlag];
-  bool dryRun = argResults[argDryRunFlag];
+  final oneByOne = argResults[argOneByOneFlag] as bool;
+  final forceRecursive = argResults[argForceRecursiveFlag] as bool;
+  final dryRun = argResults[argDryRunFlag] as bool;
 
-  List<String> rest = argResults.rest;
+  var rest = argResults.rest;
   // if no default to current folder
-  if (rest.length == 0) {
+  if (rest.isEmpty) {
     rest = ['.'];
   }
 
@@ -51,15 +52,15 @@ main(List<String> arguments) async {
 }
 
 Future pubList(List<String> directories, PubListOptions options) async {
-  List<String> pkgPaths = [];
+  final pkgPaths = <String>[];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
   }).asFuture();
 
-  for (String dir in pkgPaths) {
-    PubPackage pkg = PubPackage(dir);
+  for (final dir in pkgPaths) {
+    final pkg = PubPackage(dir);
     var pubspecYaml = PubspecYaml.fromMap(await pkg.getPubspecYamlMap());
     try {
       print(pubspecYaml);

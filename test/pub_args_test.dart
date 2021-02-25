@@ -1,4 +1,4 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.pub_args_test;
 
 import 'package:dev_test/test.dart';
@@ -31,7 +31,7 @@ void defineTests() {
     });
 
     test('pubRunTestArgs', () {
-      expect(pubRunTestArgs(), ['run', "test"]);
+      expect(pubRunTestArgs(), ['run', 'test']);
       expect(
           pubRunTestArgs(
               args: ['arg1', 'arg2'],
@@ -88,7 +88,7 @@ void defineTests() {
 
     test('runTestReporterFromString', () {
       expect(runTestReporterFromString(null), isNull);
-      expect(runTestReporterFromString("json"), RunTestReporter.json);
+      expect(runTestReporterFromString('json'), RunTestReporter.json);
     });
 
     test('pubGetArgs', () {

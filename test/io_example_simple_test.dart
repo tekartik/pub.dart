@@ -1,30 +1,33 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.example_simple_test.dart;
 
-import 'package:dev_test/test.dart';
-import 'package:path/path.dart';
-import 'package:tekartik_pub/io.dart';
 import 'dart:io';
+
+import 'package:dev_test/test.dart';
 import 'package:fs_shim/utils/io/entity.dart';
+import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
+import 'package:tekartik_pub/io.dart';
 
 import 'test_common.dart';
 
 String get pkgDir => '.';
+
 String get simplePkgDir => join(pkgDir, 'example_packages', 'simple');
+
 String get outDir => join(testOutTopPath, joinAll(testDescriptions));
 
-var longTimeout = Timeout(Duration(minutes: 2));
-var veryLongTimeout = Timeout(Duration(minutes: 5));
+var longTimeout = const Timeout(Duration(minutes: 2));
+var veryLongTimeout = const Timeout(Duration(minutes: 5));
 
-main() {
+void main() {
   group('io_example_simple', () {
     PubPackage pkg;
 
     // Order is important in the tests here
 
     setUpAll(() async {
-      PubPackage simplePkg = PubPackage(simplePkgDir);
+      final simplePkg = PubPackage(simplePkgDir);
       // clone the package in a temp output location
 
       pkg = await simplePkg.clone(outDir, delete: true);
@@ -32,14 +35,13 @@ main() {
 
     // fastest test
     test('get_offline', () async {
-      ProcessResult result =
-          await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
-      // Called first to depedencies have changed
+      final result = await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
+      // Called first to dependencies have changed
       expect(result.stdout, contains('Changed '));
     }, timeout: longTimeout);
 
     test('get', () async {
-      ProcessResult result = await runCmd(pkg.pubCmd(pubGetArgs()));
+      var result = await runCmd(pkg.pubCmd(pubGetArgs()));
       expect(result.stdout, contains('Got dependencies'));
 
       // offline
@@ -54,7 +56,7 @@ main() {
     }, timeout: longTimeout);
 
     test('upgrade', () async {
-      ProcessResult result = await runCmd(pkg.pubCmd(pubUpgradeArgs()));
+      var result = await runCmd(pkg.pubCmd(pubUpgradeArgs()));
       expect(result.stdout, contains('Resolving dependencies'));
 
       // offline
@@ -69,7 +71,7 @@ main() {
     }, timeout: veryLongTimeout);
 
     test('test', () async {
-      ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs()));
+      final result = await runCmd(pkg.pubCmd(pubRunTestArgs()));
       // on 1.13, current windows is failing
       if (!Platform.isWindows) {
         expect(result.exitCode, 0);
@@ -79,12 +81,12 @@ main() {
     test('build', () async {
       await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
 
-      File buildIndexHtmlFile =
+      final buildIndexHtmlFile =
           childFile(pkg.dir, join('build', 'web', 'index.html'));
-      if (await buildIndexHtmlFile.exists()) {
+      if (buildIndexHtmlFile.existsSync()) {
         await buildIndexHtmlFile.delete();
       }
-      ProcessResult result = await runCmd(pkg.pubCmd([
+      final result = await runCmd(pkg.pubCmd([
         'run',
         'build_runner',
         'build',
@@ -93,11 +95,11 @@ main() {
       ]));
 
       expect(result.exitCode, 0);
-      expect(await buildIndexHtmlFile.exists(), isTrue);
+      expect(buildIndexHtmlFile.existsSync(), isTrue);
     }, timeout: longTimeout);
 
     test('deps', () async {
-      ProcessResult result =
+      final result =
           await runCmd(pkg.pubCmd(pubDepsArgs(style: pubDepsStyleCompact)));
       expect(result.exitCode, 0);
       expect(result.stdout, contains('dev_test'));

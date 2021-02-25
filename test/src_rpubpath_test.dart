@@ -1,8 +1,8 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.src_rpubpath_test;
 
-import 'package:path/path.dart';
 import 'package:dev_test/test.dart';
+import 'package:path/path.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 
@@ -13,7 +13,7 @@ void main() => defineTests();
 void defineTests() {
   test('rpubpath', () async {
     //clearOutFolderSync();
-    List<String> paths = [];
+    var paths = <String>[];
     await recursivePubPath([packageRoot]).listen((String path) {
       paths.add(path);
     }).asFuture();
@@ -34,7 +34,7 @@ void defineTests() {
     }).asFuture();
     expect(paths, []);
 
-    bool failed = false;
+    var failed = false;
     try {
       await recursivePubPath([join('/', 'dummy', 'path')]).last;
     } catch (e) {
@@ -53,13 +53,13 @@ void defineTests() {
 
   test('findTargetDartDirectories', () async {
     var paths = await findTargetDartDirectories('.');
-    expect(paths, unorderedEquals(['bin', 'example', 'lib', 'test']));
+    expect(paths, unorderedEquals(['example', 'lib', 'test', 'tool']));
   });
 
   test('extract', () async {
-    Map yaml = getPackageYamlSync(packageRoot);
+    var yaml = getPackageYamlSync(packageRoot);
     expect(
-        await pubspecYamlGetDependenciesPackageName(yaml),
+        pubspecYamlGetDependenciesPackageName(yaml),
         unorderedEquals([
           'pub_semver',
           'process_run',
@@ -68,24 +68,22 @@ void defineTests() {
           'args',
           'tekartik_common_utils',
         ]));
-    expect(
-        await pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
 
     yaml = {};
-    expect(await pubspecYamlGetTestDependenciesPackageName(yaml), isNull);
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), isNull);
     yaml = {'test_dependencies': null};
-    expect(await pubspecYamlGetTestDependenciesPackageName(yaml), []);
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), []);
     yaml = {'test_dependencies': []};
-    expect(await pubspecYamlGetTestDependenciesPackageName(yaml), []);
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), []);
     yaml = {
       'test_dependencies': ['process_run']
     };
-    expect(
-        await pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
 
     yaml = {
       'dependencies': {'process_run': 'any'}
     };
-    expect(await pubspecYamlGetDependenciesPackageName(yaml), ['process_run']);
+    expect(pubspecYamlGetDependenciesPackageName(yaml), ['process_run']);
   });
 }

@@ -1,19 +1,21 @@
 #!/usr/bin/env dart
+
+import 'dart:async';
+
 import 'package:args/args.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
-import 'dart:async';
 
 class PubGetOptions extends PubBinOptions {
   bool forceRecursive;
-  bool oneByOne;
   bool offline;
   bool packagesDir;
+  bool verbose;
 }
 
 // chmod +x ...
-main(List<String> arguments) async {
-  ArgParser parser = ArgParser(allowTrailingOptions: true);
+Future main(List<String> arguments) async {
+  final parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
 
   parser.addFlag(argOfflineFlag, help: 'offline get', negatable: false);
@@ -25,9 +27,9 @@ main(List<String> arguments) async {
       help: 'generates packages dir', negatable: false);
   addCommonOptions(parser);
 
-  ArgResults argResults = parser.parse(arguments);
+  final argResults = parser.parse(arguments);
 
-  bool help = argResults[argHelpFlag] as bool;
+  var help = argResults[argHelpFlag] as bool;
   if (help) {
     print(parser.usage);
     return;
@@ -36,15 +38,16 @@ main(List<String> arguments) async {
     return;
   }
 
-  bool oneByOne = argResults[argOneByOneFlag];
-  bool offline = argResults[argOfflineFlag];
-  bool packagesDir = argResults[argPackagesDirFlag];
-  bool forceRecursive = argResults[argForceRecursiveFlag];
-  bool dryRun = argResults[argDryRunFlag];
+  final oneByOne = argResults[argOneByOneFlag] as bool;
+  final offline = argResults[argOfflineFlag] as bool;
+  final packagesDir = argResults[argPackagesDirFlag] as bool;
+  final forceRecursive = argResults[argForceRecursiveFlag] as bool;
+  final dryRun = argResults[argDryRunFlag] as bool;
+  final verbose = argResults[argVerboseFlag] as bool;
 
-  List<String> rest = argResults.rest;
+  var rest = argResults.rest;
   // if no default to current folder
-  if (rest.length == 0) {
+  if (rest.isEmpty) {
     rest = ['.'];
   }
 
@@ -55,19 +58,24 @@ main(List<String> arguments) async {
         ..forceRecursive = forceRecursive
         ..packagesDir = packagesDir
         ..offline = offline
+        ..verbose = verbose
         ..dryRun = dryRun);
 }
 
 Future pubGet(List<String> directories, PubGetOptions options) async {
-  List<String> pkgPaths = [];
+  final pkgPaths = <String>[];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
   }).asFuture();
 
-  for (String dir in pkgPaths) {
-    PubPackage pkg = PubPackage(dir);
+  if (options.verbose == true) {
+    print('found package(s): ${pkgPaths}');
+  }
+  var futures = <Future>[];
+  for (final dir in pkgPaths) {
+    final pkg = PubPackage(dir);
     ProcessCmd cmd;
     if (await isFlutterPackageRoot(dir)) {
       if (!isFlutterSupported) {
@@ -81,6 +89,10 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
     var future = runCmd(cmd, options: options);
     if (options.oneByOne) {
       await future;
+    } else {
+      futures.add(future);
+      await limitConcurrentTasks(futures);
     }
   }
+  await Future.wait(futures);
 }

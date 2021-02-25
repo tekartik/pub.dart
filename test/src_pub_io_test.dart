@@ -1,7 +1,7 @@
-@TestOn("vm")
+@TestOn('vm')
 library tekartik_pub.test.pub_test;
 
-import 'dart:io';
+import 'dart:async';
 
 import 'package:dev_test/test.dart';
 import 'package:path/path.dart';
@@ -16,11 +16,12 @@ void defineTests() {
   //useVMConfiguration();
   group('src_pub_io', () {
     test('version', () async {
-      ProcessResult result = await runCmd(PubCmd(['--version']));
-      expect(result.stdout.startsWith("Pub"), isTrue);
+      final result =
+          await runCmd(PubCmd(['--version'])..includeParentEnvironment = false);
+      expect(result.stdout, startsWith('Pub'));
     });
 
-    _testIsPubPackageRoot(String path, bool expected) async {
+    Future _testIsPubPackageRoot(String path, bool expected) async {
       expect(await isPubPackageRoot(path), expected, reason: path);
       expect(isPubPackageRootSync(path), expected, reason: path);
     }
@@ -43,7 +44,7 @@ void defineTests() {
       try {
         await getPubPackageRoot(join('/', 'dummy', 'path'));
         fail('no');
-      } catch (e) {}
+      } catch (_) {}
     });
 
     group('pub_package', () {
@@ -51,9 +52,9 @@ void defineTests() {
       same test in expanded_success test hence failing
       test('runTest', () async {
         IoPubPackage pkg = new IoPubPackage(await _pubPackageRoot);
-        ProcessResult result = await runCmd(pkg.pubCmd(pubRunTestArgs(
+        final result =  await runCmd(pkg.pubCmd(pubRunTestArgs(
             args: ['test/data/success_test_.dart'],
-            platforms: ["vm"],
+            platforms: ['vm'],
             reporter: RunTestReporter.JSON,
             concurrency: 1)));
 
@@ -78,7 +79,7 @@ void defineTests() {
       */
 
       test('name', () async {
-        IoPubPackage pkg = IoPubPackage(packageRoot);
+        final pkg = IoPubPackage(packageRoot);
         expect(pkg.name, 'tekartik_pub');
       });
     });

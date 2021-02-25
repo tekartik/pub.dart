@@ -1,4 +1,5 @@
 #!/usr/bin/env dart
+
 import 'package:args/args.dart';
 import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:tekartik_common_utils/common_utils_import.dart';
@@ -8,15 +9,14 @@ import 'package:tekartik_pub/src/rpubpath.dart';
 
 class PubAnalyzeOptions extends PubBinOptions {
   bool forceRecursive;
-  bool oneByOne;
   bool fatalInfos;
 }
 
-const String argFatalInfosFlag = "fatal-infos";
+const String argFatalInfosFlag = 'fatal-infos';
 
 // chmod +x ...
-main(List<String> arguments) async {
-  ArgParser parser = ArgParser(allowTrailingOptions: true);
+Future main(List<String> arguments) async {
+  final parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
 
   parser.addFlag(argForceRecursiveFlag,
@@ -26,9 +26,9 @@ main(List<String> arguments) async {
   parser.addFlag(argFatalInfosFlag,
       help: 'Treat infos as fatal', defaultsTo: true);
   addCommonOptions(parser);
-  ArgResults argResults = parser.parse(arguments);
+  final argResults = parser.parse(arguments);
 
-  bool help = argResults[argHelpFlag] as bool;
+  final help = argResults[argHelpFlag] as bool;
   if (help) {
     print(parser.usage);
     return;
@@ -37,14 +37,14 @@ main(List<String> arguments) async {
     return;
   }
 
-  bool oneByOne = argResults[argOneByOneFlag];
-  bool forceRecursive = argResults[argForceRecursiveFlag];
-  bool dryRun = argResults[argDryRunFlag];
-  bool fatalInfos = argResults[argFatalInfosFlag];
+  final oneByOne = argResults[argOneByOneFlag] as bool;
+  final forceRecursive = argResults[argForceRecursiveFlag] as bool;
+  final dryRun = argResults[argDryRunFlag] as bool;
+  final fatalInfos = argResults[argFatalInfosFlag] as bool;
 
-  List<String> rest = argResults.rest;
+  var rest = argResults.rest;
   // if no default to current folder
-  if (rest.length == 0) {
+  if (rest.isEmpty) {
     rest = ['.'];
   }
   await pubAnalyze(
@@ -58,15 +58,15 @@ main(List<String> arguments) async {
 
 Future<int> pubAnalyze(
     List<String> directories, PubAnalyzeOptions options) async {
-  List<Future> futures = [];
-  List<String> pkgPaths = [];
+  final futures = <Future>[];
+  final pkgPaths = <String>[];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
   }).asFuture();
 
-  for (String dir in pkgPaths) {
+  for (final dir in pkgPaths) {
     ProcessCmd cmd;
 
     if (await isFlutterPackageRoot(dir)) {
@@ -96,8 +96,10 @@ Future<int> pubAnalyze(
     var future = runCmd(cmd, options: options);
     if (options.oneByOne == true) {
       await future;
+    } else {
+      futures.add(future);
+      await limitConcurrentTasks(futures);
     }
-    futures.add(future);
   }
   await Future.wait(futures);
   return futures.length;

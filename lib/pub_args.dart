@@ -1,36 +1,84 @@
 library tekartik_io_tools.pub_args;
 
-// 2016-09-25 Use this
+enum RunTestReporter {
+  @deprecated
+  // ignore: constant_identifier_names
+  COMPACT,
+  @deprecated
+// ignore: constant_identifier_names
+  EXPANDED,
 
-// 2018-07-02 uppercase deprecated
-enum RunTestReporter { COMPACT, EXPANDED, JSON, compact, expanded, json }
+  @deprecated
+// ignore: constant_identifier_names
+  JSON,
+  compact,
+  expanded,
+  json
+}
 
-enum BuildMode { DEBUG, RELEASE, debug, release }
-enum BuildFormat { TEXT, JSON, text, json }
+enum BuildMode {
+  @deprecated
+  // ignore: constant_identifier_names
+  DEBUG,
+  @deprecated
+  // ignore: constant_identifier_names
+  RELEASE,
+  debug,
+  release
+}
+enum BuildFormat {
+  @deprecated
+  // ignore: constant_identifier_names
+  TEXT,
+  @deprecated
+  // ignore: constant_identifier_names
+  JSON,
+  text,
+  json
+}
 
-final Map<BuildMode, String> _buildModeValueMap = Map.fromIterables(
-    [BuildMode.DEBUG, BuildMode.RELEASE, BuildMode.debug, BuildMode.release],
-    ["debug", "release", "debug", "release"]);
+final Map<BuildMode, String> _buildModeValueMap = Map.fromIterables([
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+  BuildMode.DEBUG,
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+  BuildMode.RELEASE, BuildMode.debug, BuildMode.release
+], [
+  'debug',
+  'release',
+  'debug',
+  'release'
+]);
 
-final Map<BuildFormat, String> _buildFormatValueMap = Map.fromIterables(
-    [BuildFormat.TEXT, BuildFormat.JSON, BuildFormat.text, BuildFormat.json],
-    ["text", "json", "text", "json"]);
+final Map<BuildFormat, String> _buildFormatValueMap = Map.fromIterables([
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+  BuildFormat.TEXT,
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+  BuildFormat.JSON, BuildFormat.text, BuildFormat.json
+], [
+  'text',
+  'json',
+  'text',
+  'json'
+]);
 
 final Map<RunTestReporter, String> _runTestReporterValueMap =
     Map.fromIterables([
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
   RunTestReporter.COMPACT,
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
   RunTestReporter.EXPANDED,
+  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
   RunTestReporter.JSON,
   RunTestReporter.compact,
   RunTestReporter.expanded,
   RunTestReporter.json,
 ], [
-  "compact",
-  "expanded",
-  "json",
-  "compact",
-  "expanded",
-  "json"
+  'compact',
+  'expanded',
+  'json',
+  'compact',
+  'expanded',
+  'json'
 ]);
 
 Map<String, RunTestReporter> _runTestReporterEnumMap;
@@ -48,7 +96,7 @@ RunTestReporter runTestReporterFromString(String reporter) {
 
 List<String> pubArgs(
     {Iterable<String> args, bool version, bool help, bool verbose}) {
-  List<String> pubArgs = [];
+  final pubArgs = <String>[];
   // --version          Print pub version.
 
   if (version == true) {
@@ -58,7 +106,7 @@ List<String> pubArgs(
   if (help == true) {
     pubArgs.add('--help');
   }
-  // --verbose          Shortcut for "--verbosity=all".
+  // --verbose          Shortcut for '--verbosity=all'.
   if (verbose == true) {
     pubArgs.add('--verbose');
   }
@@ -76,9 +124,9 @@ List<String> pubBuildArgs(
     BuildMode mode,
     BuildFormat format,
     String output}) {
-  List<String> buildArgs = ['build'];
+  final buildArgs = <String>['build'];
   // --mode      Mode to run transformers in.
-  //    (defaults to "release")
+  //    (defaults to 'release')
   if (mode != null) {
     buildArgs.addAll(['--mode', _buildModeValueMap[mode]]);
   }
@@ -88,7 +136,7 @@ List<String> pubBuildArgs(
     buildArgs.addAll(['--format', _buildFormatValueMap[format]]);
   }
   // -o, --output    Directory to write build outputs to.
-  // (defaults to "build")
+  // (defaults to 'build')
   if (output != null) {
     buildArgs.addAll(['--output', output]);
   }
@@ -103,7 +151,7 @@ List<String> pubBuildArgs(
 }
 
 List<String> pubGetArgs({bool offline, bool dryRun, bool packagesDir}) {
-  List<String> args = ['get'];
+  final args = <String>['get'];
   if (offline == true) {
     args.add('--offline');
   }
@@ -117,7 +165,7 @@ List<String> pubGetArgs({bool offline, bool dryRun, bool packagesDir}) {
 }
 
 List<String> pubUpgradeArgs({bool offline, bool dryRun, bool packagesDir}) {
-  List<String> args = ['upgrade'];
+  final args = <String>['upgrade'];
   if (offline == true) {
     args.add('--offline');
   }
@@ -130,12 +178,12 @@ List<String> pubUpgradeArgs({bool offline, bool dryRun, bool packagesDir}) {
   return args;
 }
 
-const pubDepsStyleCompact = "compact";
-const pubDepsStyleTree = "tree";
-const pubDepsStyleList = "list";
+const pubDepsStyleCompact = 'compact';
+const pubDepsStyleTree = 'tree';
+const pubDepsStyleList = 'list';
 
 List<String> pubDepsArgs({Iterable<String> args, String style}) {
-  List<String> depsArgs = ['deps'];
+  final depsArgs = <String>['deps'];
   if (style != null) {
     depsArgs.addAll(['--style', style]);
   }
@@ -145,9 +193,9 @@ List<String> pubDepsArgs({Iterable<String> args, String style}) {
   return (depsArgs);
 }
 
-const pubRunTestReporterJson = "json";
-const pubRunTestReporterExpanded = "expanded";
-const pubRunTestReporterCompact = "compact";
+const pubRunTestReporterJson = 'json';
+const pubRunTestReporterExpanded = 'expanded';
+const pubRunTestReporterCompact = 'compact';
 
 List<String> pubRunTestReporters = [
   pubRunTestReporterCompact,
@@ -173,7 +221,7 @@ class TestRunnerArgs {
 }
 
 List<String> pubRunTestRunnerArgs([TestRunnerArgs args]) {
-  List<String> testArgs = [];
+  final testArgs = <String>[];
   if (args?.reporter != null) {
     testArgs.addAll(['-r', _runTestReporterValueMap[args.reporter]]);
   }
@@ -191,7 +239,7 @@ List<String> pubRunTestRunnerArgs([TestRunnerArgs args]) {
     }
   }
   if (args?.platforms != null) {
-    for (String platform in args.platforms) {
+    for (final platform in args.platforms) {
       testArgs.addAll(['-p', platform]);
     }
   }
@@ -209,7 +257,7 @@ List<String> testRunnerArgs(
     int concurrency,
     List<String> platforms,
     String name}) {
-  List<String> testArgs = [];
+  final testArgs = <String>[];
   testArgs.addAll(pubRunTestRunnerArgs(TestRunnerArgs(
       args: args,
       reporter: reporter,
@@ -228,7 +276,7 @@ List<String> pubRunTestArgs(
     int concurrency,
     List<String> platforms,
     String name}) {
-  List<String> testArgs = ['run', 'test'];
+  final testArgs = <String>['run', 'test'];
   testArgs.addAll(pubRunTestRunnerArgs(TestRunnerArgs(
       args: args,
       reporter: reporter,
@@ -241,7 +289,7 @@ List<String> pubRunTestArgs(
 
 /// list of argument for pubCmd
 List<String> pubRunArgs(Iterable<String> args) {
-  List<String> runArgs = ['run'];
+  final runArgs = <String>['run'];
   if (args != null) {
     runArgs.addAll(args);
   }
@@ -254,7 +302,7 @@ List<String> dartdocArgs(
     bool help,
     String input,
     String output}) {
-  List<String> pubArgs = [];
+  final pubArgs = <String>[];
   // --version          Print pub version.
 
   if (version == true) {
@@ -264,7 +312,7 @@ List<String> dartdocArgs(
   if (help == true) {
     pubArgs.add('--help');
   }
-  // --verbose          Shortcut for "--verbosity=all".
+  // --verbose          Shortcut for '--verbosity=all'.
   if (input != null) {
     pubArgs..add('--input')..add(input);
   }

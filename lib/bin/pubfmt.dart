@@ -1,20 +1,21 @@
 #!/usr/bin/env dart
+
+import 'dart:async';
+
 import 'package:args/args.dart';
 import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
-import 'dart:async';
 
 class PubFmtOptions extends PubBinOptions {
   bool forceRecursive;
-  bool oneByOne;
   bool fix;
 }
 
 // chmod +x ...
-main(List<String> arguments) async {
-  ArgParser parser = ArgParser(allowTrailingOptions: true);
+Future main(List<String> arguments) async {
+  final parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
 
   parser.addFlag(
@@ -31,9 +32,9 @@ main(List<String> arguments) async {
   );
   addCommonOptions(parser);
 
-  ArgResults argResults = parser.parse(arguments);
+  final argResults = parser.parse(arguments);
 
-  bool help = argResults[argHelpFlag] as bool;
+  final help = argResults[argHelpFlag] as bool;
   if (help) {
     print(parser.usage);
     return;
@@ -42,13 +43,13 @@ main(List<String> arguments) async {
     return;
   }
 
-  bool oneByOne = argResults[argOneByOneFlag];
-  bool forceRecursive = argResults[argForceRecursiveFlag];
-  bool dryRun = argResults[argDryRunFlag];
+  final oneByOne = argResults[argOneByOneFlag] as bool;
+  final forceRecursive = argResults[argForceRecursiveFlag] as bool;
+  final dryRun = argResults[argDryRunFlag] as bool;
 
-  List<String> rest = argResults.rest;
+  var rest = argResults.rest;
   // if no default to current folder
-  if (rest.length == 0) {
+  if (rest.isEmpty) {
     rest = ['.'];
   }
   await pubFmt(
@@ -60,15 +61,15 @@ main(List<String> arguments) async {
 }
 
 Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
-  List<Future> futures = [];
-  List<String> pkgPaths = [];
+  final futures = <Future>[];
+  final pkgPaths = <String>[];
   // Also Handle recursive projects
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
   }).asFuture();
 
-  for (String dir in pkgPaths) {
+  for (final dir in pkgPaths) {
     // list of dir to check
     var targets = await findTargetDartDirectories(dir);
     if (targets.isEmpty) {
@@ -83,8 +84,10 @@ Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
     var future = runCmd(cmd, options: options);
     if (options.oneByOne == true) {
       await future;
+    } else {
+      futures.add(future);
+      await limitConcurrentTasks(futures);
     }
-    futures.add(future);
   }
   await Future.wait(futures);
   return futures.length;

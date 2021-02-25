@@ -1,12 +1,14 @@
-import 'package:tekartik_pub/src/pub_fs_io.dart';
-import 'package:process_run/cmd_run.dart';
+import 'dart:async';
 
-main() async {
-  IoFsPubPackage pkg = IoFsPubPackage(Directory.current);
+import 'package:process_run/cmd_run.dart';
+import 'package:tekartik_pub/src/pub_fs_io.dart';
+
+Future main() async {
+  final pkg = IoFsPubPackage(Directory.current);
 
   // Run all tests
-  ProcessResult result = await runCmd(
-      pkg.pubCmd(pubRunTestArgs(reporter: RunTestReporter.EXPANDED)),
+  final result = await runCmd(
+      pkg.pubCmd(pubRunTestArgs(reporter: RunTestReporter.expanded)),
       verbose: true);
   print('exitCode: ${result.exitCode}');
 }

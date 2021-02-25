@@ -1,11 +1,12 @@
-import 'src/pub_fs.dart';
 import 'dart:async';
+
+import 'src/pub_fs.dart';
 
 class PubPackage {
   PubPackage(this._fsPubPackage);
 
   // implementation
-  FsPubPackage _fsPubPackage;
+  final FsPubPackage _fsPubPackage;
 
   FsPubPackage get fsPubPackage => _fsPubPackage;
 

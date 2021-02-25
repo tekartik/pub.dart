@@ -1,9 +1,11 @@
 language: dart
-#with_content_shell: true
 dart:
   - stable
+  - beta
   - dev
 sudo: required
 before_script:
+  - pub run chrome_travis:init
   - source $(pub run chrome_travis:env_rc)
-script: ./tool/travis.sh
+script:
+  - dart tool/travis.dart

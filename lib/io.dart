@@ -36,6 +36,7 @@ class PubPackage extends common.PubPackage {
 
   PubPackage(String path) : this._(IoFsPubPackage(Directory(path)));
 
+  @override
   String get name {
     if (super.name == null) {
       super.name = extractPubspecYamlNameSync(path);
@@ -45,11 +46,13 @@ class PubPackage extends common.PubPackage {
 
   ProcessCmd pbrCmd(List<String> args) => _pbrCmd(args);
 
+  /// When running
   ProcessCmd pubCmd(List<String> args) => _pubCmd(args);
 
   ProcessCmd dartCmd(List<String> args) => _dartCmd(args);
 
   Future<Map> getPubspecYaml() => fsPubPackage.getPubspecYaml();
+
   Future<Map<String, dynamic>> getPubspecYamlMap() =>
       fsPubPackage.getPubspecYamlMap();
 
@@ -57,7 +60,7 @@ class PubPackage extends common.PubPackage {
       fsPubPackage.extractPubspecDependencies();
 
   Future<PubPackage> extractPackage(String dependency) async {
-    FsPubPackage fsDependencyPubPackage =
+    final fsDependencyPubPackage =
         await fsPubPackage.extractPackage(dependency);
     if (fsDependencyPubPackage != null) {
       return PubPackage._(fsDependencyPubPackage);
@@ -92,7 +95,7 @@ class PubPackage extends common.PubPackage {
   }
 
   ProcessCmd _pbrCmd(List<String> args) {
-    return _pubCmd(<String>['run', 'build_runner']..addAll(args));
+    return _pubCmd(<String>['run', 'build_runner', ...args]);
   }
 
   ProcessCmd _dartCmd(List<String> args) {
@@ -127,18 +130,19 @@ class PubPackage extends common.PubPackage {
   }
 }
 
-final String _pubspecYaml = "pubspec.yaml";
+final String _pubspecYaml = 'pubspec.yaml';
 
 /// return true if root package
 
 /// @deprecated
 Future<bool> isPubPackageRoot(String dirPath) async {
-  String pubspecYamlPath = join(dirPath, _pubspecYaml);
-  return await FileSystemEntity.isFile(pubspecYamlPath);
+  final pubspecYamlPath = join(dirPath, _pubspecYaml);
+  // ignore: avoid_slow_async_io
+  return FileSystemEntity.isFile(pubspecYamlPath);
 }
 
 bool isPubPackageRootSync(String dirPath) {
-  String pubspecYamlPath = join(dirPath, _pubspecYaml);
+  final pubspecYamlPath = join(dirPath, _pubspecYaml);
   return io.FileSystemEntity.isFileSync(pubspecYamlPath);
 }
 
@@ -149,34 +153,34 @@ Future<bool> isFlutterPackageRoot(String dirPath) async {
 
 /// throws if no project found
 Future<String> getPubPackageRoot(String resolverPath) async {
-  String dirPath = normalize(absolute(resolverPath));
+  var dirPath = normalize(absolute(resolverPath));
 
   while (true) {
     // Find the project root path
     if (await isPubPackageRoot(dirPath)) {
       return dirPath;
     }
-    String parentDirPath = dirname(dirPath);
+    final parentDirPath = dirname(dirPath);
 
     if (parentDirPath == dirPath) {
-      throw Exception("No project found for path '$resolverPath");
+      throw Exception("No project found for path '$resolverPath'");
     }
     dirPath = parentDirPath;
   }
 }
 
 String getPubPackageRootSync(String resolverPath) {
-  String dirPath = normalize(absolute(resolverPath));
+  var dirPath = normalize(absolute(resolverPath));
 
   while (true) {
     // Find the project root path
     if (isPubPackageRootSync(dirPath)) {
       return dirPath;
     }
-    String parentDirPath = dirname(dirPath);
+    final parentDirPath = dirname(dirPath);
 
     if (parentDirPath == dirPath) {
-      throw Exception("No project found for path '$resolverPath");
+      throw Exception("No project found for path '$resolverPath'");
     }
     dirPath = parentDirPath;
   }
