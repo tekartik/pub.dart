@@ -22,7 +22,7 @@ var veryLongTimeout = const Timeout(Duration(minutes: 5));
 
 void main() {
   group('io_example_simple', () {
-    PubPackage pkg;
+    late PubPackage pkg;
 
     // Order is important in the tests here
 

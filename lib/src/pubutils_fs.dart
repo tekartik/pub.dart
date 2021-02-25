@@ -33,49 +33,50 @@ String _pubspecDotPackagesPath(String packageRoot) =>
     join(packageRoot, dotPackagesBasename);
 
 @deprecated
-Future<Map> getPackageYaml(Directory packageDir) => getPubspecYaml(packageDir);
+Future<Map?> getPackageYaml(Directory packageDir) => getPubspecYaml(packageDir);
 
 // 2018-12 to deprecate
-Future<Map> getPubspecYaml(Directory packageDir) =>
+Future<Map?> getPubspecYaml(Directory packageDir) =>
     getPubspecYamlMap(packageDir);
 
-Future<Map<String, dynamic>> getPubspecYamlMap(Directory packageDir) =>
+Future<Map<String, dynamic>?> getPubspecYamlMap(Directory packageDir) =>
     _getYaml(packageDir, 'pubspec.yaml');
 
-Future<Map<String, dynamic>> _getYaml(Directory packageDir, String name) async {
+Future<Map<String, dynamic>?> _getYaml(
+    Directory packageDir, String name) async {
   final content = await childFile(packageDir, name).readAsString();
-  return (loadYaml(content) as Map)?.cast<String, dynamic>();
+  return (loadYaml(content) as Map?)?.cast<String, dynamic>();
 }
 
-Uri dotPackagesGetLibUri(Map yaml, String packageName) {
+Uri dotPackagesGetLibUri(Map yaml, String? packageName) {
   return Uri.parse(yaml[packageName] as String);
 }
 
 // in dev tree
-String pubspecYamlGetPackageName(Map yaml) => yaml['name'] as String;
+String? pubspecYamlGetPackageName(Map yaml) => yaml['name'] as String?;
 
-Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
+Iterable<String>? pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   if (yaml.containsKey('test_dependencies')) {
     final list =
-        (yaml['test_dependencies'] as Iterable)?.cast<String>() ?? <String>[];
+        (yaml['test_dependencies'] as Iterable?)?.cast<String>() ?? <String>[];
 
     return list;
   }
   return null;
 }
 
-Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
-  return ((yaml['dependencies'] as Map)?.keys)?.cast<String>();
+Iterable<String>? pubspecYamlGetDependenciesPackageName(Map yaml) {
+  return ((yaml['dependencies'] as Map?)?.keys)?.cast<String>();
 }
 
 Version pubspecLockGetVersion(Map yaml, String packageName) =>
     Version.parse(yaml['packages'][packageName]['version'] as String);
 
 /// result must be run with reporter:json
-bool pubRunTestJsonIsSuccess(String stdout) {
+bool? pubRunTestJsonIsSuccess(String stdout) {
   try {
     final map = json.decode(LineSplitter.split(stdout).last) as Map;
-    return map['success'] as bool;
+    return map['success'] as bool?;
   } catch (_) {
     return false;
   }

@@ -8,7 +8,7 @@ import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/pubspec_yaml.dart';
 
 class PubListOptions extends PubBinOptions {
-  bool forceRecursive;
+  bool? forceRecursive;
 }
 
 // chmod +x ...
@@ -80,7 +80,7 @@ Future pubList(List<String> directories, PubListOptions options) async {
     }
     var future = runCmd(cmd, options: options);
     */
-    if (options.oneByOne) {
+    if (options.oneByOne!) {
       // await future;
     }
   }

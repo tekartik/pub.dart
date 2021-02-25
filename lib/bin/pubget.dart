@@ -7,10 +7,10 @@ import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 
 class PubGetOptions extends PubBinOptions {
-  bool forceRecursive;
-  bool offline;
-  bool packagesDir;
-  bool verbose;
+  bool? forceRecursive;
+  bool? offline;
+  bool? packagesDir;
+  bool? verbose;
 }
 
 // chmod +x ...
@@ -87,7 +87,7 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
           offline: options.offline, packagesDir: options.packagesDir));
     }
     var future = runCmd(cmd, options: options);
-    if (options.oneByOne) {
+    if (options.oneByOne!) {
       await future;
     } else {
       futures.add(future);

@@ -1,11 +1,11 @@
 name: tekartik_pub
-version: 0.11.1
+version: 0.12.0
 description: Pub and package helpers
 homepage: https://github.com/tekartik/pub.dart
 publish_to: none
 
 environment:
-  sdk: '>=2.10.0-0 <3.0.0'
+  sdk: '>=2.12.0-0 <3.0.0'
 dependencies:
   process_run: '>=0.10.3'
   yaml: any
@@ -15,14 +15,14 @@ dependencies:
   tekartik_common_utils:
     git:
       url: git://github.com/tekartik/common_utils.dart
-      ref: dart2
+      ref: null_safety
     version: '>=0.9.8'
 
 dev_dependencies:
   tekartik_fs_test:
     git:
       url: git://github.com/tekartik/fs_shim.dart
-      ref: dart2
+      ref: null_safety
       path: fs_test
   dev_test: '>0.13.3+7'
   test: '>=1.2.0'
@@ -33,11 +33,11 @@ dev_dependencies:
     git:
       url: git://github.com/tekartik/platform.dart
       path: platform_io
-      ref: dart2
+      ref: null_safety
   chrome_travis:
     git:
       url: git://github.com/tekartik/chrome_travis.dart
-      ref: dart2
+      ref: null_safety
 test_dependencies:
 - process_run
 

@@ -20,7 +20,7 @@ export 'pubutils_fs.dart'
         pubRunTestJsonSuccessCount;
 
 typedef FsPubPackageFactoryCreate = FsPubPackage Function(Directory dir,
-    [String name]);
+    [String? name]);
 
 class FsPubPackageFactory {
   FsPubPackageFactoryCreate create;
@@ -29,7 +29,7 @@ class FsPubPackageFactory {
 }
 
 final FsPubPackageFactory defaultFsPubPackageFactory = FsPubPackageFactory(
-    (Directory dir, [String name]) => FsPubPackage(dir, name));
+    (Directory dir, [String? name]) => FsPubPackage(dir, name));
 
 // abstract?
 class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
@@ -39,41 +39,41 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
   @override
   Directory dir;
 
-  FsPubPackage(Directory dir, [String name])
+  FsPubPackage(Directory dir, [String? name])
       : this.created(defaultFsPubPackageFactory, dir, name);
 
   FsPubPackage.created(this.factory, this.dir, [this.name]);
   @override
-  String name;
+  String? name;
 
   ProcessCmd prepareCmd(ProcessCmd cmd) => cmd..workingDirectory = dir.path;
 
   @deprecated
-  Future<Map> getPackageYaml() => pub.getPubspecYaml(dir);
+  Future<Map?> getPackageYaml() => pub.getPubspecYaml(dir);
 
-  Future<Map> getPubspecYaml() => pub.getPubspecYaml(dir);
+  Future<Map?> getPubspecYaml() => pub.getPubspecYaml(dir);
 
   // Get the pubspec as a map
-  Future<Map<String, dynamic>> getPubspecYamlMap() =>
+  Future<Map<String, dynamic>?> getPubspecYamlMap() =>
       pub.getPubspecYamlMap(dir);
 
-  Future<String> extractPackageName() async {
-    return pubspecYamlGetPackageName(await getPubspecYaml());
+  Future<String?> extractPackageName() async {
+    return pubspecYamlGetPackageName((await getPubspecYaml())!);
   }
 
   Future<Version> extractVersion() async {
-    return pubspecYamlGetVersion(await getPubspecYaml());
+    return pubspecYamlGetVersion((await getPubspecYaml())!);
   }
 
   // return as package name
-  Future<Iterable<String>> extractPubspecDependencies() async {
-    final yaml = await getPubspecYaml();
+  Future<Iterable<String>?> extractPubspecDependencies() async {
+    final yaml = (await (getPubspecYaml()))!;
     final list = pubspecYamlGetDependenciesPackageName(yaml);
     return list;
   }
 
   // Extract a package (dependency)
-  Future<FsPubPackage> extractPackage(String packageName) async {
+  Future<FsPubPackage?> extractPackage(String? packageName) async {
     try {
       final yaml = await getDotPackagesYaml(dir);
       final libPath = dotPackagesGetLibUri(yaml, packageName).toFilePath();

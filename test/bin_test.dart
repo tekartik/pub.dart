@@ -13,8 +13,8 @@ ProcessCmd binCmd(String bin, List<String> arguments) {
   return DartCmd([join('example', 'bin', '$bin.dart'), ...arguments]);
 }
 
-Future<String> runOutput(ProcessCmd cmd) async {
-  return (await runCmd(cmd)).stdout?.toString();
+Future<String?> runOutput(ProcessCmd cmd) async {
+  return (await runCmd(cmd))!.stdout?.toString();
 }
 
 void main() {

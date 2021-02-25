@@ -14,20 +14,20 @@ import 'package:yaml/yaml.dart';
 String _pubspecDotPackagesPath(String packageRoot) =>
     join(packageRoot, '.packages');
 
-Map getPackageYamlSync(String packageRoot) {
+Map? getPackageYamlSync(String packageRoot) {
   final pubspecYaml = 'pubspec.yaml';
   final pubspecYamlPath = join(packageRoot, pubspecYaml);
   final content = File(pubspecYamlPath).readAsStringSync();
-  return loadYaml(content) as Map;
+  return loadYaml(content) as Map?;
 }
 
-Future<Map> getPackageYaml(String packageRoot) =>
+Future<Map?> getPackageYaml(String packageRoot) =>
     _getYaml(packageRoot, 'pubspec.yaml');
 
-Future<Map> _getYaml(String packageRoot, String name) async {
+Future<Map?> _getYaml(String packageRoot, String name) async {
   final yamlPath = join(packageRoot, name);
   final content = await File(yamlPath).readAsString();
-  return loadYaml(content) as Map;
+  return loadYaml(content) as Map?;
 }
 
 Future<Map> getDotPackagesYaml(String packageRoot) async {
@@ -48,17 +48,17 @@ Future<Map> getDotPackagesYaml(String packageRoot) async {
   return map;
 }
 
-Uri dotPackagesGetLibUri(Map yaml, String packageName) {
+Uri dotPackagesGetLibUri(Map yaml, String? packageName) {
   return Uri.parse(yaml[packageName] as String);
 }
 
-Iterable<String> pubspecYamlGetDependenciesPackageName(Map yaml) {
-  return ((yaml['dependencies'] as Map).keys)?.cast<String>();
+Iterable<String>? pubspecYamlGetDependenciesPackageName(Map yaml) {
+  return ((yaml['dependencies'] as Map?)?.keys)?.cast<String>();
 }
 
-Iterable<String> pubspecYamlGetTestDependenciesPackageName(Map yaml) {
+Iterable<String>? pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   if (yaml.containsKey('test_dependencies')) {
-    var list = (yaml['test_dependencies'] as Iterable)?.cast<String>();
+    var list = (yaml['test_dependencies'] as Iterable?)?.cast<String>();
     list ??= [];
 
     return list;
@@ -146,7 +146,7 @@ Future<List<String>> findTargetDartDirectories(String dir) async {
   return targets;
 }
 
-Future<List<String>> _recursiveDartEntities(String dir, String base) async {
+Future<List<String>> _recursiveDartEntities(String dir, String? base) async {
   var entities = <String>[]; // dir];
   // list of basename
   var list = (await Directory(dir).list(followLinks: false).toList())
@@ -180,7 +180,7 @@ bool isDirectoryNotLinkSynk(String path) =>
 /// if [forceRecursive] is true, we folder going deeper even if the current
 /// path is a dart project
 Stream<String> recursivePubPath(List<String> dirs,
-    {List<String> dependencies, bool forceRecursive}) {
+    {List<String>? dependencies, bool? forceRecursive}) {
   final ctlr = StreamController<String>();
 
   Future _handleDir(String dir) async {
@@ -190,8 +190,8 @@ Stream<String> recursivePubPath(List<String> dirs,
       var goRecursive = true;
       if (await isPubPackageRoot(dir)) {
         goRecursive = forceRecursive == true;
-        if (dependencies is List && dependencies.isNotEmpty) {
-          final yaml = getPackageYamlSync(dir);
+        if (dependencies is List && dependencies!.isNotEmpty) {
+          final yaml = getPackageYamlSync(dir)!;
           if (yamlHasAnyDependencies(yaml, dependencies)) {
             ctlr.add(dir);
           }

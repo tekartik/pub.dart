@@ -19,7 +19,7 @@ bool _isToBeIgnored(String baseName) {
 }
 
 Stream<Directory> recursivePubDir(List<Directory> dirs,
-    {List<String> dependencies}) {
+    {List<String>? dependencies}) {
   final ctlr = StreamController<Directory>();
 
   Future _handleDir(Directory dir) async {
@@ -28,8 +28,8 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
     // don't event go below
     if (!_isToBeIgnored(basename(dir.path))) {
       if (await isPubPackageDir(dir)) {
-        if (dependencies is List && dependencies.isNotEmpty) {
-          final yaml = await getPubspecYaml(dir);
+        if (dependencies is List && dependencies!.isNotEmpty) {
+          final yaml = (await getPubspecYaml(dir))!;
           if (pubspecYamlHasAnyDependencies(yaml, dependencies)) {
             ctlr.add(dir);
           }

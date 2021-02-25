@@ -15,13 +15,13 @@ export 'pub_fs.dart';
 //export 'pub.dart';
 
 final FsPubPackageFactory ioFactory = FsPubPackageFactory((fs.Directory dir,
-        [String name]) =>
+        [String? name]) =>
     IoFsPubPackage(dir as Directory, name));
 
 // deprecated
 class IoFsPubPackage extends FsPubPackage
     implements PubPackageDir, PubPackageName {
-  IoFsPubPackage(Directory dir, [String name])
+  IoFsPubPackage(Directory dir, [String? name])
       : super.created(ioFactory, dir, name);
 
   ProcessCmd pubCmd(List<String> args) {
@@ -30,11 +30,11 @@ class IoFsPubPackage extends FsPubPackage
 
   /// main entry point
   @deprecated
-  Future<ProcessResult> runPub(List<String> args, {bool verbose}) =>
+  Future<ProcessResult> runPub(List<String> args, {bool? verbose}) =>
       runCmd(pubCmd(args), verbose: verbose);
 
   /// main entry point
-  Future<ProcessResult> runCmd(ProcessCmd cmd, {bool verbose}) {
+  Future<ProcessResult> runCmd(ProcessCmd cmd, {bool? verbose}) {
     if (cmd.workingDirectory != dir.path) {
       cmd = cmd.clone()..workingDirectory = dir.path;
     }
@@ -44,7 +44,7 @@ class IoFsPubPackage extends FsPubPackage
 
 /// result must be run with reporter:json
 @deprecated
-bool pubRunTestJsonProcessResultIsSuccess(ProcessResult result) =>
+bool? pubRunTestJsonProcessResultIsSuccess(ProcessResult result) =>
     pubRunTestJsonIsSuccess(result.stdout as String);
 
 @deprecated
