@@ -226,7 +226,7 @@ Stream<String> recursivePubPath(List<String> dirs,
         futures.add(_handle);
       }
     } else {
-      throw '${dir} not a directory';
+      throw '$dir not a directory';
     }
   }
 

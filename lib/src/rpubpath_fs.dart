@@ -57,7 +57,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
       if (await dir.fs.isDirectory(dir.path)) {
         await _handleDir(dir);
       } else {
-        throw '${dir} not a directory';
+        throw '$dir not a directory';
       }
     }));
   }

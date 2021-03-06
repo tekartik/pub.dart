@@ -71,7 +71,7 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
   }).asFuture();
 
   if (options.verbose == true) {
-    print('found package(s): ${pkgPaths}');
+    print('found package(s): $pkgPaths');
   }
   var futures = <Future>[];
   for (final dir in pkgPaths) {
