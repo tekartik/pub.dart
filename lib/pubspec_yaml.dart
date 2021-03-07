@@ -4,11 +4,11 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:tekartik_pub/src/pubspec_yaml.dart';
 
 abstract class PubspecYaml {
-  factory PubspecYaml.fromMap(Map<String, dynamic> pubspecYamlMap) {
+  factory PubspecYaml.fromMap(Map<String, dynamic>? pubspecYamlMap) {
     return PubspecYamlImpl(pubspecYamlMap);
   }
 
-  String get name;
+  String? get name;
 
-  Version get version;
+  Version? get version;
 }

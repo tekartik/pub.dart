@@ -81,21 +81,21 @@ final Map<RunTestReporter, String> _runTestReporterValueMap =
   'json'
 ]);
 
-Map<String, RunTestReporter> _runTestReporterEnumMap;
+Map<String, RunTestReporter>? _runTestReporterEnumMap;
 
-RunTestReporter runTestReporterFromString(String reporter) {
+RunTestReporter? runTestReporterFromString(String reporter) {
   if (_runTestReporterEnumMap == null) {
     _runTestReporterEnumMap = {};
     _runTestReporterValueMap
         .forEach((RunTestReporter runTestReporter, String reporter) {
-      _runTestReporterEnumMap[reporter] = runTestReporter;
+      _runTestReporterEnumMap![reporter] = runTestReporter;
     });
   }
-  return _runTestReporterEnumMap[reporter];
+  return _runTestReporterEnumMap![reporter];
 }
 
 List<String> pubArgs(
-    {Iterable<String> args, bool version, bool help, bool verbose}) {
+    {Iterable<String>? args, bool? version, bool? help, bool? verbose}) {
   final pubArgs = <String>[];
   // --version          Print pub version.
 
@@ -119,38 +119,33 @@ List<String> pubArgs(
 
 /// list of argument for pubCmd
 List<String> pubBuildArgs(
-    {Iterable<String> directories,
-    Iterable<String> args,
-    BuildMode mode,
-    BuildFormat format,
-    String output}) {
-  final buildArgs = <String>['build'];
-  // --mode      Mode to run transformers in.
-  //    (defaults to 'release')
-  if (mode != null) {
-    buildArgs.addAll(['--mode', _buildModeValueMap[mode]]);
-  }
-  // --format    How output should be displayed.
-  // [text (default), json]
-  if (format != null) {
-    buildArgs.addAll(['--format', _buildFormatValueMap[format]]);
-  }
-  // -o, --output    Directory to write build outputs to.
-  // (defaults to 'build')
-  if (output != null) {
-    buildArgs.addAll(['--output', output]);
-  }
-  if (directories != null) {
-    buildArgs.addAll(directories);
-  }
-  if (args != null) {
-    buildArgs.addAll(args);
-  }
+    {Iterable<String>? directories,
+    Iterable<String>? args,
+    BuildMode? mode,
+    BuildFormat? format,
+    String? output}) {
+  final buildArgs = <String>[
+    'build',
+    // --mode      Mode to run transformers in.
+    //    (defaults to 'release')
+    if (mode != null) ...['--mode', _buildModeValueMap[mode]!],
+    // --format    How output should be displayed.
+    // [text (default), json]
+    if (format != null) ...['--format', _buildFormatValueMap[format]!],
+
+    // -o, --output    Directory to write build outputs to.
+    // (defaults to 'build')
+    if (output != null) ...['--output', output],
+
+    if (directories != null) ...directories,
+
+    if (args != null) ...args,
+  ];
 
   return buildArgs;
 }
 
-List<String> pubGetArgs({bool offline, bool dryRun, bool packagesDir}) {
+List<String> pubGetArgs({bool? offline, bool? dryRun, bool? packagesDir}) {
   final args = <String>['get'];
   if (offline == true) {
     args.add('--offline');
@@ -164,7 +159,7 @@ List<String> pubGetArgs({bool offline, bool dryRun, bool packagesDir}) {
   return args;
 }
 
-List<String> pubUpgradeArgs({bool offline, bool dryRun, bool packagesDir}) {
+List<String> pubUpgradeArgs({bool? offline, bool? dryRun, bool? packagesDir}) {
   final args = <String>['upgrade'];
   if (offline == true) {
     args.add('--offline');
@@ -182,7 +177,7 @@ const pubDepsStyleCompact = 'compact';
 const pubDepsStyleTree = 'tree';
 const pubDepsStyleList = 'list';
 
-List<String> pubDepsArgs({Iterable<String> args, String style}) {
+List<String> pubDepsArgs({Iterable<String>? args, String? style}) {
   final depsArgs = <String>['deps'];
   if (style != null) {
     depsArgs.addAll(['--style', style]);
@@ -212,51 +207,51 @@ class TestRunnerArgs {
       this.platforms,
       this.name});
 
-  final Iterable<String> args;
-  final RunTestReporter reporter;
-  final bool color;
-  final int concurrency;
-  final List<String> platforms;
-  final String name;
+  final Iterable<String>? args;
+  final RunTestReporter? reporter;
+  final bool? color;
+  final int? concurrency;
+  final List<String>? platforms;
+  final String? name;
 }
 
-List<String> pubRunTestRunnerArgs([TestRunnerArgs args]) {
+List<String> pubRunTestRunnerArgs([TestRunnerArgs? args]) {
   final testArgs = <String>[];
   if (args?.reporter != null) {
-    testArgs.addAll(['-r', _runTestReporterValueMap[args.reporter]]);
+    testArgs.addAll(['-r', _runTestReporterValueMap[args!.reporter!]!]);
   }
   if (args?.concurrency != null) {
-    testArgs.addAll(['-j', args.concurrency.toString()]);
+    testArgs.addAll(['-j', args!.concurrency.toString()]);
   }
   if (args?.name != null) {
-    testArgs.addAll(['-n', args.name]);
+    testArgs.addAll(['-n', args!.name!]);
   }
   if (args?.color != null) {
-    if (args.color) {
+    if (args!.color!) {
       testArgs.add('--color');
     } else {
       testArgs.add('--no-color');
     }
   }
   if (args?.platforms != null) {
-    for (final platform in args.platforms) {
+    for (final platform in args!.platforms!) {
       testArgs.addAll(['-p', platform]);
     }
   }
   if (args?.args != null) {
-    testArgs.addAll(args.args);
+    testArgs.addAll(args!.args!);
   }
   return (testArgs);
 }
 
 /// list of argument for pub run test or pbr test --
 List<String> testRunnerArgs(
-    {Iterable<String> args,
-    RunTestReporter reporter,
-    bool color,
-    int concurrency,
-    List<String> platforms,
-    String name}) {
+    {Iterable<String>? args,
+    RunTestReporter? reporter,
+    bool? color,
+    int? concurrency,
+    List<String>? platforms,
+    String? name}) {
   final testArgs = <String>[];
   testArgs.addAll(pubRunTestRunnerArgs(TestRunnerArgs(
       args: args,
@@ -270,12 +265,12 @@ List<String> testRunnerArgs(
 
 /// list of argument for pubCmd
 List<String> pubRunTestArgs(
-    {Iterable<String> args,
-    RunTestReporter reporter,
-    bool color,
-    int concurrency,
-    List<String> platforms,
-    String name}) {
+    {Iterable<String>? args,
+    RunTestReporter? reporter,
+    bool? color,
+    int? concurrency,
+    List<String>? platforms,
+    String? name}) {
   final testArgs = <String>['run', 'test'];
   testArgs.addAll(pubRunTestRunnerArgs(TestRunnerArgs(
       args: args,
@@ -289,19 +284,19 @@ List<String> pubRunTestArgs(
 
 /// list of argument for pubCmd
 List<String> pubRunArgs(Iterable<String> args) {
-  final runArgs = <String>['run'];
-  if (args != null) {
-    runArgs.addAll(args);
-  }
+  final runArgs = <String>[
+    'run',
+    ...args,
+  ];
   return (runArgs);
 }
 
 List<String> dartdocArgs(
-    {Iterable<String> args,
-    bool version,
-    bool help,
-    String input,
-    String output}) {
+    {Iterable<String>? args,
+    bool? version,
+    bool? help,
+    String? input,
+    String? output}) {
   final pubArgs = <String>[];
   // --version          Print pub version.
 

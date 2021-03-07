@@ -18,7 +18,7 @@ var longTimeout = const Timeout(Duration(minutes: 2));
 
 void main() {
   group('src_fs_io_example_simple', () {
-    IoFsPubPackage pkg;
+    late IoFsPubPackage pkg;
 
     // Order is important in the tests here
 

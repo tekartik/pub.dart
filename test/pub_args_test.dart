@@ -87,7 +87,6 @@ void defineTests() {
     });
 
     test('runTestReporterFromString', () {
-      expect(runTestReporterFromString(null), isNull);
       expect(runTestReporterFromString('json'), RunTestReporter.json);
     });
 

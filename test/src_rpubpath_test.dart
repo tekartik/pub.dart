@@ -57,7 +57,7 @@ void defineTests() {
   });
 
   test('extract', () async {
-    var yaml = getPackageYamlSync(packageRoot);
+    var yaml = getPackageYamlSync(packageRoot)!;
     expect(
         pubspecYamlGetDependenciesPackageName(yaml),
         unorderedEquals([

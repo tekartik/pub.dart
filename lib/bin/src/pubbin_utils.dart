@@ -21,8 +21,8 @@ const String argDryRunFlag = 'dry-run';
 final Version binVersion = Version(0, 1, 0);
 
 class PubBinOptions {
-  bool dryRun;
-  bool oneByOne;
+  bool? dryRun;
+  bool? oneByOne;
 }
 
 void addCommonOptions(ArgParser parser) {
@@ -42,7 +42,7 @@ bool parseCommonOptions(ArgResults argResults) {
   return false;
 }
 
-Future<ProcessResult> runCmd(ProcessCmd cmd, {PubBinOptions options}) async {
+Future<ProcessResult?> runCmd(ProcessCmd cmd, {PubBinOptions? options}) async {
   void _writeWorkingDirectory() {
     if (cmd.workingDirectory != '.' && cmd.workingDirectory != null) {
       stdout.writeln('[${cmd.workingDirectory}]');

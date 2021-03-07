@@ -10,11 +10,11 @@ class PubPackage {
 
   FsPubPackage get fsPubPackage => _fsPubPackage;
 
-  String get name => _fsPubPackage.name;
+  String? get name => _fsPubPackage.name;
 
-  set name(String name) => _fsPubPackage.name = name;
+  set name(String? name) => _fsPubPackage.name = name;
 
   String get path => _fsPubPackage.dir.path;
 
-  Future<String> extractPackageName() => fsPubPackage.extractPackageName();
+  Future<String?> extractPackageName() => fsPubPackage.extractPackageName();
 }

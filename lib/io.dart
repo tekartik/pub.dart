@@ -37,7 +37,7 @@ class PubPackage extends common.PubPackage {
   PubPackage(String path) : this._(IoFsPubPackage(Directory(path)));
 
   @override
-  String get name {
+  String? get name {
     if (super.name == null) {
       super.name = extractPubspecYamlNameSync(path);
     }
@@ -51,15 +51,15 @@ class PubPackage extends common.PubPackage {
 
   ProcessCmd dartCmd(List<String> args) => _dartCmd(args);
 
-  Future<Map> getPubspecYaml() => fsPubPackage.getPubspecYaml();
+  Future<Map?> getPubspecYaml() => fsPubPackage.getPubspecYaml();
 
-  Future<Map<String, dynamic>> getPubspecYamlMap() =>
+  Future<Map<String, dynamic>?> getPubspecYamlMap() =>
       fsPubPackage.getPubspecYamlMap();
 
-  Future<Iterable<String>> extractPubspecDependencies() =>
+  Future<Iterable<String>?> extractPubspecDependencies() =>
       fsPubPackage.extractPubspecDependencies();
 
-  Future<PubPackage> extractPackage(String dependency) async {
+  Future<PubPackage?> extractPackage(String dependency) async {
     final fsDependencyPubPackage =
         await fsPubPackage.extractPackage(dependency);
     if (fsDependencyPubPackage != null) {
@@ -77,11 +77,11 @@ class PubPackage extends common.PubPackage {
 
   @deprecated
   ProcessCmd testCmd(List<String> args,
-          {RunTestReporter reporter,
-          bool color,
-          int concurrency,
-          List<String> platforms,
-          String name}) =>
+          {RunTestReporter? reporter,
+          bool? color,
+          int? concurrency,
+          List<String>? platforms,
+          String? name}) =>
       _pubCmd(pubRunTestArgs(
           args: args,
           reporter: reporter,
@@ -103,12 +103,13 @@ class PubPackage extends common.PubPackage {
   }
 
   @deprecated
-  ProcessCmd upgradeCmd({bool offline, bool dryRun}) =>
+  ProcessCmd upgradeCmd({bool? offline, bool? dryRun}) =>
       _pubCmd(pubUpgradeArgs(offline: offline, dryRun: dryRun));
 
   @deprecated
-  ProcessCmd getCmd({bool offline, bool dryRun, bool packagesDir}) => _pubCmd(
-      pubGetArgs(offline: offline, dryRun: dryRun, packagesDir: packagesDir));
+  ProcessCmd getCmd({bool? offline, bool? dryRun, bool? packagesDir}) =>
+      _pubCmd(pubGetArgs(
+          offline: offline, dryRun: dryRun, packagesDir: packagesDir));
 
   // same package is same path
 
@@ -116,7 +117,7 @@ class PubPackage extends common.PubPackage {
   int get hashCode => path.hashCode;
 
   @override
-  bool operator ==(o) => path == o.path;
+  bool operator ==(o) => o is PubPackage && path == o.path;
 
   @override
   String toString() => path;
@@ -147,7 +148,10 @@ bool isPubPackageRootSync(String dirPath) {
 }
 
 Future<bool> isFlutterPackageRoot(String dirPath) async {
-  var map = await getPubspecYaml(dirPath);
+  var map = (await getPubspecYaml(dirPath));
+  if (map == null) {
+    return false;
+  }
   return mapValueFromParts(map, ['dependencies', 'flutter']) != null;
 }
 
@@ -186,5 +190,5 @@ String getPubPackageRootSync(String resolverPath) {
   }
 }
 
-Future<Map> getPubspecYaml(String dirPath) =>
+Future<Map?> getPubspecYaml(String dirPath) =>
     fs.getPubspecYaml(wrapIoDirectory(io.Directory(dirPath)));

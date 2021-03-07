@@ -78,7 +78,7 @@ Future pubUpgrade(List<String> directories, PubGetOptions options) async {
     }
 
     var future = runCmd(cmd, options: options);
-    if (options.oneByOne) {
+    if (options.oneByOne!) {
       await future;
     } else {
       futures.add(future);

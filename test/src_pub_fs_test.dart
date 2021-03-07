@@ -104,11 +104,11 @@ test:file:///home/alex/.pub-cache/hosted/pub.dartlang.org/test-0.12.7/lib/
 test2:lib/
 ''');
       expect(await pkg.extractPackage(null), isNull);
-      final testPackage = await pkg.extractPackage('test');
+      final testPackage = (await (pkg.extractPackage('test')))!;
       expect(testPackage.name, 'test');
       expect(top.fs.path.split(testPackage.dir.path),
           contains('pub.dartlang.org'));
-      final test2Package = await pkg.extractPackage('test2');
+      final test2Package = (await (pkg.extractPackage('test2')))!;
       expect(test2Package.name, 'test2');
     });
 

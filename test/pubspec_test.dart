@@ -43,7 +43,7 @@ void main() {
       expect(pkg, selfPkg);
       pkg = await extractPackage('process_run', selfPkg.path);
       //expect(pkg, selfPkg);
-      expect(isAbsolute(pkg.path), isTrue);
+      expect(isAbsolute(pkg!.path), isTrue);
       expect(pkg.path, isNot(selfPkg.path));
     });
   });

@@ -8,8 +8,8 @@ import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 
 class PubAnalyzeOptions extends PubBinOptions {
-  bool forceRecursive;
-  bool fatalInfos;
+  bool? forceRecursive;
+  bool? fatalInfos;
 }
 
 const String argFatalInfosFlag = 'fatal-infos';
@@ -81,7 +81,7 @@ Future<int> pubAnalyze(
         continue;
       }
       var args = ['--fatal-warnings'];
-      if (options?.fatalInfos != false) {
+      if (options.fatalInfos != false) {
         args.add('--fatal-infos');
       }
       args.addAll(targets);

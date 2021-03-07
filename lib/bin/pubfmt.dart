@@ -9,8 +9,8 @@ import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 
 class PubFmtOptions extends PubBinOptions {
-  bool forceRecursive;
-  bool fix;
+  bool? forceRecursive;
+  bool? fix;
 }
 
 // chmod +x ...
@@ -43,8 +43,8 @@ Future main(List<String> arguments) async {
     return;
   }
 
-  final oneByOne = argResults[argOneByOneFlag] as bool;
-  final forceRecursive = argResults[argForceRecursiveFlag] as bool;
+  final oneByOne = argResults[argOneByOneFlag] as bool /*!*/;
+  final forceRecursive = argResults[argForceRecursiveFlag] as bool /*!*/;
   final dryRun = argResults[argDryRunFlag] as bool;
 
   var rest = argResults.rest;

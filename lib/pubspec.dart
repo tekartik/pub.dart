@@ -17,14 +17,14 @@ import 'src/rpubpath.dart';
 //     source: hosted
 //     version: "0.3.0"
 
-Future<Version> extractPubspecLockVersion(String packageRoot) async {
+Future<Version?> extractPubspecLockVersion(String packageRoot) async {
   // get the package name from the base directory
   // ~/.pub-cache/global_packages/pubglobalupdate/
   final packageName = basename(packageRoot);
   return await extractPackagePubspecLockVersion(packageName, packageRoot);
 }
 
-Future<Version> extractPackagePubspecLockVersion(
+Future<Version?> extractPackagePubspecLockVersion(
     String packageName, String packageRoot) async {
   try {
     final pubspecLock =
@@ -37,24 +37,24 @@ Future<Version> extractPackagePubspecLockVersion(
 }
 
 // in dev tree
-Future<Version> extractPubspecYamlVersion(String packageRoot) async {
+Future<Version?> extractPubspecYamlVersion(String packageRoot) async {
   try {
-    final pubspecYaml = await getPackageYaml(packageRoot);
+    final pubspecYaml = (await getPackageYaml(packageRoot))!;
     return Version.parse(pubspecYaml['version'] as String);
   } catch (_) {}
   return null;
 }
 
 // in dev tree
-String extractPubspecYamlNameSync(String packageRoot) {
+String? extractPubspecYamlNameSync(String packageRoot) {
   try {
-    final pubspecYaml = getPackageYamlSync(packageRoot);
+    final pubspecYaml = getPackageYamlSync(packageRoot)!;
     return pubspecYamlGetPackageName(pubspecYaml);
   } catch (_) {}
   return null;
 }
 
-Future<Version> extractPackageVersion(String packageRoot) async {
+Future<Version?> extractPackageVersion(String packageRoot) async {
   var version = await extractPubspecLockVersion(packageRoot) ??
       await extractPubspecYamlVersion(packageRoot);
 
@@ -62,16 +62,16 @@ Future<Version> extractPackageVersion(String packageRoot) async {
 }
 
 // return as package name
-Future<Iterable<String>> extractPubspecDependencies(String packageRoot) async {
-  final yaml = await getPackageYaml(packageRoot);
+Future<Iterable<String>?> extractPubspecDependencies(String packageRoot) async {
+  final yaml = (await getPackageYaml(packageRoot))!;
   var list = pubspecYamlGetTestDependenciesPackageName(yaml);
   list ??= pubspecYamlGetDependenciesPackageName(yaml);
 
   return list;
 }
 
-Future<PubPackage> extractPackage(
-    String packageName, String fromPackageRoot) async {
+Future<PubPackage?> extractPackage(
+    String? packageName, String fromPackageRoot) async {
   try {
     final yaml = await getDotPackagesYaml(fromPackageRoot);
     final libPath = dotPackagesGetLibUri(yaml, packageName).toFilePath();

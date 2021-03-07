@@ -17,7 +17,7 @@ class FileSystemTestContextIo extends FileSystemTestContext {
   final PlatformContext platform = platformContextIo;
   @override
   final FileSystemIo fs = FileSystemIo();
-  String outTopPath;
+  late String outTopPath;
 
   FileSystemTestContextIo() {
     outTopPath = testOutTopPath;

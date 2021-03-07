@@ -3,17 +3,17 @@ import 'package:tekartik_common_utils/version_utils.dart';
 import 'package:tekartik_pub/pubspec_yaml.dart';
 
 class PubspecYamlImpl implements PubspecYaml {
-  Map<String, dynamic> get map => pubspecYamlMap;
-  final Map<String, dynamic> pubspecYamlMap;
+  Map<String, dynamic>? get map => pubspecYamlMap;
+  final Map<String, dynamic>? pubspecYamlMap;
 
   PubspecYamlImpl(this.pubspecYamlMap);
 
   @override
-  String get name => pubspecYamlMap['name'] as String;
+  String? get name => pubspecYamlMap!['name'] as String?;
 
-  String get versionText => pubspecYamlMap['version'] as String;
+  String? get versionText => pubspecYamlMap!['version'] as String?;
 
-  Version _parseVersion(String text) {
+  Version? _parseVersion(String? text) {
     if (text == null) {
       return null;
     }
@@ -21,10 +21,10 @@ class PubspecYamlImpl implements PubspecYaml {
   }
 
   @override
-  Version get version => _parseVersion(versionText);
+  Version? get version => _parseVersion(versionText);
 
   bool get isFlutter {
-    return mapValueFromParts(map, ['dependencies', 'flutter']) != null;
+    return mapValueFromParts(map!, ['dependencies', 'flutter']) != null;
   }
 
   List<String> get targets {

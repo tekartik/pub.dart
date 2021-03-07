@@ -229,7 +229,7 @@ void defineTests() {
 
     test('getPubspecYaml', () async {
       final map = await getPubspecYaml(packageRoot);
-      expect(map['name'], 'tekartik_pub');
+      expect(map!['name'], 'tekartik_pub');
     });
     test('name', () async {
       expect(await pkg.extractPackageName(), 'tekartik_pub');
