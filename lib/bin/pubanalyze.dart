@@ -47,6 +47,7 @@ Future main(List<String> arguments) async {
   if (rest.isEmpty) {
     rest = ['.'];
   }
+  // ignore: deprecated_member_use_from_same_package
   await pubAnalyze(
       rest,
       PubAnalyzeOptions()
@@ -56,6 +57,7 @@ Future main(List<String> arguments) async {
         ..dryRun = dryRun);
 }
 
+@deprecated
 Future<int> pubAnalyze(
     List<String> directories, PubAnalyzeOptions options) async {
   final futures = <Future>[];

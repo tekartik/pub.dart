@@ -24,7 +24,7 @@ dev_dependencies:
       url: git://github.com/tekartik/fs_shim.dart
       ref: null_safety
       path: fs_test
-  dev_test: '>0.13.3+7'
+  dev_test: '>0.14.3+7'
   test: '>=1.2.0'
   build_runner: '>=1.2.7'
   build_test: '>=0.10.2'
