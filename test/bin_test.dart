@@ -21,9 +21,10 @@ void main() {
   group('bin', () {
     test('pubanalyze', () async {
       expect(
+          // ignore: deprecated_member_use_from_same_package
           await pubAnalyze(['.'], PubAnalyzeOptions()..forceRecursive = true),
           2);
-    });
+    }, skip: 'deprecated');
     test('pubfmt', () async {
       expect(await pubFmt(['.'], PubFmtOptions()..forceRecursive = true), 2);
     });
