@@ -4,7 +4,7 @@ library tekartik_pub.test.pub_fs_io_test;
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dev_test/test.dart';
+import 'package:test/test.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/io.dart';

@@ -1,7 +1,7 @@
 @TestOn('vm')
 library tekartik_pub.test.example_simple_test.dart;
 
-import 'package:dev_test/test.dart';
+import 'package:test/test.dart';
 import 'package:fs_shim/fs_io.dart';
 import 'package:fs_shim/utils/entity.dart';
 import 'package:path/path.dart';
@@ -9,10 +9,9 @@ import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/src/pub_fs_io.dart';
 
 import 'test_common.dart';
+import 'test_common_io.dart';
 
 String get simplePkgDir => join(packageRoot, 'example_packages', 'simple');
-
-Directory get outDir => Directory(join(outSubPath, joinAll(testDescriptions)));
 
 var longTimeout = const Timeout(Duration(minutes: 2));
 
@@ -23,6 +22,7 @@ void main() {
     // Order is important in the tests here
 
     setUpAll(() async {
+      var outDir = await fileSystemTestContextIo.prepare();
       final simplePkg = IoFsPubPackage(Directory(simplePkgDir));
       // clone the package in a temp output location
 
