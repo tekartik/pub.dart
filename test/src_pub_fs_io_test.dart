@@ -20,7 +20,7 @@ void defineTests() {
 
     test('version', () async {
       final result = await runCmd(pkg.pubCmd(pubArgs(version: true)));
-      expect(result.stdout.startsWith('Pub'), isTrue,
+      expect(result.stdout.toString().startsWith('Pub'), isTrue,
           reason: 'out: ${result.stdout}');
     });
 

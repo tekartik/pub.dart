@@ -119,6 +119,8 @@ test2:lib/
       await childFile(pkg.dir, pubspecYamlBasename).writeAsString('''
 name: tekartik_pub_test_extract_version
 version: 1.0.0
+environment:
+  sdk: '>=2.10.0 <3.0.0'
 ''');
       expect(await pkg.extractVersion(), Version(1, 0, 0));
 
