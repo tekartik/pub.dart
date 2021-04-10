@@ -30,8 +30,8 @@ Future<Version?> extractPackagePubspecLockVersion(
     final pubspecLock =
         loadYaml(await File(join(packageRoot, 'pubspec.lock')).readAsString())
             as Map;
-    return Version.parse(
-        pubspecLock['packages'][packageName]['version'] as String);
+    return Version.parse(((pubspecLock['packages'] as Map)[packageName]
+        as Map)['version'] as String);
   } catch (_) {}
   return null;
 }
@@ -73,7 +73,7 @@ Future<Iterable<String>?> extractPubspecDependencies(String packageRoot) async {
 Future<PubPackage?> extractPackage(
     String? packageName, String fromPackageRoot) async {
   try {
-    final yaml = await getDotPackagesYaml(fromPackageRoot);
+    final yaml = await getDotPackagesMap(fromPackageRoot);
     final libPath = dotPackagesGetLibUri(yaml, packageName).toFilePath();
     // On windows we have lib/ resolved to lib/.
     // dirname on lib/ is not giving the expected result on windows

@@ -3,7 +3,7 @@ library tekartik_pub.test.pub_test;
 
 import 'dart:convert';
 
-import 'package:dev_test/test.dart';
+import 'package:test/test.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:tekartik_pub/src/pub_fs.dart';
 import 'package:tekartik_pub/src/pubutils_fs.dart';

@@ -1,4 +1,4 @@
-import 'package:dev_test/test.dart';
+import 'package:test/test.dart';
 
 void main() {
   test('pubspec.yaml', () {});

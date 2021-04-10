@@ -30,11 +30,16 @@ Future<Map?> _getYaml(String packageRoot, String name) async {
   return loadYaml(content) as Map?;
 }
 
-Future<Map> getDotPackagesYaml(String packageRoot) async {
+@deprecated
+Future<Map> getDotPackagesYaml(String packageRoot) =>
+    getDotPackagesMap(packageRoot);
+
+/// Read info from `.packages` file, key being the package, value being the path
+Future<Map<String, String>> getDotPackagesMap(String packageRoot) async {
   final yamlPath = _pubspecDotPackagesPath(packageRoot);
   final content = await File(yamlPath).readAsString();
 
-  final map = {};
+  final map = <String, String>{};
   final lines = LineSplitter.split(content);
   for (var line in lines) {
     line = line.trim();

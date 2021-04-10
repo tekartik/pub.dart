@@ -69,8 +69,8 @@ Iterable<String>? pubspecYamlGetDependenciesPackageName(Map yaml) {
   return ((yaml['dependencies'] as Map?)?.keys)?.cast<String>();
 }
 
-Version pubspecLockGetVersion(Map yaml, String packageName) =>
-    Version.parse(yaml['packages'][packageName]['version'] as String);
+Version pubspecLockGetVersion(Map yaml, String packageName) => Version.parse(
+    ((yaml['packages'] as Map)[packageName] as Map)['version'] as String);
 
 /// result must be run with reporter:json
 bool? pubRunTestJsonIsSuccess(String stdout) {

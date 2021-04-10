@@ -3,19 +3,17 @@ library tekartik_pub.test.example_simple_test.dart;
 
 import 'dart:io';
 
-import 'package:dev_test/test.dart';
 import 'package:fs_shim/utils/io/entity.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/io.dart';
+import 'package:test/test.dart';
 
-import 'test_common.dart';
+import 'test_common_io.dart';
 
 String get pkgDir => '.';
 
 String get simplePkgDir => join(pkgDir, 'example_packages', 'simple');
-
-String get outDir => join(testOutTopPath, joinAll(testDescriptions));
 
 var longTimeout = const Timeout(Duration(minutes: 2));
 var veryLongTimeout = const Timeout(Duration(minutes: 5));
@@ -24,13 +22,12 @@ void main() {
   group('io_example_simple', () {
     late PubPackage pkg;
 
-    // Order is important in the tests here
-
     setUpAll(() async {
+      var outDir = await fileSystemTestContextIo.prepare();
       final simplePkg = PubPackage(simplePkgDir);
       // clone the package in a temp output location
 
-      pkg = await simplePkg.clone(outDir, delete: true);
+      pkg = await simplePkg.clone(outDir.path, delete: true);
     });
 
     // fastest test

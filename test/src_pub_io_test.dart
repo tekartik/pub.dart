@@ -3,7 +3,7 @@ library tekartik_pub.test.pub_test;
 
 import 'dart:async';
 
-import 'package:dev_test/test.dart';
+import 'package:test/test.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/src/pub_io.dart';

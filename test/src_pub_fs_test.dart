@@ -1,7 +1,7 @@
 @TestOn('vm')
 library tekartik_pub.test.pub_test;
 
-import 'package:dev_test/test.dart';
+import 'package:test/test.dart';
 import 'package:fs_shim/utils/copy.dart';
 import 'package:fs_shim/utils/entity.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -119,6 +119,8 @@ test2:lib/
       await childFile(pkg.dir, pubspecYamlBasename).writeAsString('''
 name: tekartik_pub_test_extract_version
 version: 1.0.0
+environment:
+  sdk: '>=2.10.0 <3.0.0'
 ''');
       expect(await pkg.extractVersion(), Version(1, 0, 0));
 

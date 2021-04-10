@@ -1,7 +1,7 @@
 @TestOn('vm')
 library tekartik_pub.test.pub_fs_io_test;
 
-import 'package:dev_test/test.dart';
+import 'package:test/test.dart';
 import 'package:fs_shim/fs_io.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/src/pub_fs_io.dart';
@@ -20,7 +20,7 @@ void defineTests() {
 
     test('version', () async {
       final result = await runCmd(pkg.pubCmd(pubArgs(version: true)));
-      expect(result.stdout.startsWith('Pub'), isTrue,
+      expect(result.stdout.toString().startsWith('Pub'), isTrue,
           reason: 'out: ${result.stdout}');
     });
 
