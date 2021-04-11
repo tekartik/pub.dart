@@ -10,8 +10,8 @@ const String pubspecYamlBasename = 'pubspec.yaml';
 const String dotPackagesBasename = '.packages';
 
 Future<Map> getDotPackagesYaml(Directory packageDir) async {
-  final yamlPath = _pubspecDotPackagesPath(packageDir.path);
-  final content = await childFile(packageDir, yamlPath).readAsString();
+  final content =
+      await childFile(packageDir, dotPackagesBasename).readAsString();
 
   final map = {};
   final lines = LineSplitter.split(content);
@@ -26,11 +26,6 @@ Future<Map> getDotPackagesYaml(Directory packageDir) async {
   }
   return map;
 }
-
-//String _pubspecYamlPath(String packageRoot) =>
-//    join(packageRoot, 'pubspec.yaml');
-String _pubspecDotPackagesPath(String packageRoot) =>
-    join(packageRoot, dotPackagesBasename);
 
 @deprecated
 Future<Map?> getPackageYaml(Directory packageDir) => getPubspecYaml(packageDir);

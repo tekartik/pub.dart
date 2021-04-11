@@ -22,7 +22,8 @@ void main() {
     // Order is important in the tests here
 
     setUpAll(() async {
-      var outDir = await fileSystemTestContextIo.prepare();
+      var outDir =
+          await FileSystemTestContextIo('src_fs_io_example_simple').prepare();
       final simplePkg = IoFsPubPackage(Directory(simplePkgDir));
       // clone the package in a temp output location
 

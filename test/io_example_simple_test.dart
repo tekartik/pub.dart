@@ -23,7 +23,7 @@ void main() {
     late PubPackage pkg;
 
     setUpAll(() async {
-      var outDir = await fileSystemTestContextIo.prepare();
+      var outDir = await FileSystemTestContextIo('io_example_simple').prepare();
       final simplePkg = PubPackage(simplePkgDir);
       // clone the package in a temp output location
 

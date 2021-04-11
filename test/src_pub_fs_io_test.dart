@@ -14,7 +14,7 @@ void main() => defineTests();
 void defineTests() {
   //useVMConfiguration();
   group('src_pub_fs_io', () {
-    pub_fs_test.defineTests(fileSystemTestContextIo);
+    pub_fs_test.defineTests(FileSystemTestContextIo('src_pub_fs_io'));
 
     final pkg = IoFsPubPackage(Directory('.'));
 

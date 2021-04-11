@@ -1,6 +1,3 @@
-@TestOn('vm')
-library tekartik_pub.test.pub_test;
-
 import 'package:test/test.dart';
 import 'package:fs_shim/utils/copy.dart';
 import 'package:fs_shim/utils/entity.dart';
