@@ -6,16 +6,14 @@ import 'package:tekartik_pub/src/import.dart';
 
 export 'package:test/test.dart';
 
-final FileSystemTestContextIo fileSystemTestContextIo =
-    FileSystemTestContextIo();
-
 class FileSystemTestContextIo extends FileSystemTestContext {
   @override
   final PlatformContext platform = platformContextIo;
   @override
   final FileSystemIo fs = FileSystemIo();
 
-  FileSystemTestContextIo() {
-    basePath = join('.dart_tool', 'tekartik_pub', 'test');
+  /// dir is a single dir
+  FileSystemTestContextIo(String dir) {
+    basePath = join('.dart_tool', 'tekartik_pub', 'test', dir);
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fs_shim/fs.dart';
 import 'package:fs_shim/utils/copy.dart';
 import 'package:fs_shim/utils/entity.dart';
+import 'package:path/path.dart' as p;
 import 'package:process_run/cmd_run.dart';
 
 import 'import.dart';
@@ -43,6 +44,7 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
       : this.created(defaultFsPubPackageFactory, dir, name);
 
   FsPubPackage.created(this.factory, this.dir, [this.name]);
+
   @override
   String? name;
 
@@ -76,7 +78,8 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
   Future<FsPubPackage?> extractPackage(String? packageName) async {
     try {
       final yaml = await getDotPackagesYaml(dir);
-      final libPath = dotPackagesGetLibUri(yaml, packageName).toFilePath();
+      final libPath = dotPackagesGetLibUri(yaml, packageName)
+          .toFilePath(windows: dir.fs.path.style == p.windows.style);
       if (basename(libPath) == 'lib') {
         var path = dirname(libPath);
         if (isRelative(path)) {
@@ -125,10 +128,11 @@ Future<bool> isPubPackageDir(Directory dir) async {
 /// throws if no project found above
 Future<Directory> getPubPackageDir(FileSystemEntity resolver) async {
   var path = resolver.path;
+  var pathContent = resolver.fs.path;
   if (!(await resolver.fs.isDirectory(resolver.path))) {
-    path = resolver.fs.path.dirname(path);
+    path = pathContent.dirname(path);
   }
-  var dir = resolver.fs.directory(normalize(path));
+  var dir = resolver.fs.directory(pathContent.normalize(path));
 
   while (true) {
     // Find the project root path
