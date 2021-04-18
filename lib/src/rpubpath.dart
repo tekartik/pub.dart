@@ -157,17 +157,17 @@ Future<List<String>> _recursiveDartEntities(String dir, String? base) async {
   var list = (await Directory(dir).list(followLinks: false).toList())
       .map((fileSystemEntity) => basename(fileSystemEntity.path))
       .toList(growable: false);
-  for (var basename_ in list) {
-    var fullpath = join(dir, basename_);
+  for (var item in list) {
+    var fullpath = join(dir, item);
     String subBase;
     if (base == null) {
-      subBase = basename_;
+      subBase = item;
     } else {
-      subBase = join(base, basename_);
+      subBase = join(base, item);
     }
 
     if (isDirectoryNotLinkSynk(fullpath)) {
-      if (!_isToBeIgnored(basename_)) {
+      if (!_isToBeIgnored(item)) {
         entities.add(subBase);
         entities.addAll(await _recursiveDartEntities(fullpath, subBase));
       }
