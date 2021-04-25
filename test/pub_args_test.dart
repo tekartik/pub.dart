@@ -1,8 +1,8 @@
 @TestOn('vm')
 library tekartik_pub.test.pub_args_test;
 
-import 'package:test/test.dart';
 import 'package:tekartik_pub/pub_args.dart';
+import 'package:test/test.dart';
 
 void main() => defineTests();
 
