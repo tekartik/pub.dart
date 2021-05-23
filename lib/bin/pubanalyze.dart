@@ -1,7 +1,6 @@
 #!/usr/bin/env dart
 
 import 'package:args/args.dart';
-import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';

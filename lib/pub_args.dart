@@ -2,7 +2,7 @@ library tekartik_io_tools.pub_args;
 
 enum RunTestReporter {
   @deprecated
-  // ignore: constant_identifier_names
+// ignore: constant_identifier_names
   COMPACT,
   @deprecated
 // ignore: constant_identifier_names
@@ -18,20 +18,20 @@ enum RunTestReporter {
 
 enum BuildMode {
   @deprecated
-  // ignore: constant_identifier_names
+// ignore: constant_identifier_names
   DEBUG,
   @deprecated
-  // ignore: constant_identifier_names
+// ignore: constant_identifier_names
   RELEASE,
   debug,
   release
 }
 enum BuildFormat {
   @deprecated
-  // ignore: constant_identifier_names
+// ignore: constant_identifier_names
   TEXT,
   @deprecated
-  // ignore: constant_identifier_names
+// ignore: constant_identifier_names
   JSON,
   text,
   json

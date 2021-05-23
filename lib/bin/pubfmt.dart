@@ -3,9 +3,7 @@
 import 'dart:async';
 
 import 'package:args/args.dart';
-import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
-import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 
 class PubFmtOptions extends PubBinOptions {

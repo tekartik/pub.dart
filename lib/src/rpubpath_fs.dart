@@ -2,13 +2,7 @@
 @deprecated
 library tekartik_pub.src.rpubpath_fs;
 
-import 'dart:async';
-
-import 'package:fs_shim/fs.dart';
-import 'package:path/path.dart';
-
 import 'import.dart';
-import 'pub_fs.dart';
 
 bool _isToBeIgnored(String baseName) {
   if (baseName == '.' || baseName == '..') {

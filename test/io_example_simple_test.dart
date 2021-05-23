@@ -7,7 +7,6 @@ import 'package:fs_shim/utils/io/entity.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/io.dart';
-import 'package:test/test.dart';
 
 import 'test_common_io.dart';
 

@@ -1,10 +1,8 @@
 @TestOn('vm')
 library tekartik_pub.test.pub_fs_io_test;
 
-import 'package:fs_shim/fs_io.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/src/pub_fs_io.dart';
-import 'package:test/test.dart';
 
 import 'src_pub_fs_test.dart' as pub_fs_test;
 import 'test_common_io.dart';

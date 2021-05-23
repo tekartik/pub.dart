@@ -2,7 +2,6 @@
 library tekartik_pub.test.src_rpubpath_test;
 
 import 'package:path/path.dart';
-import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 import 'package:test/test.dart';
 

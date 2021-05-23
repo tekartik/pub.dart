@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io' as io;
 
-import 'package:fs_shim/fs_io.dart';
 import 'package:fs_shim/fs_io.dart' as fs;
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
@@ -9,7 +8,6 @@ import 'package:process_run/cmd_run.dart' as cmd_run;
 import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_common_utils/map_utils.dart';
 
-import 'pub_args.dart';
 import 'pubspec.dart';
 import 'src/pub_fs_io.dart';
 import 'src/pubutils_fs.dart' as fs;

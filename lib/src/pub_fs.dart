@@ -1,8 +1,4 @@
-import 'dart:async';
-
-import 'package:fs_shim/fs.dart';
 import 'package:fs_shim/utils/copy.dart';
-import 'package:fs_shim/utils/entity.dart';
 import 'package:path/path.dart' as p;
 import 'package:process_run/cmd_run.dart';
 
