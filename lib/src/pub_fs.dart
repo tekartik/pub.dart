@@ -46,7 +46,7 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
 
   ProcessCmd prepareCmd(ProcessCmd cmd) => cmd..workingDirectory = dir.path;
 
-  @deprecated
+  @Deprecated('Use dev_test')
   Future<Map?> getPackageYaml() => pub.getPubspecYaml(dir);
 
   Future<Map?> getPubspecYaml() => pub.getPubspecYaml(dir);

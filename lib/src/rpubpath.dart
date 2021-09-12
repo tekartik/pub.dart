@@ -28,7 +28,7 @@ Future<Map?> _getYaml(String packageRoot, String name) async {
   return loadYaml(content) as Map?;
 }
 
-@deprecated
+@Deprecated('Use dev_test')
 Future<Map> getDotPackagesYaml(String packageRoot) =>
     getDotPackagesMap(packageRoot);
 

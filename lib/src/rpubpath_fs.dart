@@ -1,5 +1,5 @@
 // used?
-@deprecated
+@Deprecated('Use dev_test')
 library tekartik_pub.src.rpubpath_fs;
 
 import 'import.dart';

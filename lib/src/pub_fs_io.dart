@@ -29,11 +29,12 @@ class IoFsPubPackage extends FsPubPackage
   }
 
   /// main entry point
-  @deprecated
+  @Deprecated('Use dev_test')
   Future<ProcessResult> runPub(List<String> args, {bool? verbose}) =>
       runCmd(pubCmd(args), verbose: verbose);
 
   /// main entry point
+  @Deprecated('Use dev_test')
   Future<ProcessResult> runCmd(ProcessCmd cmd, {bool? verbose}) {
     if (cmd.workingDirectory != dir.path) {
       cmd = cmd.clone()..workingDirectory = dir.path;
@@ -43,14 +44,14 @@ class IoFsPubPackage extends FsPubPackage
 }
 
 /// result must be run with reporter:json
-@deprecated
+@Deprecated('Use pubtest')
 bool? pubRunTestJsonProcessResultIsSuccess(ProcessResult result) =>
     pubRunTestJsonIsSuccess(result.stdout as String);
 
-@deprecated
+@Deprecated('Use pubtest')
 int pubRunTestJsonProcessResultSuccessCount(ProcessResult result) =>
     pubRunTestJsonSuccessCount(result.stdout as String);
 
-@deprecated
+@Deprecated('Use pubtest')
 int pubRunTestJsonProcessResultFailureCount(ProcessResult result) =>
     pubRunTestJsonFailureCount(result.stdout as String);
