@@ -7,6 +7,8 @@ import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:yaml/yaml.dart';
 
+export 'package:dev_test/package.dart' show recursivePubPath;
+
 //String _pubspecYamlPath(String packageRoot) =>
 //    join(packageRoot, 'pubspec.yaml');
 String _pubspecDotPackagesPath(String packageRoot) =>
