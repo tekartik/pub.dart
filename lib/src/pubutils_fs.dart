@@ -3,6 +3,7 @@ library tekartik_pub.src.pubutils_fs;
 import 'package:yaml/yaml.dart';
 
 import 'import.dart';
+
 export 'package:dev_test/src/mixin/package.dart'
     show pubspecYamlHasAnyDependencies, pubspecYamlGetVersion;
 
@@ -27,10 +28,10 @@ Future<Map> getDotPackagesYaml(Directory packageDir) async {
   return map;
 }
 
-@deprecated
+@Deprecated('Use dev_test')
 Future<Map?> getPackageYaml(Directory packageDir) => getPubspecYaml(packageDir);
 
-// 2018-12 to deprecate
+// @Deprecated('Use dev_test')
 Future<Map?> getPubspecYaml(Directory packageDir) =>
     getPubspecYamlMap(packageDir);
 

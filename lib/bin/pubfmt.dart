@@ -3,9 +3,8 @@
 import 'dart:async';
 
 import 'package:args/args.dart';
-import 'package:process_run/cmd_run.dart' hide runCmd;
+import 'package:dev_test/package.dart' hide recursivePubPath;
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
-import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 
 class PubFmtOptions extends PubBinOptions {
@@ -80,8 +79,12 @@ Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
       args.add('--fix');
     }
     args.addAll(targets);
-    var cmd = DartFmtCmd(args)..workingDirectory = dir;
-    var future = runCmd(cmd, options: options);
+    var future = packageRunCi(dir,
+        options: PackageRunCiOptions(
+            noPubGet: true,
+            formatOnly: true,
+            recursive: false,
+            noOverride: true));
     if (options.oneByOne == true) {
       await future;
     } else {

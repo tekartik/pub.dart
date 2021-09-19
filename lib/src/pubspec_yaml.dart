@@ -37,6 +37,6 @@ class PubspecYamlImpl implements PubspecYaml {
 
   @override
   String toString() {
-    return '$name $version ${targets.isEmpty ? '' : ['${targets.join(',')}']}';
+    return '$name $version ${targets.isEmpty ? '' : [(targets.join(','))]}';
   }
 }

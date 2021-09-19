@@ -1,14 +1,13 @@
 library tekartik_io_tools.pub_args;
 
 enum RunTestReporter {
-  @deprecated
-  // ignore: constant_identifier_names
+  @Deprecated('Use compact')
+// ignore: constant_identifier_names
   COMPACT,
-  @deprecated
+  @Deprecated('Use expanded')
 // ignore: constant_identifier_names
   EXPANDED,
-
-  @deprecated
+  @Deprecated('Use json')
 // ignore: constant_identifier_names
   JSON,
   compact,
@@ -17,21 +16,21 @@ enum RunTestReporter {
 }
 
 enum BuildMode {
-  @deprecated
-  // ignore: constant_identifier_names
+  @Deprecated('Use debug')
+// ignore: constant_identifier_names
   DEBUG,
-  @deprecated
-  // ignore: constant_identifier_names
+  @Deprecated('Use release')
+// ignore: constant_identifier_names
   RELEASE,
   debug,
   release
 }
 enum BuildFormat {
-  @deprecated
-  // ignore: constant_identifier_names
+  @Deprecated('Use test')
+// ignore: constant_identifier_names
   TEXT,
-  @deprecated
-  // ignore: constant_identifier_names
+  @Deprecated('Use json')
+// ignore: constant_identifier_names
   JSON,
   text,
   json
@@ -309,10 +308,14 @@ List<String> dartdocArgs(
   }
   // --verbose          Shortcut for '--verbosity=all'.
   if (input != null) {
-    pubArgs..add('--input')..add(input);
+    pubArgs
+      ..add('--input')
+      ..add(input);
   }
   if (output != null) {
-    pubArgs..add('--output')..add(output);
+    pubArgs
+      ..add('--output')
+      ..add(output);
   }
   if (args != null) {
     pubArgs.addAll(args);

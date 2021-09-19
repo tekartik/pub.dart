@@ -1,8 +1,4 @@
-import 'dart:async';
-
-import 'package:fs_shim/fs.dart';
 import 'package:fs_shim/utils/copy.dart';
-import 'package:fs_shim/utils/entity.dart';
 import 'package:path/path.dart' as p;
 import 'package:process_run/cmd_run.dart';
 
@@ -50,7 +46,7 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
 
   ProcessCmd prepareCmd(ProcessCmd cmd) => cmd..workingDirectory = dir.path;
 
-  @deprecated
+  @Deprecated('Use dev_test')
   Future<Map?> getPackageYaml() => pub.getPubspecYaml(dir);
 
   Future<Map?> getPubspecYaml() => pub.getPubspecYaml(dir);

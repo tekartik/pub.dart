@@ -2,7 +2,6 @@
 library tekartik_pub.test.bin_pubanalyze_test;
 
 import 'package:path/path.dart';
-import 'package:process_run/cmd_run.dart' hide runCmd;
 import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_pub/bin/pubanalyze.dart';
 import 'package:tekartik_pub/bin/pubfmt.dart';
@@ -26,9 +25,6 @@ void main() {
           2);
     }, skip: 'deprecated');
     test('pubfmt', () async {
-      expect(await pubFmt(['.'], PubFmtOptions()..forceRecursive = true), 2);
-    });
-    test('pubList', () async {
       expect(await pubFmt(['.'], PubFmtOptions()..forceRecursive = true), 2);
     });
 

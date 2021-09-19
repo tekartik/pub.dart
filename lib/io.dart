@@ -1,19 +1,23 @@
 import 'dart:async';
 import 'dart:io' as io;
 
-import 'package:fs_shim/fs_io.dart';
+import 'package:dev_test/build_support.dart';
 import 'package:fs_shim/fs_io.dart' as fs;
-import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:process_run/cmd_run.dart' as cmd_run;
 import 'package:tekartik_common_utils/common_utils_import.dart';
-import 'package:tekartik_common_utils/map_utils.dart';
 
-import 'pub_args.dart';
 import 'pubspec.dart';
 import 'src/pub_fs_io.dart';
-import 'src/pubutils_fs.dart' as fs;
 import 'tekartik_pub.dart' as common;
+
+export 'package:dev_test/src/pub_io.dart'
+    show
+        isPubPackageRoot,
+        isFlutterPackageRoot,
+        isPubPackageRootSync,
+        getPubPackageRootSync,
+        getPubPackageRoot;
 
 export 'pub_args.dart';
 export 'pubspec.dart';
@@ -26,7 +30,6 @@ export 'src/pubutils_fs.dart'
         pubRunTestJsonIsSuccess,
         pubRunTestJsonSuccessCount;
 export 'src/rpubpath.dart' show recursivePubPath;
-
 // bool _DEBUG = false;
 
 class PubPackage extends common.PubPackage {
@@ -68,14 +71,14 @@ class PubPackage extends common.PubPackage {
     return null;
   }
 
-  @deprecated
+  @Deprecated('Use dev_test')
   List<String> upgradeCmdArgs() {
     //args = new List.from(args);
     //args.insertAll(0, ['upgrade']);
     return ['upgrade'];
   }
 
-  @deprecated
+  @Deprecated('Use dev_test')
   ProcessCmd testCmd(List<String> args,
           {RunTestReporter? reporter,
           bool? color,
@@ -102,11 +105,11 @@ class PubPackage extends common.PubPackage {
     return cmd_run.DartCmd(args)..workingDirectory = path;
   }
 
-  @deprecated
+  @Deprecated('Use dev_test')
   ProcessCmd upgradeCmd({bool? offline, bool? dryRun}) =>
       _pubCmd(pubUpgradeArgs(offline: offline, dryRun: dryRun));
 
-  @deprecated
+  @Deprecated('Use dev_test')
   ProcessCmd getCmd({bool? offline, bool? dryRun, bool? packagesDir}) =>
       _pubCmd(pubGetArgs(
           offline: offline, dryRun: dryRun, packagesDir: packagesDir));
@@ -117,7 +120,7 @@ class PubPackage extends common.PubPackage {
   int get hashCode => path.hashCode;
 
   @override
-  bool operator ==(o) => o is PubPackage && path == o.path;
+  bool operator ==(Object other) => other is PubPackage && path == other.path;
 
   @override
   String toString() => path;
@@ -131,64 +134,4 @@ class PubPackage extends common.PubPackage {
   }
 }
 
-final String _pubspecYaml = 'pubspec.yaml';
-
-/// return true if root package
-
-/// @deprecated
-Future<bool> isPubPackageRoot(String dirPath) async {
-  final pubspecYamlPath = join(dirPath, _pubspecYaml);
-  // ignore: avoid_slow_async_io
-  return FileSystemEntity.isFile(pubspecYamlPath);
-}
-
-bool isPubPackageRootSync(String dirPath) {
-  final pubspecYamlPath = join(dirPath, _pubspecYaml);
-  return io.FileSystemEntity.isFileSync(pubspecYamlPath);
-}
-
-Future<bool> isFlutterPackageRoot(String dirPath) async {
-  var map = (await getPubspecYaml(dirPath));
-  if (map == null) {
-    return false;
-  }
-  return mapValueFromParts(map, ['dependencies', 'flutter']) != null;
-}
-
-/// throws if no project found
-Future<String> getPubPackageRoot(String resolverPath) async {
-  var dirPath = normalize(absolute(resolverPath));
-
-  while (true) {
-    // Find the project root path
-    if (await isPubPackageRoot(dirPath)) {
-      return dirPath;
-    }
-    final parentDirPath = dirname(dirPath);
-
-    if (parentDirPath == dirPath) {
-      throw Exception("No project found for path '$resolverPath'");
-    }
-    dirPath = parentDirPath;
-  }
-}
-
-String getPubPackageRootSync(String resolverPath) {
-  var dirPath = normalize(absolute(resolverPath));
-
-  while (true) {
-    // Find the project root path
-    if (isPubPackageRootSync(dirPath)) {
-      return dirPath;
-    }
-    final parentDirPath = dirname(dirPath);
-
-    if (parentDirPath == dirPath) {
-      throw Exception("No project found for path '$resolverPath'");
-    }
-    dirPath = parentDirPath;
-  }
-}
-
-Future<Map?> getPubspecYaml(String dirPath) =>
-    fs.getPubspecYaml(wrapIoDirectory(io.Directory(dirPath)));
+Future<Map?> getPubspecYaml(String dirPath) => pathGetPubspecYamlMap(dirPath);
