@@ -81,7 +81,10 @@ Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
     args.addAll(targets);
     var future = packageRunCi(dir,
         options: PackageRunCiOptions(
-            noPubGet: true, formatOnly: true, recursive: false));
+            noPubGet: true,
+            formatOnly: true,
+            recursive: false,
+            noOverride: true));
     if (options.oneByOne == true) {
       await future;
     } else {

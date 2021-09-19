@@ -27,9 +27,6 @@ void main() {
     test('pubfmt', () async {
       expect(await pubFmt(['.'], PubFmtOptions()..forceRecursive = true), 2);
     });
-    test('pubList', () async {
-      expect(await pubFmt(['.'], PubFmtOptions()..forceRecursive = true), 2);
-    });
 
     test('version', () async {
       //expect(parseVersion(await runOutput(binCmd('publist', ['--version']))),
