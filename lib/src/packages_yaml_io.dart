@@ -30,7 +30,8 @@ String dotPackagesYamlMapGetPackageLibPath(
 }
 
 /// In a given project, for a given dependency package, find a given file.
-Future<String> pubGetPackageFilePath(String packageRoot, String package, String file) async {
+Future<String> pubGetPackageFilePath(
+    String packageRoot, String package, String file) async {
   return join(
       dotPackagesYamlMapGetPackageLibPath(
           await getDotPackagesYamlMap(packageRoot), package),
