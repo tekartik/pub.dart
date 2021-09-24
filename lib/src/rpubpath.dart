@@ -227,9 +227,7 @@ Stream<String> recursivePubPath(List<String> dirs,
   for (final dir in dirs) {
     if (isDirectoryNotLinkSynk(dir)) {
       final _handle = _handleDir(dir);
-      if (_handle is Future) {
-        futures.add(_handle);
-      }
+      futures.add(_handle);
     } else {
       throw '$dir not a directory';
     }
