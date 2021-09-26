@@ -4,9 +4,20 @@ Pub and package helpers
 
 [![Build Status](https://travis-ci.org/tekartik/tekartik_pub.dart.svg?branch=master)](https://travis-ci.org/tekartik/tekartik_pub.dart)
 
-# API
+## Setup
 
-## Usage
+`pubspec.yaml`:
+
+```yaml
+  tekartik_pub:
+    git:
+      url: git://github.com/tekartik/pub.dart
+      ref: null_safety
+    version: '>=0.12.2'
+```
+## API
+
+#### Usage
 
 ````
 import 'package:tekartik_pub/pub_fs_io.dart';
@@ -20,15 +31,15 @@ main() async {
 }
 ````
 
-# Commands
+## Commands
 
-## pubget
+### pubget
 
 Recursively call `pub get`
 
    pubget
     
-## pubupgrade
+### pubupgrade
 
 Recursively call `pub upgrade`
 
