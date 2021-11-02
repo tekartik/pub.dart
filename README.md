@@ -11,8 +11,8 @@ Pub and package helpers
 ```yaml
   tekartik_pub:
     git:
-      url: git://github.com/tekartik/pub.dart
-      ref: null_safety
+      url: https://github.com/tekartik/pub.dart
+      ref: dart2_3
     version: '>=0.12.2'
 ```
 ## API
