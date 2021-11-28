@@ -14,15 +14,15 @@ dependencies:
   args: any
   tekartik_common_utils:
     git:
-      url: git://github.com/tekartik/common_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/common_utils.dart
+      ref: dart2_3
     version: '>=0.9.8'
 
 dev_dependencies:
   tekartik_fs_test:
     git:
-      url: git://github.com/tekartik/fs_shim.dart
-      ref: null_safety
+      url: https://github.com/tekartik/fs_shim.dart
+      ref: dart2_3
       path: fs_test
     version: '>=0.4.3'
   dev_test: '>0.14.3+7'
@@ -32,13 +32,13 @@ dev_dependencies:
   async: '>=2.0.7'
   tekartik_platform_io:
     git:
-      url: git://github.com/tekartik/platform.dart
+      url: https://github.com/tekartik/platform.dart
       path: platform_io
-      ref: null_safety
+      ref: dart2_3
   chrome_travis:
     git:
-      url: git://github.com/tekartik/chrome_travis.dart
-      ref: null_safety
+      url: https://github.com/tekartik/chrome_travis.dart
+      ref: dart2_3
 test_dependencies:
 - process_run
 
@@ -46,8 +46,8 @@ test_dependencies:
 #  dev_test:
 #    path: ../dev_test.dart/dev_test
 #  process_run:
-#    git: git://github.com/tekartik/process_run.dart
+#    git: https://github.com/tekartik/process_run.dart
 #  fs_shim:
-#    git: git://github.com/tekartik/fs_shim.dart
+#    git: https://github.com/tekartik/fs_shim.dart
 #  fs_shim:
 #    path: /media/ssd/devx/git/github.com/tekartik/fs_shim.dart
