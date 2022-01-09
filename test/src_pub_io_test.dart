@@ -4,7 +4,6 @@ library tekartik_pub.test.pub_test;
 import 'dart:async';
 
 import 'package:path/path.dart';
-import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/src/pub_io.dart';
 import 'package:test/test.dart';
 
@@ -15,12 +14,6 @@ void main() => defineTests();
 void defineTests() {
   //useVMConfiguration();
   group('src_pub_io', () {
-    test('version', () async {
-      final result =
-          await runCmd(PubCmd(['--version'])..includeParentEnvironment = false);
-      expect(result.stdout, startsWith('Pub'));
-    });
-
     Future _testIsPubPackageRoot(String path, bool expected) async {
       expect(await isPubPackageRoot(path), expected, reason: path);
       expect(isPubPackageRootSync(path), expected, reason: path);

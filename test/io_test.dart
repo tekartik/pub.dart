@@ -29,26 +29,6 @@ void defineTests() {
       expect(pkg1, pkg2);
     });
 
-    test('version', () async {
-      final pkg = PubPackage(packageRoot);
-
-      /// includeParentEnvironment = false to prevent Observatory server failed to start
-      final result = await runCmd(
-          pkg.pubCmd(pubArgs(version: true))..includeParentEnvironment = false);
-      //print(result);
-      expect(result.stdout, startsWith('Pub'));
-    });
-
-    test('run', () async {
-      final pkg = PubPackage(packageRoot);
-
-      /// includeParentEnvironment = false to prevent Observatory server failed to start
-      final result = await runCmd(
-          pkg.pubCmd(pubArgs(version: true))..includeParentEnvironment = false);
-      //print(result);
-      expect(result.stdout, startsWith('Pub'));
-    });
-
     Future _testIsPubPackageRoot(String path, bool expected) async {
       expect(await isPubPackageRoot(path), expected);
       expect(isPubPackageRootSync(path), expected);

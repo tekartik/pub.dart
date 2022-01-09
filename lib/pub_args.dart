@@ -94,13 +94,11 @@ RunTestReporter? runTestReporterFromString(String reporter) {
 }
 
 List<String> pubArgs(
-    {Iterable<String>? args, bool? version, bool? help, bool? verbose}) {
+    {Iterable<String>? args,
+    @Deprecated('version no longer supported') bool? version,
+    bool? help,
+    bool? verbose}) {
   final pubArgs = <String>[];
-  // --version          Print pub version.
-
-  if (version == true) {
-    pubArgs.add('--version');
-  }
   // --help             Print this usage information.
   if (help == true) {
     pubArgs.add('--help');
