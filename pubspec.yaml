@@ -1,5 +1,5 @@
 name: tekartik_pub
-version: 0.12.2
+version: 0.12.3
 description: Pub and package helpers
 homepage: https://github.com/tekartik/pub.dart
 publish_to: none
@@ -43,6 +43,8 @@ test_dependencies:
 - process_run
 
 # dependency_overrides:
+#  process_run:
+#    path: ../../../github.com/tekartik/process_run.dart
 #  dev_test:
 #    path: ../dev_test.dart/dev_test
 #  process_run:

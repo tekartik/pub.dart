@@ -11,7 +11,6 @@ void defineTests() {
   group('pub_args', () {
     test('pubArgs', () {
       expect(pubArgs(), []);
-      expect(pubArgs(version: true), ['--version']);
       expect(pubArgs(help: true), ['--help']);
       expect(pubArgs(verbose: true), ['--verbose']);
     });
