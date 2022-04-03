@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:fs_shim/fs.dart' as fs;
 import 'package:fs_shim/fs_io.dart';
 import 'package:process_run/cmd_run.dart';
-import 'package:process_run/cmd_run.dart' as _cmd;
+import 'package:process_run/cmd_run.dart' as cmd_run;
 
 import 'pub_fs.dart';
 import 'pub_package_fs.dart';
@@ -25,7 +25,7 @@ class IoFsPubPackage extends FsPubPackage
       : super.created(ioFactory, dir, name);
 
   ProcessCmd pubCmd(List<String> args) {
-    return _cmd.PubCmd(args)..workingDirectory = dir.path;
+    return cmd_run.PubCmd(args)..workingDirectory = dir.path;
   }
 
   /// main entry point
@@ -39,7 +39,7 @@ class IoFsPubPackage extends FsPubPackage
     if (cmd.workingDirectory != dir.path) {
       cmd = cmd.clone()..workingDirectory = dir.path;
     }
-    return _cmd.runCmd(cmd, verbose: verbose);
+    return cmd_run.runCmd(cmd, verbose: verbose);
   }
 }
 
