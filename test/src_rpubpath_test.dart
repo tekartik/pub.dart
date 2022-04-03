@@ -60,12 +60,14 @@ void defineTests() {
     expect(
         pubspecYamlGetDependenciesPackageName(yaml),
         unorderedEquals([
-          'pub_semver',
+          'dev_test',
+          'path',
           'process_run',
           'yaml',
           'fs_shim',
+          'pub_semver',
           'args',
-          'tekartik_common_utils',
+          'tekartik_common_utils'
         ]));
     expect(pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
 
