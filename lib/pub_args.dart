@@ -25,6 +25,7 @@ enum BuildMode {
   debug,
   release
 }
+
 enum BuildFormat {
   @Deprecated('Use test')
 // ignore: constant_identifier_names
