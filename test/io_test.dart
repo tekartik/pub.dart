@@ -29,15 +29,15 @@ void defineTests() {
       expect(pkg1, pkg2);
     });
 
-    Future _testIsPubPackageRoot(String path, bool expected) async {
+    Future testIsPubPackageRoot(String path, bool expected) async {
       expect(await isPubPackageRoot(path), expected);
       expect(isPubPackageRootSync(path), expected);
     }
 
     test('root', () async {
-      await _testIsPubPackageRoot('test', false);
-      await _testIsPubPackageRoot('..', false);
-      await _testIsPubPackageRoot('.', true);
+      await testIsPubPackageRoot('test', false);
+      await testIsPubPackageRoot('..', false);
+      await testIsPubPackageRoot('.', true);
       try {
         await getPubPackageRoot(join('/', 'dummy', 'path'));
         fail('no');

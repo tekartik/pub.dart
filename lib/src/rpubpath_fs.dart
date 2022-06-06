@@ -16,7 +16,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
     {List<String>? dependencies}) {
   final ctlr = StreamController<Directory>();
 
-  Future _handleDir(Directory dir) async {
+  Future handleDir(Directory dir) async {
     final fs = dir.fs;
     // Ignore folder starting with .
     // don't event go below
@@ -36,7 +36,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
         await dir.list().listen((FileSystemEntity fse) {
           sub.add(Future.sync(() async {
             if (await fs.isDirectory(fse.path)) {
-              await _handleDir(fs.directory(fse.path));
+              await handleDir(fs.directory(fse.path));
             }
           }));
         }).asFuture();
@@ -49,7 +49,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
   for (final dir in dirs) {
     futures.add(Future.sync(() async {
       if (await dir.fs.isDirectory(dir.path)) {
-        await _handleDir(dir);
+        await handleDir(dir);
       } else {
         throw '$dir not a directory';
       }

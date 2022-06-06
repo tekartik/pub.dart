@@ -43,27 +43,27 @@ bool parseCommonOptions(ArgResults argResults) {
 }
 
 Future<ProcessResult?> runCmd(ProcessCmd cmd, {PubBinOptions? options}) async {
-  void _writeWorkingDirectory() {
+  void writeWorkingDirectory() {
     if (cmd.workingDirectory != '.' && cmd.workingDirectory != null) {
       stdout.writeln('[${cmd.workingDirectory}]');
     }
   }
 
   if (options?.dryRun == true) {
-    _writeWorkingDirectory();
+    writeWorkingDirectory();
     stdout.writeln('\$ $cmd');
     return null;
   }
   ProcessResult result;
   if (options?.oneByOne == true) {
-    _writeWorkingDirectory();
+    writeWorkingDirectory();
     result = await cmd_run.runCmd(cmd, verbose: true);
     if (result.exitCode != 0) {
       exit(result.exitCode);
     }
   } else {
     result = await cmd_run.runCmd(cmd);
-    _writeWorkingDirectory();
+    writeWorkingDirectory();
     stdout.writeln('\$ $cmd');
     stdout.write(result.stdout);
     stderr.write(result.stderr);

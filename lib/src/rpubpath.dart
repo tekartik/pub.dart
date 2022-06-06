@@ -117,7 +117,7 @@ Future<List<String>> findTargetDartDirectories(String dir) async {
     var entityBasename = basename(entity.path);
     var subDir = join(dir, entityBasename);
     if (isDirectoryNotLinkSynk(subDir)) {
-      bool _isToBeIgnored(String baseName) {
+      bool isToBeIgnored(String baseName) {
         if (_blackListedTargets.contains(baseName)) {
           return true;
         }
@@ -129,8 +129,7 @@ Future<List<String>> findTargetDartDirectories(String dir) async {
         return false;
       }
 
-      if (!_isToBeIgnored(entityBasename) &&
-          !(await isPubPackageRoot(subDir))) {
+      if (!isToBeIgnored(entityBasename) && !(await isPubPackageRoot(subDir))) {
         var paths = (await recursiveDartEntities(subDir))
             .map((path) => join(subDir, path))
             .toList(growable: false);
@@ -188,7 +187,7 @@ Stream<String> recursivePubPath(List<String> dirs,
     {List<String>? dependencies, bool? forceRecursive}) {
   final ctlr = StreamController<String>();
 
-  Future _handleDir(String dir) async {
+  Future handleDir(String dir) async {
     // Ignore folder starting with .
     // don't event go below
     if (!_isToBeIgnored(basename(dir))) {
@@ -212,7 +211,7 @@ Stream<String> recursivePubPath(List<String> dirs,
             .list()
             .listen((FileSystemEntity fse) {
               if (isDirectoryNotLinkSynk(fse.path)) {
-                sub.add(_handleDir(fse.path));
+                sub.add(handleDir(fse.path));
               }
             })
             .asFuture()
@@ -226,7 +225,7 @@ Stream<String> recursivePubPath(List<String> dirs,
   final futures = <Future>[];
   for (final dir in dirs) {
     if (isDirectoryNotLinkSynk(dir)) {
-      final future = _handleDir(dir);
+      final future = handleDir(dir);
       futures.add(future);
     } else {
       throw '$dir not a directory';
