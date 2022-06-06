@@ -14,18 +14,18 @@ void main() => defineTests();
 void defineTests() {
   //useVMConfiguration();
   group('src_pub_io', () {
-    Future _testIsPubPackageRoot(String path, bool expected) async {
+    Future testIsPubPackageRoot(String path, bool expected) async {
       expect(await isPubPackageRoot(path), expected, reason: path);
       expect(isPubPackageRootSync(path), expected, reason: path);
     }
 
     test('isPubPackageRoot', () async {
-      await _testIsPubPackageRoot(join(packageRoot, 'test'), false);
-      await _testIsPubPackageRoot('.', true);
-      await _testIsPubPackageRoot(absolute(packageRoot), true);
-      await _testIsPubPackageRoot(normalize(absolute(packageRoot)), true);
-      await _testIsPubPackageRoot(packageRoot, true);
-      await _testIsPubPackageRoot(
+      await testIsPubPackageRoot(join(packageRoot, 'test'), false);
+      await testIsPubPackageRoot('.', true);
+      await testIsPubPackageRoot(absolute(packageRoot), true);
+      await testIsPubPackageRoot(normalize(absolute(packageRoot)), true);
+      await testIsPubPackageRoot(packageRoot, true);
+      await testIsPubPackageRoot(
           dirname(normalize(absolute(packageRoot))), false);
     });
 
