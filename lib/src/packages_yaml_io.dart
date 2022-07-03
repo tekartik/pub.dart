@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dev_test/build_support.dart';
 import 'package:path/path.dart';
 
 /// Read info from `.packages` file, key being the package, value being the path
@@ -24,16 +25,17 @@ Future<Map<String, String>> getDotPackagesYamlMap(String packageRoot) async {
 }
 
 /// Get the lib path for a given package
+@Deprecated('No longer supported')
 String dotPackagesYamlMapGetPackageLibPath(
     Map<String, String> dotPackagesYamlMap, String package) {
   return Uri.parse(dotPackagesYamlMap[package]!).toFilePath();
 }
 
-/// In a given project, for a given dependency package, find a given file.
+/// In a given project, for a given dependency package, find a given file in the lib folder
 Future<String> pubGetPackageFilePath(
     String packageRoot, String package, String file) async {
-  return join(
-      dotPackagesYamlMapGetPackageLibPath(
-          await getDotPackagesYamlMap(packageRoot), package),
-      file);
+  var configMap = await pathGetPackageConfigMap(packageRoot);
+  var packagePath =
+      pathPackageConfigMapGetPackagePath(packageRoot, configMap, package)!;
+  return join(packagePath, 'lib', file);
 }
