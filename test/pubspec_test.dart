@@ -1,7 +1,6 @@
 @TestOn('vm')
 library tekartik_pub.test.pubspec_test;
 
-import 'package:path/path.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/pubspec_yaml.dart';
@@ -33,17 +32,6 @@ void main() {
       expect(
           await extractPackagePubspecLockVersion('tekartik_pub', packageRoot),
           isNull);
-    });
-
-    test('.packages', () async {
-      final selfPkg = PubPackage(packageRoot);
-
-      var pkg = await extractPackage(selfPkg.name, selfPkg.path);
-      expect(pkg, selfPkg);
-      pkg = await extractPackage('process_run', selfPkg.path);
-      //expect(pkg, selfPkg);
-      expect(isAbsolute(pkg!.path), isTrue);
-      expect(pkg.path, isNot(selfPkg.path));
     });
   });
 }

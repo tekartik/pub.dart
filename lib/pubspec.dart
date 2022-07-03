@@ -70,6 +70,7 @@ Future<Iterable<String>?> extractPubspecDependencies(String packageRoot) async {
   return list;
 }
 
+@Deprecated('No longer supported')
 Future<PubPackage?> extractPackage(
     String? packageName, String fromPackageRoot) async {
   try {
