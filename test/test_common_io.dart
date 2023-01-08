@@ -1,7 +1,5 @@
 import 'package:fs_shim/src/io/io_file_system.dart';
 import 'package:tekartik_fs_test/test_common.dart';
-import 'package:tekartik_platform/context.dart'; // ignore: depend_on_referenced_packages
-import 'package:tekartik_platform_io/context_io.dart';
 import 'package:tekartik_pub/src/import.dart';
 
 export 'package:test/test.dart';
