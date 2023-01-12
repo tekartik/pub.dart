@@ -10,7 +10,7 @@ void defineTests() {
   //useVMConfiguration();
   group('pub_args', () {
     test('pubArgs', () {
-      expect(pubArgs(), []);
+      expect(pubArgs(), isEmpty);
       expect(pubArgs(help: true), ['--help']);
       expect(pubArgs(verbose: true), ['--verbose']);
     });
@@ -59,7 +59,7 @@ void defineTests() {
     });
 
     test('pubRunTestRunnerArgs', () {
-      expect(pubRunTestRunnerArgs(), []);
+      expect(pubRunTestRunnerArgs(), isEmpty);
       expect(
           pubRunTestRunnerArgs(TestRunnerArgs(
               args: ['arg1', 'arg2'],

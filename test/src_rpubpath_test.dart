@@ -15,7 +15,7 @@ void defineTests() {
     var paths = <String>[];
     await recursivePubPath([packageRoot]).listen((String path) {
       paths.add(path);
-    }).asFuture();
+    }).asFuture<void>();
     expect(paths, [packageRoot]);
 
     // with criteria
@@ -23,15 +23,15 @@ void defineTests() {
     await recursivePubPath([packageRoot], dependencies: ['test'])
         .listen((String path) {
       paths.add(path);
-    }).asFuture();
+    }).asFuture<void>();
     expect(paths, [packageRoot]);
 
     paths = [];
     await recursivePubPath([packageRoot], dependencies: ['unittest'])
         .listen((String path) {
       paths.add(path);
-    }).asFuture();
-    expect(paths, []);
+    }).asFuture<void>();
+    expect(paths, isEmpty);
 
     var failed = false;
     try {
@@ -74,9 +74,9 @@ void defineTests() {
     yaml = {};
     expect(pubspecYamlGetTestDependenciesPackageName(yaml), isNull);
     yaml = {'test_dependencies': null};
-    expect(pubspecYamlGetTestDependenciesPackageName(yaml), []);
-    yaml = {'test_dependencies': []};
-    expect(pubspecYamlGetTestDependenciesPackageName(yaml), []);
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), isEmpty);
+    yaml = {'test_dependencies': <Object?>[]};
+    expect(pubspecYamlGetTestDependenciesPackageName(yaml), isEmpty);
     yaml = {
       'test_dependencies': ['process_run']
     };

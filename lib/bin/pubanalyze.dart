@@ -65,7 +65,7 @@ Future<int> pubAnalyze(
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
-  }).asFuture();
+  }).asFuture<void>();
 
   for (final dir in pkgPaths) {
     ProcessCmd cmd;

@@ -66,7 +66,7 @@ Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
-  }).asFuture();
+  }).asFuture<void>();
 
   for (final dir in pkgPaths) {
     // list of dir to check

@@ -10,11 +10,11 @@ export 'package:dev_test/src/mixin/package.dart'
 const String pubspecYamlBasename = 'pubspec.yaml';
 const String dotPackagesBasename = '.packages';
 
-Future<Map> getDotPackagesYaml(Directory packageDir) async {
+Future<Map<String, Object?>> getDotPackagesYaml(Directory packageDir) async {
   final content =
       await childFile(packageDir, dotPackagesBasename).readAsString();
 
-  final map = {};
+  final map = <String, Object?>{};
   final lines = LineSplitter.split(content);
   for (var line in lines) {
     line = line.trim();
