@@ -68,7 +68,7 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
-  }).asFuture();
+  }).asFuture<void>();
 
   if (options.verbose == true) {
     print('found package(s): $pkgPaths');

@@ -17,7 +17,7 @@ void main() {
     expect(pubspecYamlGetTestDependenciesPackageName({}), isNull);
     expect(
         pubspecYamlGetTestDependenciesPackageName({'test_dependencies': null}),
-        []);
+        isEmpty);
     expect(
         pubspecYamlGetTestDependenciesPackageName({
           'test_dependencies': ['one']

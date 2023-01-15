@@ -62,7 +62,7 @@ Future pubUpgrade(List<String> directories, PubGetOptions options) async {
   await recursivePubPath(directories, forceRecursive: options.forceRecursive)
       .listen((String dir) {
     pkgPaths.add(dir);
-  }).asFuture();
+  }).asFuture<void>();
   var futures = <Future>[];
   for (final dir in pkgPaths) {
     final pkg = PubPackage(dir);

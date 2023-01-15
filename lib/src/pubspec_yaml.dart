@@ -24,7 +24,8 @@ class PubspecYamlImpl implements PubspecYaml {
   Version? get version => _parseVersion(versionText);
 
   bool get isFlutter {
-    return mapValueFromParts(map!, ['dependencies', 'flutter']) != null;
+    return mapValueFromParts<Object?>(map!, ['dependencies', 'flutter']) !=
+        null;
   }
 
   List<String> get targets {

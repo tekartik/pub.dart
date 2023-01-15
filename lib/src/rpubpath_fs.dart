@@ -39,7 +39,7 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
               await handleDir(fs.directory(fse.path));
             }
           }));
-        }).asFuture();
+        }).asFuture<void>();
         await Future.wait(sub);
       }
     }

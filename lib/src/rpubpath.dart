@@ -214,7 +214,7 @@ Stream<String> recursivePubPath(List<String> dirs,
                 sub.add(handleDir(fse.path));
               }
             })
-            .asFuture()
+            .asFuture<void>()
             .then((_) {
               return Future.wait(sub);
             });
