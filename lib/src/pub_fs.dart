@@ -94,17 +94,10 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
     final src = dir;
     final dst = toDir;
     if (await isPubPackageDir(src)) {
-      await copyDirectory(src, dst,
-          options: CopyOptions(
-              recursive: true,
-              delete: delete, // delete before copying
-              exclude: [
-                'packages',
-                '.packages',
-                '.pub',
-                'pubspec.lock',
-                'build'
-              ]));
+      await copyDirectory(src, dst, options: CopyOptions(
+          recursive: true,
+          delete: delete, // delete before copying
+          exclude: ['packages', '.packages', '.pub', 'pubspec.lock', 'build']));
     } else {
       throw ArgumentError('not a pub directory');
     }
