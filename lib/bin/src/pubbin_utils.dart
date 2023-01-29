@@ -16,6 +16,7 @@ const String argOneByOneFlag = 'one';
 const String argOfflineFlag = 'offline';
 const String argPackagesDirFlag = 'packages-dir';
 const String argForceRecursiveFlag = 'force-recursive';
+const String argIgnoreErrorsFlag = 'ignore-errors';
 const String argDryRunFlag = 'dry-run';
 
 final Version binVersion = Version(0, 1, 0);

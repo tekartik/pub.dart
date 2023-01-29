@@ -199,7 +199,6 @@ void defineTests() {
           // expect(pubRunTestJsonIsSuccess(result.stdout as String), isFalse);
           // expect(pubRunTestJsonSuccessCount(result.stdout as String), 0);
           // expect(pubRunTestJsonFailureCount(result.stdout as String), 1);
-
         }
       } finally {
         try {

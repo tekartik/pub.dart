@@ -1,6 +1,7 @@
 #!/usr/bin/env dart
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
@@ -11,6 +12,7 @@ class PubGetOptions extends PubBinOptions {
   bool? offline;
   bool? packagesDir;
   bool? verbose;
+  bool? ignoreErrors;
 }
 
 // chmod +x ...
@@ -23,6 +25,10 @@ Future main(List<String> arguments) async {
       abbr: 'f',
       help: 'Force going recursive even in dart project',
       defaultsTo: true);
+  parser.addFlag(argIgnoreErrorsFlag,
+      abbr: 'i',
+      help: 'Ignore errors, all projects are processed',
+      negatable: false);
   parser.addFlag(argPackagesDirFlag,
       help: 'generates packages dir', negatable: false);
   addCommonOptions(parser);
@@ -44,6 +50,7 @@ Future main(List<String> arguments) async {
   final forceRecursive = argResults[argForceRecursiveFlag] as bool;
   final dryRun = argResults[argDryRunFlag] as bool;
   final verbose = argResults[argVerboseFlag] as bool;
+  final ignoreErrors = argResults[argIgnoreErrorsFlag] as bool;
 
   var rest = argResults.rest;
   // if no default to current folder
@@ -59,7 +66,8 @@ Future main(List<String> arguments) async {
         ..packagesDir = packagesDir
         ..offline = offline
         ..verbose = verbose
-        ..dryRun = dryRun);
+        ..dryRun = dryRun
+        ..ignoreErrors = ignoreErrors);
 }
 
 Future pubGet(List<String> directories, PubGetOptions options) async {
@@ -86,7 +94,18 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
       cmd = pkg.pubCmd(pubGetArgs(
           offline: options.offline, packagesDir: options.packagesDir));
     }
-    var future = runCmd(cmd, options: options);
+    var future = () async {
+      try {
+        await runCmd(cmd, options: options);
+      } catch (e) {
+        stderr.writeln('Error in $pkg: $e');
+        if (options.ignoreErrors ?? false) {
+          // ok
+        } else {
+          rethrow;
+        }
+      }
+    }();
     if (options.oneByOne!) {
       await future;
     } else {
