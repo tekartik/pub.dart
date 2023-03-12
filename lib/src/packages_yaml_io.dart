@@ -6,7 +6,24 @@ import 'package:path/path.dart';
 
 /// Read info from `.packages` file, key being the package, value being the path
 /// as a file Uri
+@Deprecated('Returns a map package to uri - use packageConfig')
 Future<Map<String, String>> getDotPackagesYamlMap(String packageRoot) async {
+  var resultMap = <String, String>{};
+  var configMap = await pathGetPackageConfigMap(packageRoot);
+
+  var packageMap = configMap['packages'] as List;
+  for (var packageSrc in packageMap) {
+    var map = packageSrc as Map;
+    var package = map['name'].toString();
+    var rootUri = map['rootUri'].toString();
+    resultMap[package] = rootUri;
+  }
+  return resultMap;
+}
+
+// ignore: unused_element
+Future<Map<String, String>> _getDotPackagesYamlMapCompat(
+    String packageRoot) async {
   final yamlPath = join(packageRoot, '.packages');
   final content = await File(yamlPath).readAsString();
 

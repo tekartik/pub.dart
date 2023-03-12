@@ -14,9 +14,8 @@ export '../pub_args.dart';
 export 'pub_fs.dart';
 //export 'pub.dart';
 
-final FsPubPackageFactory ioFactory = FsPubPackageFactory((fs.Directory dir,
-        [String? name]) =>
-    IoFsPubPackage(dir as Directory, name));
+final FsPubPackageFactory ioFactory = FsPubPackageFactory(
+    (fs.Directory dir, [String? name]) => IoFsPubPackage(dir, name));
 
 // deprecated
 class IoFsPubPackage extends FsPubPackage
