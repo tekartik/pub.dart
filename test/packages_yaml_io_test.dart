@@ -30,5 +30,11 @@ void main() {
         expect(e, isNot(const TypeMatcher<TestFailure>()));
       }
     });
+    test('compat', () async {
+      // yaml: file:///home/alex/.pub-cache/hosted/pub.dev/yaml-3.1.1,
+      // ignore: deprecated_member_use_from_same_package
+      var map = await getDotPackagesYamlMap('.');
+      expect(Uri.parse(map['yaml'] as String).path, contains('yaml'));
+    });
   });
 }
