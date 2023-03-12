@@ -73,7 +73,7 @@ void main() {
 
     test('build', () async {
       final buildIndexHtmlFile =
-          childFile(pkg.dir, join('build', 'web', 'index.html')) as File;
+          childFile(pkg.dir, join('build', 'web', 'index.html'));
       if (await buildIndexHtmlFile.exists()) {
         await buildIndexHtmlFile.delete();
       }
