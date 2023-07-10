@@ -36,10 +36,6 @@ dev_dependencies:
       url: https://github.com/tekartik/platform.dart
       path: platform_io
       ref: dart3a
-  chrome_travis:
-    git:
-      url: https://github.com/tekartik/chrome_travis.dart
-      ref: dart3a
 test_dependencies:
 - process_run
 
