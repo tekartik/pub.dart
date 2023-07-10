@@ -5,7 +5,7 @@ homepage: https://github.com/tekartik/pub.dart
 publish_to: none
 
 environment:
-  sdk: '>=2.18.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 dependencies:
   dev_test:
   path:
@@ -17,14 +17,14 @@ dependencies:
   tekartik_common_utils:
     git:
       url: https://github.com/tekartik/common_utils.dart
-      ref: dart2_3
+      ref: dart3a
     version: '>=0.9.8'
 
 dev_dependencies:
   tekartik_fs_test:
     git:
       url: https://github.com/tekartik/fs_shim.dart
-      ref: dart2_3
+      ref: dart3a
       path: fs_test
     version: '>=0.4.3'
   test: '>=1.2.0'
@@ -35,11 +35,11 @@ dev_dependencies:
     git:
       url: https://github.com/tekartik/platform.dart
       path: platform_io
-      ref: dart2_3
+      ref: dart3a
   chrome_travis:
     git:
       url: https://github.com/tekartik/chrome_travis.dart
-      ref: dart2_3
+      ref: dart3a
 test_dependencies:
 - process_run
 

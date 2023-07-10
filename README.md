@@ -12,7 +12,7 @@ Pub and package helpers
   tekartik_pub:
     git:
       url: https://github.com/tekartik/pub.dart
-      ref: dart2_3
+      ref: dart3a
     version: '>=0.12.2'
 ```
 ## API
