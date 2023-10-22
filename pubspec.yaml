@@ -7,7 +7,7 @@ publish_to: none
 environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
-  dev_test:
+  dev_test: '>=0.16.3'
   path:
   process_run: '>=0.10.3'
   yaml: any
