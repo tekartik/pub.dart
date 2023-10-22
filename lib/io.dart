@@ -35,7 +35,7 @@ export 'src/rpubpath.dart' show recursivePubPath;
 class PubPackage extends common.PubPackage {
   io.Directory get dir => unwrapIoDirectory(fsPubPackage.dir);
 
-  PubPackage._(FsPubPackage fsPubPackage) : super(fsPubPackage);
+  PubPackage._(super.fsPubPackage);
 
   PubPackage(String path) : this._(IoFsPubPackage(Directory(path)));
 

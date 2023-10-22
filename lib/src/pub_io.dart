@@ -6,5 +6,5 @@ export '../io.dart';
 
 // obsolete
 class IoPubPackage extends PubPackage {
-  IoPubPackage(String path) : super(path);
+  IoPubPackage(super.path);
 }
