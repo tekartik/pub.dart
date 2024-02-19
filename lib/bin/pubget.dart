@@ -89,7 +89,7 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
       if (!isFlutterSupported) {
         continue;
       }
-      cmd = FlutterCmd(['packages', 'get'])..workingDirectory = dir;
+      cmd = FlutterCmd(['pub', 'get'])..workingDirectory = dir;
     } else {
       cmd = pkg.pubCmd(pubGetArgs(
           offline: options.offline, packagesDir: options.packagesDir));

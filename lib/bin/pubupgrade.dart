@@ -77,7 +77,7 @@ Future pubUpgrade(List<String> directories, PubGetOptions options) async {
       if (!isFlutterSupported) {
         continue;
       }
-      cmd = FlutterCmd(['packages', 'upgrade'])..workingDirectory = dir;
+      cmd = FlutterCmd(['pub', 'upgrade'])..workingDirectory = dir;
     } else {
       cmd = pkg.pubCmd(pubUpgradeArgs(
           offline: options.offline, packagesDir: options.packagesDir));
