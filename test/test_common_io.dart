@@ -10,11 +10,6 @@ class FileSystemTestContextIo extends FileSystemTestContext {
   @override
   final FileSystemIo fs = FileSystemIo();
 
-  late final String basePath;
-
-  @override
-  String get outPath => joinAll([basePath, ...testDescriptions]);
-
   /// dir is a single dir
   FileSystemTestContextIo(String dir) {
     basePath = join('.dart_tool', 'tekartik_pub', 'test', dir);
