@@ -60,7 +60,7 @@ void defineTests() {
     expect(
         pubspecYamlGetDependenciesPackageName(yaml),
         unorderedEquals([
-          'dev_test',
+          'dev_build',
           'path',
           'process_run',
           'yaml',
