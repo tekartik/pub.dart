@@ -4,7 +4,7 @@ import 'package:yaml/yaml.dart';
 
 import 'import.dart';
 
-export 'package:dev_test/src/mixin/package.dart'
+export 'package:dev_build/src/mixin/package.dart'
     show pubspecYamlHasAnyDependencies, pubspecYamlGetVersion;
 
 const String pubspecYamlBasename = 'pubspec.yaml';

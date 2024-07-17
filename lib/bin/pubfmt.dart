@@ -3,7 +3,7 @@
 import 'dart:async';
 
 import 'package:args/args.dart';
-import 'package:dev_test/package.dart' hide recursivePubPath;
+import 'package:dev_build/package.dart' hide recursivePubPath;
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 

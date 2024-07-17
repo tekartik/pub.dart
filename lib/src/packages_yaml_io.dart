@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dev_test/build_support.dart';
+import 'package:dev_build/build_support.dart';
 import 'package:path/path.dart';
 
 /// Read info from `.packages` file, key being the package, value being the path

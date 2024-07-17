@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io' as io;
 
-import 'package:dev_test/build_support.dart';
+import 'package:dev_build/build_support.dart';
 import 'package:fs_shim/fs_io.dart' as fs;
 import 'package:process_run/cmd_run.dart';
 import 'package:process_run/cmd_run.dart' as cmd_run;
@@ -11,7 +11,7 @@ import 'pubspec.dart';
 import 'src/pub_fs_io.dart';
 import 'tekartik_pub.dart' as common;
 
-export 'package:dev_test/src/pub_io.dart'
+export 'package:dev_build/src/pub_io.dart'
     show
         isPubPackageRoot,
         isFlutterPackageRoot,
@@ -71,14 +71,14 @@ class PubPackage extends common.PubPackage {
     return null;
   }
 
-  @Deprecated('Use dev_test')
+  @Deprecated('Use dev_build')
   List<String> upgradeCmdArgs() {
     //args = new List.from(args);
     //args.insertAll(0, ['upgrade']);
     return ['upgrade'];
   }
 
-  @Deprecated('Use dev_test')
+  @Deprecated('Use dev_build')
   ProcessCmd testCmd(List<String> args,
           {RunTestReporter? reporter,
           bool? color,

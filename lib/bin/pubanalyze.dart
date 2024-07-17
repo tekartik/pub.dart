@@ -56,7 +56,7 @@ Future main(List<String> arguments) async {
         ..dryRun = dryRun);
 }
 
-@Deprecated('Use dev_test')
+@Deprecated('Use dev_build')
 Future<int> pubAnalyze(
     List<String> directories, PubAnalyzeOptions options) async {
   final futures = <Future>[];

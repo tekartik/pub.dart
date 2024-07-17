@@ -7,7 +7,7 @@ import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:yaml/yaml.dart';
 
-export 'package:dev_test/package.dart' show recursivePubPath;
+export 'package:dev_build/package.dart' show recursivePubPath;
 
 //String _pubspecYamlPath(String packageRoot) =>
 //    join(packageRoot, 'pubspec.yaml');
@@ -30,7 +30,7 @@ Future<Map?> _getYaml(String packageRoot, String name) async {
   return loadYaml(content) as Map?;
 }
 
-@Deprecated('Use dev_test')
+@Deprecated('Use dev_build')
 Future<Map> getDotPackagesYaml(String packageRoot) =>
     getDotPackagesMap(packageRoot);
 

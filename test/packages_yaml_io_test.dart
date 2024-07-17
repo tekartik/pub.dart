@@ -3,8 +3,8 @@ library tekartik_pub.test.packages_yaml_io_test;
 
 import 'dart:io';
 
-import 'package:dev_test/test.dart';
 import 'package:tekartik_pub/packages_yaml_io.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('io', () {
