@@ -1,9 +1,9 @@
 #!/usr/bin/env dart
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:process_run/stdio.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 
@@ -84,16 +84,18 @@ Future pubUpgrade(List<String> directories, PubGetOptions options) async {
     }
 
     var future = () async {
-      try {
-        await runCmd(cmd, options: options);
-      } catch (e) {
-        stderr.writeln('Error in $pkg: $e');
-        if (options.ignoreErrors ?? false) {
-          // ok
-        } else {
-          rethrow;
+      await shellStdioLinesGrouper.runZoned(() async {
+        try {
+          await runCmd(cmd, options: options);
+        } catch (e) {
+          stderr.writeln('Error in $pkg: $e');
+          if (options.ignoreErrors ?? false) {
+            // ok
+          } else {
+            rethrow;
+          }
         }
-      }
+      });
     }();
 
     if (options.oneByOne!) {
