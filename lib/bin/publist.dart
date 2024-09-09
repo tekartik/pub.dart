@@ -52,12 +52,7 @@ Future main(List<String> arguments) async {
 }
 
 Future pubList(List<String> directories, PubListOptions options) async {
-  final pkgPaths = <String>[];
-  // Also Handle recursive projects
-  await recursivePubPath(directories, forceRecursive: options.forceRecursive)
-      .listen((String dir) {
-    pkgPaths.add(dir);
-  }).asFuture<void>();
+  final pkgPaths = await recursivePubPath(directories);
 
   for (final dir in pkgPaths) {
     final pkg = PubPackage(dir);

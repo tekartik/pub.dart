@@ -1,5 +1,3 @@
-#!/usr/bin/env dart
-
 import 'dart:async';
 
 import 'package:args/args.dart';
@@ -71,12 +69,7 @@ Future main(List<String> arguments) async {
 }
 
 Future pubGet(List<String> directories, PubGetOptions options) async {
-  final pkgPaths = <String>[];
-  // Also Handle recursive projects
-  await recursivePubPath(directories, forceRecursive: options.forceRecursive)
-      .listen((String dir) {
-    pkgPaths.add(dir);
-  }).asFuture<void>();
+  final pkgPaths = await recursivePubPath(directories);
 
   if (options.verbose == true) {
     print('found package(s): $pkgPaths');

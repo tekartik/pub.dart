@@ -181,64 +181,6 @@ bool isDirectoryNotLinkSynk(String path) =>
     FileSystemEntity.isDirectorySync(path) &&
     !FileSystemEntity.isLinkSync(path);
 
-/// if [forceRecursive] is true, we folder going deeper even if the current
-/// path is a dart project
-Stream<String> recursivePubPath(List<String> dirs,
-    {List<String>? dependencies, bool? forceRecursive}) {
-  final ctlr = StreamController<String>();
-
-  Future handleDir(String dir) async {
-    // Ignore folder starting with .
-    // don't event go below
-    if (!_isToBeIgnored(basename(dir))) {
-      var goRecursive = true;
-      if (await isPubPackageRoot(dir)) {
-        goRecursive = forceRecursive == true;
-        if (dependencies is List && dependencies!.isNotEmpty) {
-          final yaml = getPackageYamlSync(dir)!;
-          if (yamlHasAnyDependencies(yaml, dependencies)) {
-            ctlr.add(dir);
-          }
-        } else {
-          // add package path
-          ctlr.add(dir);
-        }
-      }
-
-      if (goRecursive) {
-        final sub = <Future>[];
-        return Directory(dir)
-            .list()
-            .listen((FileSystemEntity fse) {
-              if (isDirectoryNotLinkSynk(fse.path)) {
-                sub.add(handleDir(fse.path));
-              }
-            })
-            .asFuture<void>()
-            .then((_) {
-              return Future.wait(sub);
-            });
-      }
-    }
-  }
-
-  final futures = <Future>[];
-  for (final dir in dirs) {
-    if (isDirectoryNotLinkSynk(dir)) {
-      final future = handleDir(dir);
-      futures.add(future);
-    } else {
-      throw '$dir not a directory';
-    }
-  }
-
-  Future.wait(futures).then((_) {
-    ctlr.close();
-  });
-
-  return ctlr.stream;
-}
-
 bool containsPubPackage(Iterable<String> paths) {
   for (var path in paths) {
     if (isDirectoryNotLinkSynk(path)) {

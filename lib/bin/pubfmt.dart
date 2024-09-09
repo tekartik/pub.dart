@@ -3,7 +3,7 @@
 import 'dart:async';
 
 import 'package:args/args.dart';
-import 'package:dev_build/package.dart' hide recursivePubPath;
+import 'package:dev_build/package.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 
@@ -61,12 +61,7 @@ Future main(List<String> arguments) async {
 
 Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
   final futures = <Future>[];
-  final pkgPaths = <String>[];
-  // Also Handle recursive projects
-  await recursivePubPath(directories, forceRecursive: options.forceRecursive)
-      .listen((String dir) {
-    pkgPaths.add(dir);
-  }).asFuture<void>();
+  final pkgPaths = await recursivePubPath(directories);
 
   for (final dir in pkgPaths) {
     // list of dir to check

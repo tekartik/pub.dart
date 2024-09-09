@@ -12,30 +12,21 @@ void main() => defineTests();
 void defineTests() {
   test('rpubpath', () async {
     //clearOutFolderSync();
-    var paths = <String>[];
-    await recursivePubPath([packageRoot]).listen((String path) {
-      paths.add(path);
-    }).asFuture<void>();
-    expect(paths, [packageRoot]);
+    var paths = await recursivePubPath([packageRoot]);
+    expect(
+        paths, [packageRoot, join(packageRoot, 'example_packages', 'simple')]);
 
     // with criteria
-    paths = [];
-    await recursivePubPath([packageRoot], dependencies: ['test'])
-        .listen((String path) {
-      paths.add(path);
-    }).asFuture<void>();
-    expect(paths, [packageRoot]);
+    paths = await recursivePubPath([packageRoot], dependencies: ['test']);
+    expect(
+        paths, [packageRoot, join(packageRoot, 'example_packages', 'simple')]);
 
-    paths = [];
-    await recursivePubPath([packageRoot], dependencies: ['unittest'])
-        .listen((String path) {
-      paths.add(path);
-    }).asFuture<void>();
+    paths = await recursivePubPath([packageRoot], dependencies: ['unittest']);
     expect(paths, isEmpty);
 
     var failed = false;
     try {
-      await recursivePubPath([join('/', 'dummy', 'path')]).last;
+      (await recursivePubPath([join('/', 'dummy', 'path')])).last;
     } catch (e) {
       failed = true;
     }
