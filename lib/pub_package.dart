@@ -1,4 +1,4 @@
 @Deprecated('Use dev_build')
-library tekartik_pub.pub_package;
+library;
 
 export 'src/pub_package_fs.dart';

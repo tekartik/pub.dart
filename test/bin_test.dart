@@ -1,5 +1,5 @@
 @TestOn('vm')
-library tekartik_pub.test.bin_pubanalyze_test;
+library;
 
 import 'package:path/path.dart';
 import 'package:tekartik_common_utils/common_utils_import.dart';

@@ -1,4 +1,4 @@
-library tekartik_io_tools.pub_io;
+library;
 
 import '../io.dart';
 

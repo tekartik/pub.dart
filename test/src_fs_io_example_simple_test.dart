@@ -1,5 +1,5 @@
 @TestOn('vm')
-library tekartik_pub.test.example_simple_test.dart;
+library;
 
 import 'package:fs_shim/utils/entity.dart';
 import 'package:path/path.dart';

@@ -1,4 +1,4 @@
-library tekartik_pub.pubspec_yaml;
+library;
 
 import 'package:pub_semver/pub_semver.dart';
 import 'package:tekartik_pub/src/pubspec_yaml.dart';

@@ -1,5 +1,5 @@
 @TestOn('vm')
-library tekartik_pub.test.pubspec_test;
+library;
 
 import 'package:pub_semver/pub_semver.dart';
 import 'package:tekartik_pub/io.dart';

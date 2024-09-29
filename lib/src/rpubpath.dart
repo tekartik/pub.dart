@@ -1,4 +1,4 @@
-library tekartik_pub.src.rpubpath;
+library;
 
 import 'dart:io';
 

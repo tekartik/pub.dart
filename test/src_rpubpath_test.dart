@@ -1,5 +1,5 @@
 @TestOn('vm')
-library tekartik_pub.test.src_rpubpath_test;
+library;
 
 import 'package:path/path.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';

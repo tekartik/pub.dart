@@ -1,4 +1,4 @@
-library tekartik_io_tools.pub_args;
+library;
 
 enum RunTestReporter {
   @Deprecated('Use compact')

@@ -1,4 +1,4 @@
-library tekartik_pub.pubspec;
+library;
 
 import 'dart:async';
 import 'dart:io';

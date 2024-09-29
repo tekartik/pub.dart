@@ -1,4 +1,4 @@
-library tekartik_pub.src.pubutils_fs;
+library;
 
 import 'package:yaml/yaml.dart';
 

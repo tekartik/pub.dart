@@ -1,4 +1,4 @@
-library tekartik_pub.src.import;
+library;
 
 export 'dart:async';
 export 'dart:convert' show LineSplitter, json;

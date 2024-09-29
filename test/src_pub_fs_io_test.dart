@@ -1,5 +1,5 @@
 @TestOn('vm')
-library tekartik_pub.test.pub_fs_io_test;
+library;
 
 import 'package:tekartik_pub/src/pub_fs_io.dart';
 

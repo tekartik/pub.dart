@@ -1,4 +1,4 @@
 @Deprecated('Use dev_test')
-library tekartik_io_tools.pub;
+library;
 
 export 'io.dart';
