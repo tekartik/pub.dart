@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:args/args.dart';
+import 'package:dev_build/menu/menu_run_ci.dart';
 import 'package:process_run/stdio.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
@@ -76,9 +77,12 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
   }
   var futures = <Future>[];
   for (final dir in pkgPaths) {
+    var pubIoPackage = PubIoPackage(dir);
+    await pubIoPackage.ready;
+    var isFlutterPub = pubIoPackage.dofPub == 'flutter pub';
     final pkg = PubPackage(dir);
     ProcessCmd cmd;
-    if (await isFlutterPackageRoot(dir)) {
+    if (isFlutterPub) {
       if (!isFlutterSupported) {
         continue;
       }
