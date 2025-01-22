@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:args/args.dart';
 import 'package:dev_build/menu/menu_run_ci.dart';
 import 'package:process_run/stdio.dart';
+import 'package:tekartik_pub/bin/src/pub_workspace_cache.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 
@@ -50,7 +51,7 @@ Future main(List<String> arguments) async {
   if (rest.isEmpty) {
     rest = ['.'];
   }
-
+  initPubWorkspacesCache();
   await pubUpgrade(
       rest,
       PubGetOptions()
@@ -64,28 +65,26 @@ Future main(List<String> arguments) async {
 }
 
 Future pubUpgrade(List<String> directories, PubGetOptions options) async {
+  var offline = options.offline ?? false;
   final pkgPaths = await recursivePubPath(directories);
   var futures = <Future>[];
   for (final dir in pkgPaths) {
     final pkg = PubPackage(dir);
-    ProcessCmd cmd;
     var pubIoPackage = PubIoPackage(dir);
     await pubIoPackage.ready;
-    var isFlutterPub = pubIoPackage.dofPub == 'flutter pub';
-    if (isFlutterPub) {
-      if (!isFlutterSupported) {
+
+    if (pubWorkspacesCache != null &&
+        (pubIoPackage.hasWorkspaceResolution || pubIoPackage.isWorkspace)) {
+      var root = await pubIoPackage.getWorkspaceRootPath();
+      var cache = PubWorkspaceCache(root, PubWorkspaceCacheAction.get, offline);
+      if (!pubWorkspacesCache!.cacheIfNeeded(cache)) {
         continue;
       }
-      cmd = FlutterCmd(['pub', 'upgrade'])..workingDirectory = dir;
-    } else {
-      cmd = pkg.pubCmd(pubUpgradeArgs(
-          offline: options.offline, packagesDir: options.packagesDir));
     }
-
     var future = () async {
       await shellStdioLinesGrouper.runZoned(() async {
         try {
-          await runCmd(cmd, options: options);
+          await pubIoPackage.pubUpgrade(offline: offline);
         } catch (e) {
           stderr.writeln('Error in $pkg: $e');
           if (options.ignoreErrors ?? false) {
