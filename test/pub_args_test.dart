@@ -19,12 +19,21 @@ void defineTests() {
       expect(pubBuildArgs(), ['build']);
       expect(pubBuildArgs(output: 'out'), ['build', '--output', 'out']);
       expect(pubBuildArgs(mode: BuildMode.debug), ['build', '--mode', 'debug']);
-      expect(pubBuildArgs(mode: BuildMode.release),
-          ['build', '--mode', 'release']);
-      expect(pubBuildArgs(format: BuildFormat.json),
-          ['build', '--format', 'json']);
-      expect(pubBuildArgs(format: BuildFormat.text),
-          ['build', '--format', 'text']);
+      expect(pubBuildArgs(mode: BuildMode.release), [
+        'build',
+        '--mode',
+        'release',
+      ]);
+      expect(pubBuildArgs(format: BuildFormat.json), [
+        'build',
+        '--format',
+        'json',
+      ]);
+      expect(pubBuildArgs(format: BuildFormat.text), [
+        'build',
+        '--format',
+        'text',
+      ]);
       expect(pubBuildArgs(args: ['web']), ['build', 'web']);
       expect(pubBuildArgs(directories: ['web']), ['build', 'web']);
     });
@@ -32,57 +41,63 @@ void defineTests() {
     test('pubRunTestArgs', () {
       expect(pubRunTestArgs(), ['run', 'test']);
       expect(
-          pubRunTestArgs(
-              args: ['arg1', 'arg2'],
-              platforms: ['platform1', 'platform2'],
-              reporter: RunTestReporter.json,
-              color: true,
-              concurrency: 2,
-              name: 'name'),
-          [
-            'run',
-            'test',
-            '-r',
-            'json',
-            '-j',
-            '2',
-            '-n',
-            'name',
-            '--color',
-            '-p',
-            'platform1',
-            '-p',
-            'platform2',
-            'arg1',
-            'arg2'
-          ]);
+        pubRunTestArgs(
+          args: ['arg1', 'arg2'],
+          platforms: ['platform1', 'platform2'],
+          reporter: RunTestReporter.json,
+          color: true,
+          concurrency: 2,
+          name: 'name',
+        ),
+        [
+          'run',
+          'test',
+          '-r',
+          'json',
+          '-j',
+          '2',
+          '-n',
+          'name',
+          '--color',
+          '-p',
+          'platform1',
+          '-p',
+          'platform2',
+          'arg1',
+          'arg2',
+        ],
+      );
     });
 
     test('pubRunTestRunnerArgs', () {
       expect(pubRunTestRunnerArgs(), isEmpty);
       expect(
-          pubRunTestRunnerArgs(TestRunnerArgs(
-              args: ['arg1', 'arg2'],
-              platforms: ['platform1', 'platform2'],
-              reporter: RunTestReporter.compact,
-              color: true,
-              concurrency: 2,
-              name: 'name')),
-          [
-            '-r',
-            'compact',
-            '-j',
-            '2',
-            '-n',
-            'name',
-            '--color',
-            '-p',
-            'platform1',
-            '-p',
-            'platform2',
-            'arg1',
-            'arg2'
-          ]);
+        pubRunTestRunnerArgs(
+          TestRunnerArgs(
+            args: ['arg1', 'arg2'],
+            platforms: ['platform1', 'platform2'],
+            reporter: RunTestReporter.compact,
+            color: true,
+            concurrency: 2,
+            name: 'name',
+          ),
+        ),
+        [
+          '-r',
+          'compact',
+          '-j',
+          '2',
+          '-n',
+          'name',
+          '--color',
+          '-p',
+          'platform1',
+          '-p',
+          'platform2',
+          'arg1',
+          'arg2',
+        ],
+      );
     });
 
     test('runTestReporterFromString', () {

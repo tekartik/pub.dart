@@ -12,7 +12,8 @@ void main() {
   group('activate_package', () {
     test('PubspecYaml', () async {
       var pubspecYaml = PubspecYaml.fromMap(
-          await PubPackage(packageRoot).getPubspecYamlMap());
+        await PubPackage(packageRoot).getPubspecYamlMap(),
+      );
       expect(pubspecYaml.name, 'tekartik_pub');
       expect(pubspecYaml.version, greaterThan(Version(0, 10, 0)));
     });
@@ -25,13 +26,16 @@ void main() {
     });
 
     test('pubspec.lock', () async {
-      final processRunVersion =
-          await extractPackagePubspecLockVersion('process_run', packageRoot);
+      final processRunVersion = await extractPackagePubspecLockVersion(
+        'process_run',
+        packageRoot,
+      );
       expect(processRunVersion, greaterThanOrEqualTo(Version(0, 1, 1)));
 
       expect(
-          await extractPackagePubspecLockVersion('tekartik_pub', packageRoot),
-          isNull);
+        await extractPackagePubspecLockVersion('tekartik_pub', packageRoot),
+        isNull,
+      );
     });
   });
 }

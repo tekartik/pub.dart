@@ -63,8 +63,9 @@ class PubPackage extends common.PubPackage {
       fsPubPackage.extractPubspecDependencies();
 
   Future<PubPackage?> extractPackage(String dependency) async {
-    final fsDependencyPubPackage =
-        await fsPubPackage.extractPackage(dependency);
+    final fsDependencyPubPackage = await fsPubPackage.extractPackage(
+      dependency,
+    );
     if (fsDependencyPubPackage != null) {
       return PubPackage._(fsDependencyPubPackage);
     }
@@ -79,19 +80,23 @@ class PubPackage extends common.PubPackage {
   }
 
   @Deprecated('Use dev_build')
-  ProcessCmd testCmd(List<String> args,
-          {RunTestReporter? reporter,
-          bool? color,
-          int? concurrency,
-          List<String>? platforms,
-          String? name}) =>
-      _pubCmd(pubRunTestArgs(
-          args: args,
-          reporter: reporter,
-          color: color,
-          concurrency: concurrency,
-          platforms: platforms,
-          name: name));
+  ProcessCmd testCmd(
+    List<String> args, {
+    RunTestReporter? reporter,
+    bool? color,
+    int? concurrency,
+    List<String>? platforms,
+    String? name,
+  }) => _pubCmd(
+    pubRunTestArgs(
+      args: args,
+      reporter: reporter,
+      color: color,
+      concurrency: concurrency,
+      platforms: platforms,
+      name: name,
+    ),
+  );
 
   ProcessCmd _pubCmd(List<String> args) {
     return cmd_run.PubCmd(args)..workingDirectory = path;
@@ -111,8 +116,9 @@ class PubPackage extends common.PubPackage {
 
   @Deprecated('Use dev_test')
   ProcessCmd getCmd({bool? offline, bool? dryRun, bool? packagesDir}) =>
-      _pubCmd(pubGetArgs(
-          offline: offline, dryRun: dryRun, packagesDir: packagesDir));
+      _pubCmd(
+        pubGetArgs(offline: offline, dryRun: dryRun, packagesDir: packagesDir),
+      );
 
   // same package is same path
 
@@ -130,7 +136,8 @@ class PubPackage extends common.PubPackage {
   /// if [delete] is true, content will be deleted first
   Future<PubPackage> clone(String dir, {bool delete = false}) async {
     return PubPackage._(
-        await fsPubPackage.clone(fs.Directory(dir), delete: delete));
+      await fsPubPackage.clone(fs.Directory(dir), delete: delete),
+    );
   }
 }
 

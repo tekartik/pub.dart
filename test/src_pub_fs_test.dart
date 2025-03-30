@@ -24,11 +24,15 @@ void defineTests(FileSystemTestContext ctx) {
       expect(await isPubPackageDir(sub), isFalse);
 
       expect(
-          (await getPubPackageDir(childDirectory(top, 'sub'))).path, top.path);
+        (await getPubPackageDir(childDirectory(top, 'sub'))).path,
+        top.path,
+      );
       expect((await getPubPackageDir(top)).path, top.path);
 
-      expect((await getPubPackageDir(childFile(top, pubspecYamlBasename))).path,
-          top.path);
+      expect(
+        (await getPubPackageDir(childFile(top, pubspecYamlBasename))).path,
+        top.path,
+      );
       expect((await getPubPackageDir(top)).path, top.path);
     });
     test('clone', () async {
@@ -101,8 +105,10 @@ test2:lib/
       expect(await pkg.extractPackage(null), isNull);
       final testPackage = (await (pkg.extractPackage('test')))!;
       expect(testPackage.name, 'test');
-      expect(top.fs.path.split(testPackage.dir.path),
-          contains('pub.dartlang.org'));
+      expect(
+        top.fs.path.split(testPackage.dir.path),
+        contains('pub.dartlang.org'),
+      );
       final test2Package = (await (pkg.extractPackage('test2')))!;
       expect(test2Package.name, 'test2');
     });

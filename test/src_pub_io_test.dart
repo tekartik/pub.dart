@@ -26,13 +26,17 @@ void defineTests() {
       await testIsPubPackageRoot(normalize(absolute(packageRoot)), true);
       await testIsPubPackageRoot(packageRoot, true);
       await testIsPubPackageRoot(
-          dirname(normalize(absolute(packageRoot))), false);
+        dirname(normalize(absolute(packageRoot))),
+        false,
+      );
     });
 
     test('getPubPackageRoot', () async {
       expect(await getPubPackageRoot(join(packageRoot, 'test')), packageRoot);
-      expect(await getPubPackageRoot(join(packageRoot, 'test', 'data')),
-          packageRoot);
+      expect(
+        await getPubPackageRoot(join(packageRoot, 'test', 'data')),
+        packageRoot,
+      );
       expect(await getPubPackageRoot(packageRoot), packageRoot);
       try {
         await getPubPackageRoot(join('/', 'dummy', 'path'));

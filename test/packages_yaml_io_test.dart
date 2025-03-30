@@ -10,21 +10,36 @@ void main() {
   group('io', () {
     test('yamlMap', () async {
       expect(
-          File(await pubGetPackageFilePath(
-                  '.', 'tekartik_lints', 'recommended.yaml'))
-              .existsSync(),
-          isTrue);
+        File(
+          await pubGetPackageFilePath(
+            '.',
+            'tekartik_lints',
+            'recommended.yaml',
+          ),
+        ).existsSync(),
+        isTrue,
+      );
       expect(
-          File(await pubGetPackageFilePath(
-                  '.', 'tekartik_lints', 'recommended.yaml_'))
-              .existsSync(),
-          isFalse);
+        File(
+          await pubGetPackageFilePath(
+            '.',
+            'tekartik_lints',
+            'recommended.yaml_',
+          ),
+        ).existsSync(),
+        isFalse,
+      );
       try {
         expect(
-            File(await pubGetPackageFilePath(
-                    '.', 'tekartik_lints_', 'recommended.yaml'))
-                .existsSync(),
-            isFalse);
+          File(
+            await pubGetPackageFilePath(
+              '.',
+              'tekartik_lints_',
+              'recommended.yaml',
+            ),
+          ).existsSync(),
+          isFalse,
+        );
         fail('should fail');
       } catch (e) {
         expect(e, isNot(const TypeMatcher<TestFailure>()));

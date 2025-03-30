@@ -27,8 +27,12 @@ class PubBinOptions {
 }
 
 void addCommonOptions(ArgParser parser) {
-  parser.addFlag(argOneByOneFlag,
-      abbr: 'o', help: 'One at a time', defaultsTo: Platform.isWindows);
+  parser.addFlag(
+    argOneByOneFlag,
+    abbr: 'o',
+    help: 'One at a time',
+    defaultsTo: Platform.isWindows,
+  );
   parser.addFlag(argDryRunFlag, abbr: 'd', help: "Don't execture the command");
   parser.addFlag(argVersionFlag, help: 'Version', negatable: false);
   parser.addFlag(argVerboseFlag, abbr: 'v', help: 'Verbose', negatable: false);

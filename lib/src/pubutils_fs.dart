@@ -39,7 +39,9 @@ Future<Map<String, dynamic>?> getPubspecYamlMap(Directory packageDir) =>
     _getYaml(packageDir, 'pubspec.yaml');
 
 Future<Map<String, dynamic>?> _getYaml(
-    Directory packageDir, String name) async {
+  Directory packageDir,
+  String name,
+) async {
   final content = await childFile(packageDir, name).readAsString();
   return (loadYaml(content) as Map?)?.cast<String, dynamic>();
 }
@@ -66,7 +68,8 @@ Iterable<String>? pubspecYamlGetDependenciesPackageName(Map yaml) {
 }
 
 Version pubspecLockGetVersion(Map yaml, String packageName) => Version.parse(
-    ((yaml['packages'] as Map)[packageName] as Map)['version'] as String);
+  ((yaml['packages'] as Map)[packageName] as Map)['version'] as String,
+);
 
 /// result must be run with reporter:json
 bool? pubRunTestJsonIsSuccess(String stdout) {

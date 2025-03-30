@@ -11,8 +11,8 @@ Future main() async {
 
   // Run all tests
   final result = await runCmd(
-      pkg.pubCmd(
-          pubBuildArgs(directories: [join('example_packages', 'simple')])),
-      verbose: true);
+    pkg.pubCmd(pubBuildArgs(directories: [join('example_packages', 'simple')])),
+    verbose: true,
+  );
   print('exitCode: ${result.exitCode}');
 }

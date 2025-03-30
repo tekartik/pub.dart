@@ -13,13 +13,17 @@ void defineTests() {
   test('rpubpath', () async {
     //clearOutFolderSync();
     var paths = await recursivePubPath([packageRoot]);
-    expect(
-        paths, [packageRoot, join(packageRoot, 'example_packages', 'simple')]);
+    expect(paths, [
+      packageRoot,
+      join(packageRoot, 'example_packages', 'simple'),
+    ]);
 
     // with criteria
     paths = await recursivePubPath([packageRoot], dependencies: ['test']);
-    expect(
-        paths, [packageRoot, join(packageRoot, 'example_packages', 'simple')]);
+    expect(paths, [
+      packageRoot,
+      join(packageRoot, 'example_packages', 'simple'),
+    ]);
 
     paths = await recursivePubPath([packageRoot], dependencies: ['unittest']);
     expect(paths, isEmpty);
@@ -49,17 +53,18 @@ void defineTests() {
   test('extract', () async {
     var yaml = getPackageYamlSync(packageRoot)!;
     expect(
-        pubspecYamlGetDependenciesPackageName(yaml),
-        unorderedEquals([
-          'dev_build',
-          'path',
-          'process_run',
-          'yaml',
-          'fs_shim',
-          'pub_semver',
-          'args',
-          'tekartik_common_utils'
-        ]));
+      pubspecYamlGetDependenciesPackageName(yaml),
+      unorderedEquals([
+        'dev_build',
+        'path',
+        'process_run',
+        'yaml',
+        'fs_shim',
+        'pub_semver',
+        'args',
+        'tekartik_common_utils',
+      ]),
+    );
     expect(pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
 
     yaml = {};
@@ -69,12 +74,12 @@ void defineTests() {
     yaml = {'test_dependencies': <Object?>[]};
     expect(pubspecYamlGetTestDependenciesPackageName(yaml), isEmpty);
     yaml = {
-      'test_dependencies': ['process_run']
+      'test_dependencies': ['process_run'],
     };
     expect(pubspecYamlGetTestDependenciesPackageName(yaml), ['process_run']);
 
     yaml = {
-      'dependencies': {'process_run': 'any'}
+      'dependencies': {'process_run': 'any'},
     };
     expect(pubspecYamlGetDependenciesPackageName(yaml), ['process_run']);
   });

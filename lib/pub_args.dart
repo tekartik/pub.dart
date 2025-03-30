@@ -2,103 +2,97 @@ library;
 
 enum RunTestReporter {
   @Deprecated('Use compact')
-// ignore: constant_identifier_names
+  // ignore: constant_identifier_names
   COMPACT,
   @Deprecated('Use expanded')
-// ignore: constant_identifier_names
+  // ignore: constant_identifier_names
   EXPANDED,
   @Deprecated('Use json')
-// ignore: constant_identifier_names
+  // ignore: constant_identifier_names
   JSON,
   compact,
   expanded,
-  json
+  json,
 }
 
 enum BuildMode {
   @Deprecated('Use debug')
-// ignore: constant_identifier_names
+  // ignore: constant_identifier_names
   DEBUG,
   @Deprecated('Use release')
-// ignore: constant_identifier_names
+  // ignore: constant_identifier_names
   RELEASE,
   debug,
-  release
+  release,
 }
 
 enum BuildFormat {
   @Deprecated('Use test')
-// ignore: constant_identifier_names
+  // ignore: constant_identifier_names
   TEXT,
   @Deprecated('Use json')
-// ignore: constant_identifier_names
+  // ignore: constant_identifier_names
   JSON,
   text,
-  json
+  json,
 }
 
-final Map<BuildMode, String> _buildModeValueMap = Map.fromIterables([
-  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
-  BuildMode.DEBUG,
-  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
-  BuildMode.RELEASE, BuildMode.debug, BuildMode.release
-], [
-  'debug',
-  'release',
-  'debug',
-  'release'
-]);
+final Map<BuildMode, String> _buildModeValueMap = Map.fromIterables(
+  [
+    // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+    BuildMode.DEBUG,
+    // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+    BuildMode.RELEASE, BuildMode.debug, BuildMode.release,
+  ],
+  ['debug', 'release', 'debug', 'release'],
+);
 
-final Map<BuildFormat, String> _buildFormatValueMap = Map.fromIterables([
-  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
-  BuildFormat.TEXT,
-  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
-  BuildFormat.JSON, BuildFormat.text, BuildFormat.json
-], [
-  'text',
-  'json',
-  'text',
-  'json'
-]);
+final Map<BuildFormat, String> _buildFormatValueMap = Map.fromIterables(
+  [
+    // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+    BuildFormat.TEXT,
+    // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+    BuildFormat.JSON, BuildFormat.text, BuildFormat.json,
+  ],
+  ['text', 'json', 'text', 'json'],
+);
 
-final Map<RunTestReporter, String> _runTestReporterValueMap =
-    Map.fromIterables([
-  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
-  RunTestReporter.COMPACT,
-  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
-  RunTestReporter.EXPANDED,
-  // ignore: deprecated_member_use, deprecated_member_use_from_same_package
-  RunTestReporter.JSON,
-  RunTestReporter.compact,
-  RunTestReporter.expanded,
-  RunTestReporter.json,
-], [
-  'compact',
-  'expanded',
-  'json',
-  'compact',
-  'expanded',
-  'json'
-]);
+final Map<RunTestReporter, String> _runTestReporterValueMap = Map.fromIterables(
+  [
+    // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+    RunTestReporter.COMPACT,
+    // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+    RunTestReporter.EXPANDED,
+    // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+    RunTestReporter.JSON,
+    RunTestReporter.compact,
+    RunTestReporter.expanded,
+    RunTestReporter.json,
+  ],
+  ['compact', 'expanded', 'json', 'compact', 'expanded', 'json'],
+);
 
 Map<String, RunTestReporter>? _runTestReporterEnumMap;
 
 RunTestReporter? runTestReporterFromString(String reporter) {
   if (_runTestReporterEnumMap == null) {
     _runTestReporterEnumMap = {};
-    _runTestReporterValueMap
-        .forEach((RunTestReporter runTestReporter, String reporter) {
+    _runTestReporterValueMap.forEach((
+      RunTestReporter runTestReporter,
+      String reporter,
+    ) {
       _runTestReporterEnumMap![reporter] = runTestReporter;
     });
   }
   return _runTestReporterEnumMap![reporter];
 }
 
-List<String> pubArgs(
-    {Iterable<String>? args,
-    @Deprecated('version no longer supported') bool? version,
-    bool? help,
-    bool? verbose}) {
+List<String> pubArgs({
+  Iterable<String>? args,
+  @Deprecated('version no longer supported') bool? version,
+  bool? help,
+  bool? verbose,
+}) {
   final pubArgs = <String>[];
   // --help             Print this usage information.
   if (help == true) {
@@ -116,12 +110,13 @@ List<String> pubArgs(
 }
 
 /// list of argument for pubCmd
-List<String> pubBuildArgs(
-    {Iterable<String>? directories,
-    Iterable<String>? args,
-    BuildMode? mode,
-    BuildFormat? format,
-    String? output}) {
+List<String> pubBuildArgs({
+  Iterable<String>? directories,
+  Iterable<String>? args,
+  BuildMode? mode,
+  BuildFormat? format,
+  String? output,
+}) {
   final buildArgs = <String>[
     'build',
     // --mode      Mode to run transformers in.
@@ -193,17 +188,18 @@ const pubRunTestReporterCompact = 'compact';
 List<String> pubRunTestReporters = [
   pubRunTestReporterCompact,
   pubRunTestReporterExpanded,
-  pubRunTestReporterJson
+  pubRunTestReporterJson,
 ];
 
 class TestRunnerArgs {
-  TestRunnerArgs(
-      {this.args,
-      this.reporter,
-      this.color,
-      this.concurrency,
-      this.platforms,
-      this.name});
+  TestRunnerArgs({
+    this.args,
+    this.reporter,
+    this.color,
+    this.concurrency,
+    this.platforms,
+    this.name,
+  });
 
   final Iterable<String>? args;
   final RunTestReporter? reporter;
@@ -243,58 +239,68 @@ List<String> pubRunTestRunnerArgs([TestRunnerArgs? args]) {
 }
 
 /// list of argument for pub run test or pbr test --
-List<String> testRunnerArgs(
-    {Iterable<String>? args,
-    RunTestReporter? reporter,
-    bool? color,
-    int? concurrency,
-    List<String>? platforms,
-    String? name}) {
+List<String> testRunnerArgs({
+  Iterable<String>? args,
+  RunTestReporter? reporter,
+  bool? color,
+  int? concurrency,
+  List<String>? platforms,
+  String? name,
+}) {
   final testArgs = <String>[];
-  testArgs.addAll(pubRunTestRunnerArgs(TestRunnerArgs(
-      args: args,
-      reporter: reporter,
-      color: color,
-      concurrency: concurrency,
-      platforms: platforms,
-      name: name)));
+  testArgs.addAll(
+    pubRunTestRunnerArgs(
+      TestRunnerArgs(
+        args: args,
+        reporter: reporter,
+        color: color,
+        concurrency: concurrency,
+        platforms: platforms,
+        name: name,
+      ),
+    ),
+  );
   return (testArgs);
 }
 
 /// list of argument for pubCmd
-List<String> pubRunTestArgs(
-    {Iterable<String>? args,
-    RunTestReporter? reporter,
-    bool? color,
-    int? concurrency,
-    List<String>? platforms,
-    String? name}) {
+List<String> pubRunTestArgs({
+  Iterable<String>? args,
+  RunTestReporter? reporter,
+  bool? color,
+  int? concurrency,
+  List<String>? platforms,
+  String? name,
+}) {
   final testArgs = <String>['run', 'test'];
-  testArgs.addAll(pubRunTestRunnerArgs(TestRunnerArgs(
-      args: args,
-      reporter: reporter,
-      color: color,
-      concurrency: concurrency,
-      platforms: platforms,
-      name: name)));
+  testArgs.addAll(
+    pubRunTestRunnerArgs(
+      TestRunnerArgs(
+        args: args,
+        reporter: reporter,
+        color: color,
+        concurrency: concurrency,
+        platforms: platforms,
+        name: name,
+      ),
+    ),
+  );
   return (testArgs);
 }
 
 /// list of argument for pubCmd
 List<String> pubRunArgs(Iterable<String> args) {
-  final runArgs = <String>[
-    'run',
-    ...args,
-  ];
+  final runArgs = <String>['run', ...args];
   return (runArgs);
 }
 
-List<String> dartdocArgs(
-    {Iterable<String>? args,
-    bool? version,
-    bool? help,
-    String? input,
-    String? output}) {
+List<String> dartdocArgs({
+  Iterable<String>? args,
+  bool? version,
+  bool? help,
+  String? input,
+  String? output,
+}) {
   final pubArgs = <String>[];
   // --version          Print pub version.
 

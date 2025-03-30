@@ -8,7 +8,8 @@ Future main() async {
 
   // Run all tests
   final result = await runCmd(
-      pkg.pubCmd(pubRunTestArgs(reporter: RunTestReporter.expanded)),
-      verbose: true);
+    pkg.pubCmd(pubRunTestArgs(reporter: RunTestReporter.expanded)),
+    verbose: true,
+  );
   print('exitCode: ${result.exitCode}');
 }

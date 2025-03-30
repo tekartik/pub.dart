@@ -15,13 +15,14 @@ export 'pub_fs.dart';
 //export 'pub.dart';
 
 final FsPubPackageFactory ioFactory = FsPubPackageFactory(
-    (fs.Directory dir, [String? name]) => IoFsPubPackage(dir, name));
+  (fs.Directory dir, [String? name]) => IoFsPubPackage(dir, name),
+);
 
 // deprecated
 class IoFsPubPackage extends FsPubPackage
     implements PubPackageDir, PubPackageName {
   IoFsPubPackage(Directory dir, [String? name])
-      : super.created(ioFactory, dir, name);
+    : super.created(ioFactory, dir, name);
 
   ProcessCmd pubCmd(List<String> args) {
     return cmd_run.PubCmd(args)..workingDirectory = dir.path;

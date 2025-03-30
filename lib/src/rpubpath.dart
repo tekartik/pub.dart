@@ -106,7 +106,7 @@ final List<String> _blackListedTargets = [
   // 2018-03-18 removed
   // 'packages',
   'deploy',
-  'node_modules'
+  'node_modules',
 ];
 
 /// find the path at the top level that contains dart file
@@ -130,9 +130,9 @@ Future<List<String>> findTargetDartDirectories(String dir) async {
       }
 
       if (!isToBeIgnored(entityBasename) && !(await isPubPackageRoot(subDir))) {
-        var paths = (await recursiveDartEntities(subDir))
-            .map((path) => join(subDir, path))
-            .toList(growable: false);
+        var paths = (await recursiveDartEntities(
+          subDir,
+        )).map((path) => join(subDir, path)).toList(growable: false);
 
         if (containsPubPackage(paths)) {
           continue;

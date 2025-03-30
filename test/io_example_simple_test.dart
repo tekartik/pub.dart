@@ -46,8 +46,9 @@ void main() {
       expect(result.stdout, contains('Got dependencies'));
 
       // dry run
-      result =
-          await runCmd(pkg.pubCmd(pubGetArgs(offline: true, dryRun: true)));
+      result = await runCmd(
+        pkg.pubCmd(pubGetArgs(offline: true, dryRun: true)),
+      );
       expect(result.stdout, contains('No dependencies'));
     }, timeout: longTimeout);
 
@@ -61,8 +62,9 @@ void main() {
       expect(result.stdout, contains('Resolving dependencies'));
 
       // dry run
-      result =
-          await runCmd(pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)));
+      result = await runCmd(
+        pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)),
+      );
       expect(result.stdout, contains('No dependencies'));
     }, timeout: veryLongTimeout);
 
@@ -77,26 +79,31 @@ void main() {
     test('build', () async {
       await runCmd(pkg.pubCmd(pubGetArgs(offline: true)));
 
-      final buildIndexHtmlFile =
-          childFile(pkg.dir, join('build', 'web', 'index.html'));
+      final buildIndexHtmlFile = childFile(
+        pkg.dir,
+        join('build', 'web', 'index.html'),
+      );
       if (buildIndexHtmlFile.existsSync()) {
         await buildIndexHtmlFile.delete();
       }
-      final result = await runCmd(pkg.pubCmd([
-        'run',
-        'build_runner',
-        'build',
-        '--output',
-        'web:${join('build', 'web')}'
-      ]));
+      final result = await runCmd(
+        pkg.pubCmd([
+          'run',
+          'build_runner',
+          'build',
+          '--output',
+          'web:${join('build', 'web')}',
+        ]),
+      );
 
       expect(result.exitCode, 0);
       expect(buildIndexHtmlFile.existsSync(), isTrue);
     }, timeout: longTimeout);
 
     test('deps', () async {
-      final result =
-          await runCmd(pkg.pubCmd(pubDepsArgs(style: pubDepsStyleCompact)));
+      final result = await runCmd(
+        pkg.pubCmd(pubDepsArgs(style: pubDepsStyleCompact)),
+      );
       expect(result.exitCode, 0);
       expect(result.stdout, contains('dev_test'));
     }, timeout: longTimeout);

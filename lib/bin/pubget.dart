@@ -21,16 +21,23 @@ Future main(List<String> arguments) async {
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
 
   parser.addFlag(argOfflineFlag, help: 'offline get', negatable: false);
-  parser.addFlag(argForceRecursiveFlag,
-      abbr: 'f',
-      help: 'Force going recursive even in dart project',
-      defaultsTo: true);
-  parser.addFlag(argIgnoreErrorsFlag,
-      abbr: 'i',
-      help: 'Ignore errors, all projects are processed',
-      negatable: false);
-  parser.addFlag(argPackagesDirFlag,
-      help: 'generates packages dir', negatable: false);
+  parser.addFlag(
+    argForceRecursiveFlag,
+    abbr: 'f',
+    help: 'Force going recursive even in dart project',
+    defaultsTo: true,
+  );
+  parser.addFlag(
+    argIgnoreErrorsFlag,
+    abbr: 'i',
+    help: 'Ignore errors, all projects are processed',
+    negatable: false,
+  );
+  parser.addFlag(
+    argPackagesDirFlag,
+    help: 'generates packages dir',
+    negatable: false,
+  );
   addCommonOptions(parser);
 
   final argResults = parser.parse(arguments);
@@ -60,15 +67,16 @@ Future main(List<String> arguments) async {
 
   initPubWorkspacesCache();
   await pubGet(
-      rest,
-      PubGetOptions()
-        ..oneByOne = oneByOne
-        ..forceRecursive = forceRecursive
-        ..packagesDir = packagesDir
-        ..offline = offline
-        ..verbose = verbose
-        ..dryRun = dryRun
-        ..ignoreErrors = ignoreErrors);
+    rest,
+    PubGetOptions()
+      ..oneByOne = oneByOne
+      ..forceRecursive = forceRecursive
+      ..packagesDir = packagesDir
+      ..offline = offline
+      ..verbose = verbose
+      ..dryRun = dryRun
+      ..ignoreErrors = ignoreErrors,
+  );
 }
 
 Future pubGet(List<String> directories, PubGetOptions options) async {

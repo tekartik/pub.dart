@@ -25,13 +25,17 @@ Future<Version?> extractPubspecLockVersion(String packageRoot) async {
 }
 
 Future<Version?> extractPackagePubspecLockVersion(
-    String packageName, String packageRoot) async {
+  String packageName,
+  String packageRoot,
+) async {
   try {
     final pubspecLock =
         loadYaml(await File(join(packageRoot, 'pubspec.lock')).readAsString())
             as Map;
-    return Version.parse(((pubspecLock['packages'] as Map)[packageName]
-        as Map)['version'] as String);
+    return Version.parse(
+      ((pubspecLock['packages'] as Map)[packageName] as Map)['version']
+          as String,
+    );
   } catch (_) {}
   return null;
 }
@@ -55,7 +59,8 @@ String? extractPubspecYamlNameSync(String packageRoot) {
 }
 
 Future<Version?> extractPackageVersion(String packageRoot) async {
-  var version = await extractPubspecLockVersion(packageRoot) ??
+  var version =
+      await extractPubspecLockVersion(packageRoot) ??
       await extractPubspecYamlVersion(packageRoot);
 
   return version;
@@ -72,7 +77,9 @@ Future<Iterable<String>?> extractPubspecDependencies(String packageRoot) async {
 
 @Deprecated('No longer supported')
 Future<PubPackage?> extractPackage(
-    String? packageName, String fromPackageRoot) async {
+  String? packageName,
+  String fromPackageRoot,
+) async {
   try {
     final yaml = await getDotPackagesMap(fromPackageRoot);
     final libPath = dotPackagesGetLibUri(yaml, packageName).toFilePath();

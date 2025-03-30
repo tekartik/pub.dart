@@ -15,10 +15,12 @@ class PubListOptions extends PubBinOptions {
 Future main(List<String> arguments) async {
   final parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
-  parser.addFlag(argForceRecursiveFlag,
-      abbr: 'f',
-      help: 'Force going recursive even in dart project',
-      defaultsTo: true);
+  parser.addFlag(
+    argForceRecursiveFlag,
+    abbr: 'f',
+    help: 'Force going recursive even in dart project',
+    defaultsTo: true,
+  );
   addCommonOptions(parser);
 
   final argResults = parser.parse(arguments);
@@ -44,11 +46,12 @@ Future main(List<String> arguments) async {
   }
 
   await pubList(
-      rest,
-      PubListOptions()
-        ..oneByOne = oneByOne
-        ..forceRecursive = forceRecursive
-        ..dryRun = dryRun);
+    rest,
+    PubListOptions()
+      ..oneByOne = oneByOne
+      ..forceRecursive = forceRecursive
+      ..dryRun = dryRun,
+  );
 }
 
 Future pubList(List<String> directories, PubListOptions options) async {

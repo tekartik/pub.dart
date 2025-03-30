@@ -45,8 +45,9 @@ void main() {
       expect(result.stdout, contains('Got dependencies'));
 
       // dry run
-      result =
-          await runCmd(pkg.pubCmd(pubGetArgs(offline: true, dryRun: true)));
+      result = await runCmd(
+        pkg.pubCmd(pubGetArgs(offline: true, dryRun: true)),
+      );
       expect(result.stdout, contains('No dependencies'));
     }, timeout: longTimeout);
 
@@ -60,8 +61,9 @@ void main() {
       expect(result.stdout, contains('Resolving dependencies'));
 
       // dry run
-      result =
-          await runCmd(pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)));
+      result = await runCmd(
+        pkg.pubCmd(pubUpgradeArgs(offline: true, dryRun: true)),
+      );
       expect(result.stdout, contains('No dependencies'));
     }, timeout: longTimeout);
 
@@ -72,18 +74,22 @@ void main() {
     }, timeout: longTimeout);
 
     test('build', () async {
-      final buildIndexHtmlFile =
-          childFile(pkg.dir, join('build', 'web', 'index.html'));
+      final buildIndexHtmlFile = childFile(
+        pkg.dir,
+        join('build', 'web', 'index.html'),
+      );
       if (await buildIndexHtmlFile.exists()) {
         await buildIndexHtmlFile.delete();
       }
-      final result = await runCmd(pkg.pubCmd([
-        'run',
-        'build_runner',
-        'build',
-        '--output',
-        'web:${join('build', 'web')}'
-      ]));
+      final result = await runCmd(
+        pkg.pubCmd([
+          'run',
+          'build_runner',
+          'build',
+          '--output',
+          'web:${join('build', 'web')}',
+        ]),
+      );
       // final result =  await runCmd(pkg.pubCmd(pubBuildArgs()));
 
       expect(result.exitCode, 0);
@@ -91,8 +97,9 @@ void main() {
     }, timeout: longTimeout);
 
     test('deps', () async {
-      final result =
-          await runCmd(pkg.pubCmd(pubDepsArgs(style: pubDepsStyleCompact)));
+      final result = await runCmd(
+        pkg.pubCmd(pubDepsArgs(style: pubDepsStyleCompact)),
+      );
       expect(result.exitCode, 0);
       expect(result.stdout, contains('dev_test'));
     });

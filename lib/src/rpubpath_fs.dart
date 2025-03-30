@@ -12,8 +12,10 @@ bool _isToBeIgnored(String baseName) {
   return baseName.startsWith('.');
 }
 
-Stream<Directory> recursivePubDir(List<Directory> dirs,
-    {List<String>? dependencies}) {
+Stream<Directory> recursivePubDir(
+  List<Directory> dirs, {
+  List<String>? dependencies,
+}) {
   final ctlr = StreamController<Directory>();
 
   Future handleDir(Directory dir) async {
@@ -34,11 +36,13 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
       } else {
         final sub = <Future>[];
         await dir.list().listen((FileSystemEntity fse) {
-          sub.add(Future.sync(() async {
-            if (await fs.isDirectory(fse.path)) {
-              await handleDir(fs.directory(fse.path));
-            }
-          }));
+          sub.add(
+            Future.sync(() async {
+              if (await fs.isDirectory(fse.path)) {
+                await handleDir(fs.directory(fse.path));
+              }
+            }),
+          );
         }).asFuture<void>();
         await Future.wait(sub);
       }
@@ -47,13 +51,15 @@ Stream<Directory> recursivePubDir(List<Directory> dirs,
 
   final futures = <Future>[];
   for (final dir in dirs) {
-    futures.add(Future.sync(() async {
-      if (await dir.fs.isDirectory(dir.path)) {
-        await handleDir(dir);
-      } else {
-        throw '$dir not a directory';
-      }
-    }));
+    futures.add(
+      Future.sync(() async {
+        if (await dir.fs.isDirectory(dir.path)) {
+          await handleDir(dir);
+        } else {
+          throw '$dir not a directory';
+        }
+      }),
+    );
   }
 
   Future.wait(futures).then((_) {

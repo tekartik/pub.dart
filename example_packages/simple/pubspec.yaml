@@ -2,7 +2,7 @@ name: tekartik_pub_example_simple
 publish_to: none
 
 environment:
-  sdk: ^3.5.0
+  sdk: ^3.7.0
 
 dev_dependencies:
   test: any

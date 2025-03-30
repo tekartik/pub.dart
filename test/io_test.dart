@@ -49,12 +49,17 @@ void defineTests() {
       var testPath = join('test', 'success_test.dart');
       try {
         await File(join('test', 'data', 'success_test_.dart')).copy(testPath);
-        final result = await runCmd(pkg.pubCmd(pubRunTestArgs(
-            args: [testPath],
-            platforms: ['vm'],
-            //reporter: pubRunTestReporterJson,
-            reporter: RunTestReporter.json,
-            concurrency: 1)));
+        final result = await runCmd(
+          pkg.pubCmd(
+            pubRunTestArgs(
+              args: [testPath],
+              platforms: ['vm'],
+              //reporter: pubRunTestReporterJson,
+              reporter: RunTestReporter.json,
+              concurrency: 1,
+            ),
+          ),
+        );
 
         expect(result.exitCode, 0, reason: result.stdout?.toString());
         expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
@@ -67,58 +72,74 @@ void defineTests() {
       }
     }, timeout: const Timeout(Duration(minutes: 2)));
 
-    test('pbr_success_test_to_fix', () async {
-      var testPath = join('test', 'success_test.dart');
-      try {
-        await File(join('test', 'data', 'success_test_.dart')).copy(testPath);
-        final result = await runCmd(pkg.pbrCmd([
-          'test',
-          '--',
-          ...testRunnerArgs(
-              args: [testPath],
-              platforms: ['vm'],
-              //reporter: pubRunTestReporterJson,
-              reporter: RunTestReporter.json,
-              concurrency: 1)
-        ]));
-
-        expect(result.exitCode, 0, reason: result.stdout?.toString());
-        expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
-        expect(pubRunTestJsonSuccessCount(result.stdout as String), 1);
-        expect(pubRunTestJsonFailureCount(result.stdout as String), 0);
-      } finally {
+    test(
+      'pbr_success_test_to_fix',
+      () async {
+        var testPath = join('test', 'success_test.dart');
         try {
-          await File(testPath).delete();
-        } catch (_) {}
-      }
-    }, skip: true, timeout: const Timeout(Duration(minutes: 2)));
+          await File(join('test', 'data', 'success_test_.dart')).copy(testPath);
+          final result = await runCmd(
+            pkg.pbrCmd([
+              'test',
+              '--',
+              ...testRunnerArgs(
+                args: [testPath],
+                platforms: ['vm'],
+                //reporter: pubRunTestReporterJson,
+                reporter: RunTestReporter.json,
+                concurrency: 1,
+              ),
+            ]),
+          );
+
+          expect(result.exitCode, 0, reason: result.stdout?.toString());
+          expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
+          expect(pubRunTestJsonSuccessCount(result.stdout as String), 1);
+          expect(pubRunTestJsonFailureCount(result.stdout as String), 0);
+        } finally {
+          try {
+            await File(testPath).delete();
+          } catch (_) {}
+        }
+      },
+      skip: true,
+      timeout: const Timeout(Duration(minutes: 2)),
+    );
 
     // Skip report a weird error about missing the 'test' dependency...
-    test('pbr_success_test', () async {
-      var testPath = join('test', 'success_test.dart');
-      try {
-        await File(join('test', 'data', 'success_test_.dart')).copy(testPath);
-        final result = await runCmd(pkg.pbrCmd([
-          'test',
-          '--',
-          ...testRunnerArgs(
-              args: [testPath],
-              platforms: ['vm'],
-              //reporter: pubRunTestReporterJson,
-              //reporter: RunTestReporter.JSON,
-              concurrency: 1)
-        ]));
-
-        expect(result.exitCode, 0, reason: result.stdout?.toString());
-        //expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
-        //expect(pubRunTestJsonSuccessCount(result.stdout as String), 1);
-        //expect(pubRunTestJsonFailureCount(result.stdout as String), 0);
-      } finally {
+    test(
+      'pbr_success_test',
+      () async {
+        var testPath = join('test', 'success_test.dart');
         try {
-          await File(testPath).delete();
-        } catch (_) {}
-      }
-    }, skip: 'to investigate', timeout: const Timeout(Duration(minutes: 2)));
+          await File(join('test', 'data', 'success_test_.dart')).copy(testPath);
+          final result = await runCmd(
+            pkg.pbrCmd([
+              'test',
+              '--',
+              ...testRunnerArgs(
+                args: [testPath],
+                platforms: ['vm'],
+                //reporter: pubRunTestReporterJson,
+                //reporter: RunTestReporter.JSON,
+                concurrency: 1,
+              ),
+            ]),
+          );
+
+          expect(result.exitCode, 0, reason: result.stdout?.toString());
+          //expect(pubRunTestJsonIsSuccess(result.stdout as String), isTrue);
+          //expect(pubRunTestJsonSuccessCount(result.stdout as String), 1);
+          //expect(pubRunTestJsonFailureCount(result.stdout as String), 0);
+        } finally {
+          try {
+            await File(testPath).delete();
+          } catch (_) {}
+        }
+      },
+      skip: 'to investigate',
+      timeout: const Timeout(Duration(minutes: 2)),
+    );
     /*
     test('expanded_success_test', () async {
       final result =  await devRunCmd(pkg.pubCmd(pubRunTestArgs(
@@ -136,10 +157,17 @@ void defineTests() {
       var failTestPath = join('test', 'fail_test.dart');
       try {
         if (!Platform.isWindows) {
-          await File(join('test', 'data', 'fail_test_.dart'))
-              .copy(failTestPath);
-          final result = await runCmd(pkg.pubCmd(pubRunTestArgs(
-              args: [failTestPath], reporter: RunTestReporter.json)));
+          await File(
+            join('test', 'data', 'fail_test_.dart'),
+          ).copy(failTestPath);
+          final result = await runCmd(
+            pkg.pubCmd(
+              pubRunTestArgs(
+                args: [failTestPath],
+                reporter: RunTestReporter.json,
+              ),
+            ),
+          );
           //if (!Platform.isWindows) {
           expect(result.exitCode, 1);
           //}
@@ -154,45 +182,59 @@ void defineTests() {
       }
     }, timeout: const Timeout(Duration(minutes: 2)));
 
-    test('pbr_failure_test_to_fix', () async {
-      var failTestPath = join('test', 'fail_test.dart');
-      try {
-        if (!Platform.isWindows) {
-          await File(join('test', 'data', 'fail_test_.dart'))
-              .copy(failTestPath);
-          final result = await runCmd(pkg.pbrCmd([
-            'test',
-            '--',
-            ...testRunnerArgs(
-                args: [failTestPath], reporter: RunTestReporter.json)
-          ]));
-          //if (!Platform.isWindows) {
-          expect(result.exitCode, 1);
-          //}
-          expect(pubRunTestJsonIsSuccess(result.stdout as String), isFalse);
-          expect(pubRunTestJsonSuccessCount(result.stdout as String), 0);
-          expect(pubRunTestJsonFailureCount(result.stdout as String), 1);
-        }
-      } finally {
+    test(
+      'pbr_failure_test_to_fix',
+      () async {
+        var failTestPath = join('test', 'fail_test.dart');
         try {
-          await File(failTestPath).delete();
-        } catch (_) {}
-      }
-    }, skip: true, timeout: const Timeout(Duration(minutes: 2)));
+          if (!Platform.isWindows) {
+            await File(
+              join('test', 'data', 'fail_test_.dart'),
+            ).copy(failTestPath);
+            final result = await runCmd(
+              pkg.pbrCmd([
+                'test',
+                '--',
+                ...testRunnerArgs(
+                  args: [failTestPath],
+                  reporter: RunTestReporter.json,
+                ),
+              ]),
+            );
+            //if (!Platform.isWindows) {
+            expect(result.exitCode, 1);
+            //}
+            expect(pubRunTestJsonIsSuccess(result.stdout as String), isFalse);
+            expect(pubRunTestJsonSuccessCount(result.stdout as String), 0);
+            expect(pubRunTestJsonFailureCount(result.stdout as String), 1);
+          }
+        } finally {
+          try {
+            await File(failTestPath).delete();
+          } catch (_) {}
+        }
+      },
+      skip: true,
+      timeout: const Timeout(Duration(minutes: 2)),
+    );
 
     test('pbr_failure_test', () async {
       var failTestPath = join('test', 'fail_test.dart');
       try {
         if (!Platform.isWindows) {
-          await File(join('test', 'data', 'fail_test_.dart'))
-              .copy(failTestPath);
-          final result = await runCmd(pkg.pbrCmd([
-            'test',
-            '--',
-            ...testRunnerArgs(args: [failTestPath])
-          ]
+          await File(
+            join('test', 'data', 'fail_test_.dart'),
+          ).copy(failTestPath);
+          final result = await runCmd(
+            pkg.pbrCmd(
+              [
+                'test',
+                '--',
+                ...testRunnerArgs(args: [failTestPath]),
+              ],
               //reporter: RunTestReporter.JSON
-              ));
+            ),
+          );
           //if (!Platform.isWindows) {
           expect(result.exitCode, 1);
           //}

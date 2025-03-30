@@ -16,8 +16,8 @@ export 'pubutils_fs.dart'
         pubRunTestJsonIsSuccess,
         pubRunTestJsonSuccessCount;
 
-typedef FsPubPackageFactoryCreate = FsPubPackage Function(Directory dir,
-    [String? name]);
+typedef FsPubPackageFactoryCreate =
+    FsPubPackage Function(Directory dir, [String? name]);
 
 class FsPubPackageFactory {
   FsPubPackageFactoryCreate create;
@@ -26,7 +26,8 @@ class FsPubPackageFactory {
 }
 
 final FsPubPackageFactory defaultFsPubPackageFactory = FsPubPackageFactory(
-    (Directory dir, [String? name]) => FsPubPackage(dir, name));
+  (Directory dir, [String? name]) => FsPubPackage(dir, name),
+);
 
 // abstract?
 class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
@@ -37,7 +38,7 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
   Directory dir;
 
   FsPubPackage(Directory dir, [String? name])
-      : this.created(defaultFsPubPackageFactory, dir, name);
+    : this.created(defaultFsPubPackageFactory, dir, name);
 
   FsPubPackage.created(this.factory, this.dir, [this.name]);
 
@@ -74,8 +75,10 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
   Future<FsPubPackage?> extractPackage(String? packageName) async {
     try {
       final yaml = await getDotPackagesYaml(dir);
-      final libPath = dotPackagesGetLibUri(yaml, packageName)
-          .toFilePath(windows: dir.fs.path.style == p.windows.style);
+      final libPath = dotPackagesGetLibUri(
+        yaml,
+        packageName,
+      ).toFilePath(windows: dir.fs.path.style == p.windows.style);
       if (basename(libPath) == 'lib') {
         var path = dirname(libPath);
         if (isRelative(path)) {
@@ -94,10 +97,15 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
     final src = dir;
     final dst = toDir;
     if (await isPubPackageDir(src)) {
-      await copyDirectory(src, dst, options: CopyOptions(
+      await copyDirectory(
+        src,
+        dst,
+        options: CopyOptions(
           recursive: true,
           delete: delete, // delete before copying
-          exclude: ['packages', '.packages', '.pub', 'pubspec.lock', 'build']));
+          exclude: ['packages', '.packages', '.pub', 'pubspec.lock', 'build'],
+        ),
+      );
     } else {
       throw ArgumentError('not a pub directory');
     }

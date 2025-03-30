@@ -23,12 +23,7 @@ Future main(List<String> arguments) async {
     help: 'Force going recursive even in dart project',
     defaultsTo: true,
   );
-  parser.addFlag(
-    argFixFlag,
-    abbr: 'x',
-    help: 'Fix code',
-    defaultsTo: true,
-  );
+  parser.addFlag(argFixFlag, abbr: 'x', help: 'Fix code', defaultsTo: true);
   addCommonOptions(parser);
 
   final argResults = parser.parse(arguments);
@@ -52,11 +47,12 @@ Future main(List<String> arguments) async {
     rest = ['.'];
   }
   await pubFmt(
-      rest,
-      PubFmtOptions()
-        ..oneByOne = oneByOne
-        ..forceRecursive = forceRecursive
-        ..dryRun = dryRun);
+    rest,
+    PubFmtOptions()
+      ..oneByOne = oneByOne
+      ..forceRecursive = forceRecursive
+      ..dryRun = dryRun,
+  );
 }
 
 Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
@@ -74,12 +70,15 @@ Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
       args.add('--fix');
     }
     args.addAll(targets);
-    var future = packageRunCi(dir,
-        options: PackageRunCiOptions(
-            noPubGet: true,
-            formatOnly: true,
-            recursive: false,
-            noOverride: true));
+    var future = packageRunCi(
+      dir,
+      options: PackageRunCiOptions(
+        noPubGet: true,
+        formatOnly: true,
+        recursive: false,
+        noOverride: true,
+      ),
+    );
     if (options.oneByOne == true) {
       await future;
     } else {

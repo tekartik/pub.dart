@@ -23,7 +23,8 @@ Future<Map<String, String>> getDotPackagesYamlMap(String packageRoot) async {
 
 // ignore: unused_element
 Future<Map<String, String>> _getDotPackagesYamlMapCompat(
-    String packageRoot) async {
+  String packageRoot,
+) async {
   final yamlPath = join(packageRoot, '.packages');
   final content = await File(yamlPath).readAsString();
 
@@ -44,13 +45,18 @@ Future<Map<String, String>> _getDotPackagesYamlMapCompat(
 /// Get the lib path for a given package
 @Deprecated('No longer supported')
 String dotPackagesYamlMapGetPackageLibPath(
-    Map<String, String> dotPackagesYamlMap, String package) {
+  Map<String, String> dotPackagesYamlMap,
+  String package,
+) {
   return Uri.parse(dotPackagesYamlMap[package]!).toFilePath();
 }
 
 /// In a given project, for a given dependency package, find a given file in the lib folder
 Future<String> pubGetPackageFilePath(
-    String packageRoot, String package, String file) async {
+  String packageRoot,
+  String package,
+  String file,
+) async {
   var configMap = await pathGetPackageConfigMap(packageRoot);
   var packagePath =
       pathPackageConfigMapGetPackagePath(packageRoot, configMap, package)!;
