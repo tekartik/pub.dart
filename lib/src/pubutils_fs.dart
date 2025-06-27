@@ -11,8 +11,10 @@ const String pubspecYamlBasename = 'pubspec.yaml';
 const String dotPackagesBasename = '.packages';
 
 Future<Map<String, Object?>> getDotPackagesYaml(Directory packageDir) async {
-  final content =
-      await childFile(packageDir, dotPackagesBasename).readAsString();
+  final content = await childFile(
+    packageDir,
+    dotPackagesBasename,
+  ).readAsString();
 
   final map = <String, Object?>{};
   final lines = LineSplitter.split(content);

@@ -58,7 +58,10 @@ Future<String> pubGetPackageFilePath(
   String file,
 ) async {
   var configMap = await pathGetPackageConfigMap(packageRoot);
-  var packagePath =
-      pathPackageConfigMapGetPackagePath(packageRoot, configMap, package)!;
+  var packagePath = pathPackageConfigMapGetPackagePath(
+    packageRoot,
+    configMap,
+    package,
+  )!;
   return join(packagePath, 'lib', file);
 }
