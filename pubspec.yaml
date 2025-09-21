@@ -17,14 +17,12 @@ dependencies:
   tekartik_common_utils:
     git:
       url: https://github.com/tekartik/common_utils.dart
-      ref: dart3a
     version: '>=0.9.8'
 
 dev_dependencies:
   tekartik_fs_test:
     git:
       url: https://github.com/tekartik/fs_shim.dart
-      ref: dart3a
       path: fs_test
     version: '>=0.4.3'
   test: ">=1.24.0"
@@ -35,7 +33,6 @@ dev_dependencies:
     git:
       url: https://github.com/tekartik/platform.dart
       path: platform_io
-      ref: dart3a
 test_dependencies:
 - process_run
 
