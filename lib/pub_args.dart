@@ -130,9 +130,9 @@ List<String> pubBuildArgs({
     // (defaults to 'build')
     if (output != null) ...['--output', output],
 
-    if (directories != null) ...directories,
+    ...?directories,
 
-    if (args != null) ...args,
+    ...?args,
   ];
 
   return buildArgs;
