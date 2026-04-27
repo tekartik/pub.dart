@@ -103,7 +103,7 @@ class PubPackage extends common.PubPackage {
   }
 
   ProcessCmd _pbrCmd(List<String> args) {
-    return _pubCmd(<String>['run', 'build_runner', ...args]);
+    return _dartCmd(<String>['run', 'build_runner', ...args]);
   }
 
   ProcessCmd _dartCmd(List<String> args) {

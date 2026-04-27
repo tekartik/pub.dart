@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
+import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:test/test.dart';
 
@@ -137,7 +138,7 @@ void defineTests() {
           } catch (_) {}
         }
       },
-      skip: 'to investigate',
+      skip: 'No longer supported',
       timeout: const Timeout(Duration(minutes: 2)),
     );
     /*
@@ -218,36 +219,41 @@ void defineTests() {
       timeout: const Timeout(Duration(minutes: 2)),
     );
 
-    test('pbr_failure_test', () async {
-      var failTestPath = join('test', 'fail_test.dart');
-      try {
-        if (!Platform.isWindows) {
-          await File(
-            join('test', 'data', 'fail_test_.dart'),
-          ).copy(failTestPath);
-          final result = await runCmd(
-            pkg.pbrCmd(
-              [
-                'test',
-                '--',
-                ...testRunnerArgs(args: [failTestPath]),
-              ],
-              //reporter: RunTestReporter.JSON
-            ),
-          );
-          //if (!Platform.isWindows) {
-          expect(result.exitCode, 1);
-          //}
-          // expect(pubRunTestJsonIsSuccess(result.stdout as String), isFalse);
-          // expect(pubRunTestJsonSuccessCount(result.stdout as String), 0);
-          // expect(pubRunTestJsonFailureCount(result.stdout as String), 1);
-        }
-      } finally {
+    test(
+      'pbr_failure_test',
+      () async {
+        var failTestPath = join('test', 'fail_test.dart');
         try {
-          await File(failTestPath).delete();
-        } catch (_) {}
-      }
-    }, timeout: const Timeout(Duration(minutes: 2)));
+          if (!Platform.isWindows) {
+            await File(
+              join('test', 'data', 'fail_test_.dart'),
+            ).copy(failTestPath);
+            final result = await runCmd(
+              pkg.pbrCmd(
+                [
+                  'test',
+                  '--',
+                  ...testRunnerArgs(args: [failTestPath]),
+                ],
+                //reporter: RunTestReporter.JSON
+              ),
+            );
+            //if (!Platform.isWindows) {
+            expect(result.exitCode, 1);
+            //}
+            // expect(pubRunTestJsonIsSuccess(result.stdout as String), isFalse);
+            // expect(pubRunTestJsonSuccessCount(result.stdout as String), 0);
+            // expect(pubRunTestJsonFailureCount(result.stdout as String), 1);
+          }
+        } finally {
+          try {
+            await File(failTestPath).delete();
+          } catch (_) {}
+        }
+      },
+      skip: 'no longer supported',
+      timeout: const Timeout(Duration(minutes: 2)),
+    );
 
     test('getPubspecYaml', () async {
       final map = await getPubspecYaml(packageRoot);
