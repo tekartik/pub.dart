@@ -1,39 +1,67 @@
 library;
 
+/// Reporter options for running tests.
 enum RunTestReporter {
+  /// Compact reporter (deprecated, use [compact]).
   @Deprecated('Use compact')
   // ignore: constant_identifier_names
   COMPACT,
+
+  /// Expanded reporter (deprecated, use [expanded]).
   @Deprecated('Use expanded')
   // ignore: constant_identifier_names
   EXPANDED,
+
+  /// JSON reporter (deprecated, use [json]).
   @Deprecated('Use json')
   // ignore: constant_identifier_names
   JSON,
+
+  /// Compact reporter.
   compact,
+
+  /// Expanded reporter.
   expanded,
+
+  /// JSON reporter.
   json,
 }
 
+/// Build modes.
 enum BuildMode {
+  /// Debug mode (deprecated, use [debug]).
   @Deprecated('Use debug')
   // ignore: constant_identifier_names
   DEBUG,
+
+  /// Release mode (deprecated, use [release]).
   @Deprecated('Use release')
   // ignore: constant_identifier_names
   RELEASE,
+
+  /// Debug mode.
   debug,
+
+  /// Release mode.
   release,
 }
 
+/// Formats for build output.
 enum BuildFormat {
+  /// Text format (deprecated, use [text]).
   @Deprecated('Use test')
   // ignore: constant_identifier_names
   TEXT,
+
+  /// JSON format (deprecated, use [json]).
   @Deprecated('Use json')
   // ignore: constant_identifier_names
   JSON,
+
+  /// Text format.
   text,
+
+  /// JSON format.
   json,
 }
 
@@ -74,6 +102,7 @@ final Map<RunTestReporter, String> _runTestReporterValueMap = Map.fromIterables(
 
 Map<String, RunTestReporter>? _runTestReporterEnumMap;
 
+/// Converts a string to a [RunTestReporter], or null if not found.
 RunTestReporter? runTestReporterFromString(String reporter) {
   if (_runTestReporterEnumMap == null) {
     _runTestReporterEnumMap = {};
@@ -87,6 +116,7 @@ RunTestReporter? runTestReporterFromString(String reporter) {
   return _runTestReporterEnumMap![reporter];
 }
 
+/// Returns command line arguments for the pub tool.
 List<String> pubArgs({
   Iterable<String>? args,
   @Deprecated('version no longer supported') bool? version,
@@ -138,6 +168,7 @@ List<String> pubBuildArgs({
   return buildArgs;
 }
 
+/// Returns arguments for the `pub get` command.
 List<String> pubGetArgs({bool? offline, bool? dryRun, bool? packagesDir}) {
   final args = <String>['get'];
   if (offline == true) {
@@ -152,6 +183,7 @@ List<String> pubGetArgs({bool? offline, bool? dryRun, bool? packagesDir}) {
   return args;
 }
 
+/// Returns arguments for the `pub upgrade` command.
 List<String> pubUpgradeArgs({bool? offline, bool? dryRun, bool? packagesDir}) {
   final args = <String>['upgrade'];
   if (offline == true) {
@@ -166,10 +198,16 @@ List<String> pubUpgradeArgs({bool? offline, bool? dryRun, bool? packagesDir}) {
   return args;
 }
 
+/// Compact style for pub deps.
 const pubDepsStyleCompact = 'compact';
+
+/// Tree style for pub deps.
 const pubDepsStyleTree = 'tree';
+
+/// List style for pub deps.
 const pubDepsStyleList = 'list';
 
+/// Returns arguments for the `pub deps` command.
 List<String> pubDepsArgs({Iterable<String>? args, String? style}) {
   final depsArgs = <String>['deps'];
   if (style != null) {
@@ -181,17 +219,25 @@ List<String> pubDepsArgs({Iterable<String>? args, String? style}) {
   return (depsArgs);
 }
 
+/// JSON reporter constant.
 const pubRunTestReporterJson = 'json';
+
+/// Expanded reporter constant.
 const pubRunTestReporterExpanded = 'expanded';
+
+/// Compact reporter constant.
 const pubRunTestReporterCompact = 'compact';
 
+/// List of all pub run test reporters.
 List<String> pubRunTestReporters = [
   pubRunTestReporterCompact,
   pubRunTestReporterExpanded,
   pubRunTestReporterJson,
 ];
 
+/// Arguments for test runner.
 class TestRunnerArgs {
+  /// Constructor for TestRunnerArgs.
   TestRunnerArgs({
     this.args,
     this.reporter,
@@ -201,14 +247,26 @@ class TestRunnerArgs {
     this.name,
   });
 
+  /// Custom arguments.
   final Iterable<String>? args;
+
+  /// The test reporter type.
   final RunTestReporter? reporter;
+
+  /// Whether to output colored logs.
   final bool? color;
+
+  /// Number of concurrent test runs.
   final int? concurrency;
+
+  /// Target platforms.
   final List<String>? platforms;
+
+  /// Test name filter pattern.
   final String? name;
 }
 
+/// Returns argument list for the pub run test runner with custom options.
 List<String> pubRunTestRunnerArgs([TestRunnerArgs? args]) {
   final testArgs = <String>[];
   if (args?.reporter != null) {
@@ -294,6 +352,7 @@ List<String> pubRunArgs(Iterable<String> args) {
   return (runArgs);
 }
 
+/// Returns arguments for the `dartdoc` command.
 List<String> dartdocArgs({
   Iterable<String>? args,
   bool? version,

@@ -8,7 +8,9 @@ import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 import 'package:tekartik_pub/pubspec_yaml.dart';
 
+/// Options for the `publist` command.
 class PubListOptions extends PubBinOptions {
+  /// Force recursive search even in a Dart project.
   bool? forceRecursive;
 }
 
@@ -55,6 +57,7 @@ Future main(List<String> arguments) async {
   );
 }
 
+/// List pub packages in the given directories.
 Future pubList(List<String> directories, PubListOptions options) async {
   final pkgPaths = await recursivePubPath(directories);
 

@@ -14,6 +14,7 @@ export 'package:dev_build/package.dart' show recursivePubPath;
 String _pubspecDotPackagesPath(String packageRoot) =>
     join(packageRoot, '.packages');
 
+/// Get package pubspec yaml map synchronously.
 Map? getPackageYamlSync(String packageRoot) {
   final pubspecYaml = 'pubspec.yaml';
   final pubspecYamlPath = join(packageRoot, pubspecYaml);
@@ -21,6 +22,7 @@ Map? getPackageYamlSync(String packageRoot) {
   return loadYaml(content) as Map?;
 }
 
+/// Get package pubspec yaml map.
 Future<Map?> getPackageYaml(String packageRoot) =>
     _getYaml(packageRoot, 'pubspec.yaml');
 
@@ -30,6 +32,7 @@ Future<Map?> _getYaml(String packageRoot, String name) async {
   return loadYaml(content) as Map?;
 }
 
+/// Get `.packages` yaml map.
 @Deprecated('Use dev_build')
 Future<Map> getDotPackagesYaml(String packageRoot) =>
     getDotPackagesMap(packageRoot);
@@ -53,14 +56,17 @@ Future<Map<String, String>> getDotPackagesMap(String packageRoot) async {
   return map;
 }
 
+/// Get lib directory URI from `.packages` yaml.
 Uri dotPackagesGetLibUri(Map yaml, String? packageName) {
   return Uri.parse(yaml[packageName] as String);
 }
 
+/// Get dependencies package names from pubspec yaml.
 Iterable<String>? pubspecYamlGetDependenciesPackageName(Map yaml) {
   return ((yaml['dependencies'] as Map?)?.keys)?.cast<String>();
 }
 
+/// Get test dependencies package names from pubspec yaml.
 Iterable<String>? pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   if (yaml.containsKey('test_dependencies')) {
     var list = (yaml['test_dependencies'] as Iterable?)?.cast<String>();
@@ -71,6 +77,7 @@ Iterable<String>? pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   return null;
 }
 
+/// Check if pubspec yaml has any of the specified dependencies.
 bool yamlHasAnyDependencies(Map yaml, List<String> dependencies) =>
     pubspecYamlHasAnyDependencies(yaml, dependencies);
 
@@ -93,6 +100,7 @@ bool _isToBeIgnored(String baseName) {
   return baseName.startsWith('.');
 }
 
+/// Get all dart entities recursively.
 Future<List<String>> recursiveDartEntities(String dir) async {
   var entities = await _recursiveDartEntities(dir, null);
 
@@ -177,10 +185,12 @@ Future<List<String>> _recursiveDartEntities(String dir, String? base) async {
   return entities;
 }
 
+/// Check if path is a directory and not a link synchronously.
 bool isDirectoryNotLinkSynk(String path) =>
     FileSystemEntity.isDirectorySync(path) &&
     !FileSystemEntity.isLinkSync(path);
 
+/// Check if any path in [paths] is a pub package root.
 bool containsPubPackage(Iterable<String> paths) {
   for (var path in paths) {
     if (isDirectoryNotLinkSynk(path)) {
@@ -192,6 +202,7 @@ bool containsPubPackage(Iterable<String> paths) {
   return false;
 }
 
+/// Check if any path in [paths] is a dart file.
 bool containsDartFiles(Iterable<String> paths) {
   for (var path in paths) {
     if (extension(path) == '.dart' && FileSystemEntity.isFileSync(path)) {

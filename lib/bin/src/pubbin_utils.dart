@@ -8,24 +8,49 @@ import 'package:pub_semver/pub_semver.dart';
 
 export 'package:process_run/cmd_run.dart' hide runCmd;
 
+/// Argument flag for help.
 const String argHelpFlag = 'help';
+
+/// Argument flag for verbose logging.
 const String argVerboseFlag = 'verbose';
+
+/// Argument flag for version.
 const String argVersionFlag = 'version';
+
+/// Argument flag for fix.
 const String argFixFlag = 'fix';
+
+/// Argument flag for running one by one.
 const String argOneByOneFlag = 'one';
+
+/// Argument flag for offline mode.
 const String argOfflineFlag = 'offline';
+
+/// Argument flag for packages directory.
 const String argPackagesDirFlag = 'packages-dir';
+
+/// Argument flag for force recursive.
 const String argForceRecursiveFlag = 'force-recursive';
+
+/// Argument flag for ignore errors.
 const String argIgnoreErrorsFlag = 'ignore-errors';
+
+/// Argument flag for dry run.
 const String argDryRunFlag = 'dry-run';
 
+/// Version of the bin utilities.
 final Version binVersion = Version(0, 1, 0);
 
+/// Common binary options.
 class PubBinOptions {
+  /// Whether to run in dry run mode.
   bool? dryRun;
+
+  /// Whether to run commands one by one.
   bool? oneByOne;
 }
 
+/// Add common options to the argument parser.
 void addCommonOptions(ArgParser parser) {
   parser.addFlag(
     argOneByOneFlag,
@@ -38,6 +63,7 @@ void addCommonOptions(ArgParser parser) {
   parser.addFlag(argVerboseFlag, abbr: 'v', help: 'Verbose', negatable: false);
 }
 
+/// Parse common options from the argument results.
 bool parseCommonOptions(ArgResults argResults) {
   final version = argResults[argVersionFlag] as bool;
   if (version) {
@@ -47,6 +73,7 @@ bool parseCommonOptions(ArgResults argResults) {
   return false;
 }
 
+/// Run a command with the given options.
 Future<ProcessResult?> runCmd(ProcessCmd cmd, {PubBinOptions? options}) async {
   void writeWorkingDirectory() {
     if (cmd.workingDirectory != '.' && cmd.workingDirectory != null) {

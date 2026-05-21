@@ -16,62 +16,77 @@ export 'pubutils_fs.dart'
         pubRunTestJsonIsSuccess,
         pubRunTestJsonSuccessCount;
 
+/// Factory function type to create an [FsPubPackage].
 typedef FsPubPackageFactoryCreate =
     FsPubPackage Function(Directory dir, [String? name]);
 
+/// Factory to construct [FsPubPackage] objects.
 class FsPubPackageFactory {
+  /// The factory function to create [FsPubPackage] instances.
   FsPubPackageFactoryCreate create;
 
+  /// Constructor for [FsPubPackageFactory].
   FsPubPackageFactory(this.create);
 }
 
+/// Default instance of [FsPubPackageFactory].
 final FsPubPackageFactory defaultFsPubPackageFactory = FsPubPackageFactory(
   (Directory dir, [String? name]) => FsPubPackage(dir, name),
 );
 
 // abstract?
+/// File system based pub package representation.
 class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
+  /// The factory associated with this package.
   final FsPubPackageFactory factory;
 
+  /// Gets the file system of the package directory.
   FileSystem get fs => dir.fs;
   @override
   Directory dir;
 
+  /// Constructor for FsPubPackage.
   FsPubPackage(Directory dir, [String? name])
     : this.created(defaultFsPubPackageFactory, dir, name);
 
+  /// Constructor with custom factory.
   FsPubPackage.created(this.factory, this.dir, [this.name]);
 
   @override
   String? name;
 
+  /// Prepare a command to be run within the package directory.
   ProcessCmd prepareCmd(ProcessCmd cmd) => cmd..workingDirectory = dir.path;
 
+  /// Get the package yaml.
   @Deprecated('Use dev_test')
   Future<Map?> getPackageYaml() => pub.getPubspecYaml(dir);
 
+  /// Get the pubspec yaml file contents.
   Future<Map?> getPubspecYaml() => pub.getPubspecYaml(dir);
 
-  // Get the pubspec as a map
+  /// Get the pubspec as a map.
   Future<Map<String, dynamic>?> getPubspecYamlMap() =>
       pub.getPubspecYamlMap(dir);
 
+  /// Extract the package name from pubspec.
   Future<String?> extractPackageName() async {
     return pubspecYamlGetPackageName((await getPubspecYaml())!);
   }
 
+  /// Extract the package version from pubspec.
   Future<Version> extractVersion() async {
     return pubspecYamlGetVersion((await getPubspecYaml())!);
   }
 
-  // return as package name
+  /// Extract the dependencies listed in pubspec.yaml.
   Future<Iterable<String>?> extractPubspecDependencies() async {
     final yaml = (await (getPubspecYaml()))!;
     final list = pubspecYamlGetDependenciesPackageName(yaml);
     return list;
   }
 
-  // Extract a package (dependency)
+  /// Extract a package dependency from the package configuration.
   Future<FsPubPackage?> extractPackage(String? packageName) async {
     try {
       final yaml = await getDotPackagesYaml(dir);

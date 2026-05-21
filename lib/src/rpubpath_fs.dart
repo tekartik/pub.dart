@@ -12,6 +12,7 @@ bool _isToBeIgnored(String baseName) {
   return baseName.startsWith('.');
 }
 
+/// Get all pub directories recursively.
 Stream<Directory> recursivePubDir(
   List<Directory> dirs, {
   List<String>? dependencies,

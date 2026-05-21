@@ -73,6 +73,7 @@ Future main(List<String> arguments) async {
   );
 }
 
+/// Run the pub upgrade command on the given directories.
 Future pubUpgrade(List<String> directories, PubGetOptions options) async {
   var offline = options.offline ?? false;
   final pkgPaths = await recursivePubPath(directories);

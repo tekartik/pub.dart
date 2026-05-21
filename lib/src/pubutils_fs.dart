@@ -7,9 +7,13 @@ import 'import.dart';
 export 'package:dev_build/src/mixin/package.dart'
     show pubspecYamlHasAnyDependencies, pubspecYamlGetVersion;
 
+/// Basename for pubspec.yaml file.
 const String pubspecYamlBasename = 'pubspec.yaml';
+
+/// Basename for .packages file.
 const String dotPackagesBasename = '.packages';
 
+/// Read and parse a .packages file.
 Future<Map<String, Object?>> getDotPackagesYaml(Directory packageDir) async {
   final content = await childFile(
     packageDir,
@@ -30,13 +34,16 @@ Future<Map<String, Object?>> getDotPackagesYaml(Directory packageDir) async {
   return map;
 }
 
+/// Get the pubspec yaml file.
 @Deprecated('Use dev_test')
 Future<Map?> getPackageYaml(Directory packageDir) => getPubspecYaml(packageDir);
 
 // @Deprecated('Use dev_test')
+/// Get the pubspec yaml file.
 Future<Map?> getPubspecYaml(Directory packageDir) =>
     getPubspecYamlMap(packageDir);
 
+/// Get the pubspec yaml map.
 Future<Map<String, dynamic>?> getPubspecYamlMap(Directory packageDir) =>
     _getYaml(packageDir, 'pubspec.yaml');
 
@@ -48,13 +55,16 @@ Future<Map<String, dynamic>?> _getYaml(
   return (loadYaml(content) as Map?)?.cast<String, dynamic>();
 }
 
+/// Parse a dependency lib URI from a `.packages` file entry.
 Uri dotPackagesGetLibUri(Map yaml, String? packageName) {
   return Uri.parse(yaml[packageName] as String);
 }
 
 // in dev tree
+/// Get the package name from a pubspec yaml map.
 String? pubspecYamlGetPackageName(Map yaml) => yaml['name'] as String?;
 
+/// Get the test dependencies package names from a pubspec yaml map.
 Iterable<String>? pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   if (yaml.containsKey('test_dependencies')) {
     final list =
@@ -65,10 +75,12 @@ Iterable<String>? pubspecYamlGetTestDependenciesPackageName(Map yaml) {
   return null;
 }
 
+/// Get the dependencies package names from a pubspec yaml map.
 Iterable<String>? pubspecYamlGetDependenciesPackageName(Map yaml) {
   return ((yaml['dependencies'] as Map?)?.keys)?.cast<String>();
 }
 
+/// Get the version of a package from pubspec.lock.
 Version pubspecLockGetVersion(Map yaml, String packageName) => Version.parse(
   ((yaml['packages'] as Map)[packageName] as Map)['version'] as String,
 );
@@ -83,6 +95,7 @@ bool? pubRunTestJsonIsSuccess(String stdout) {
   }
 }
 
+/// Get success count from test runner json output.
 int pubRunTestJsonSuccessCount(String stdout) {
   //int _warn;
   //print('# ${processResultToDebugString(result)}');
@@ -125,6 +138,7 @@ int pubRunTestJsonSuccessCount(String stdout) {
 {'testID':2,'result':'failure','hidden':false,'type':'testDone','time':346}
 {'success':false,'type':'done','time':348}
  */
+/// Get failure count from test runner json output.
 int pubRunTestJsonFailureCount(String stdout) {
   var count = 0;
   for (final line in LineSplitter.split(stdout)) {

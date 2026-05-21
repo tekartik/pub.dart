@@ -1,13 +1,29 @@
 import 'package:path/path.dart';
 
-enum PubWorkspaceCacheAction { get, upgrade, downgrade }
+/// Action performed on a workspace.
+enum PubWorkspaceCacheAction {
+  /// Pub get action.
+  get,
 
-/// Last action done on a workspace, invalide others.
+  /// Pub upgrade action.
+  upgrade,
+
+  /// Pub downgrade action.
+  downgrade,
+}
+
+/// Last action done on a workspace, invalidates others.
 class PubWorkspaceCache {
+  /// The root path of the workspace.
   final String workspaceRoot;
+
+  /// Whether the command was run in offline mode.
   final bool offline;
+
+  /// The action performed on the workspace.
   final PubWorkspaceCacheAction action;
 
+  /// Constructor for PubWorkspaceCache.
   PubWorkspaceCache(String workspaceRoot, this.action, this.offline)
     : workspaceRoot = normalize(absolute(workspaceRoot));
 
@@ -27,10 +43,13 @@ class PubWorkspaceCache {
 
 /// Workspace cache
 abstract class PubWorkspacesCache {
+  /// Factory constructor to create a workspace cache.
   factory PubWorkspacesCache() => _PubWorkspacesCache();
 
   /// Returns true if the cache was updated (i.e. must run, next call will return false)
   bool cacheIfNeeded(PubWorkspaceCache cache);
+
+  /// Gets the workspace cache for the given root path.
   PubWorkspaceCache? getWorkspaceCache(String workspaceRoot);
 }
 
@@ -60,6 +79,7 @@ class _PubWorkspacesCache implements PubWorkspacesCache {
   }
 }
 
+/// Global instance of [PubWorkspacesCache].
 PubWorkspacesCache? pubWorkspacesCache;
 
 /// Internal only use for run_ci binary for now

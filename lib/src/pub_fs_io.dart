@@ -14,16 +14,20 @@ export '../pub_args.dart';
 export 'pub_fs.dart';
 //export 'pub.dart';
 
+/// Factory for physical file system pub package instances.
 final FsPubPackageFactory ioFactory = FsPubPackageFactory(
   (fs.Directory dir, [String? name]) => IoFsPubPackage(dir, name),
 );
 
 // deprecated
+/// Physical file system pub package representation.
 class IoFsPubPackage extends FsPubPackage
     implements PubPackageDir, PubPackageName {
+  /// Constructor for [IoFsPubPackage].
   IoFsPubPackage(Directory dir, [String? name])
     : super.created(ioFactory, dir, name);
 
+  /// Create a pub command for the package.
   ProcessCmd pubCmd(List<String> args) {
     return cmd_run.PubCmd(args)..workingDirectory = dir.path;
   }
@@ -48,10 +52,12 @@ class IoFsPubPackage extends FsPubPackage
 bool? pubRunTestJsonProcessResultIsSuccess(ProcessResult result) =>
     pubRunTestJsonIsSuccess(result.stdout as String);
 
+/// Get success count from test process result.
 @Deprecated('Use pubtest')
 int pubRunTestJsonProcessResultSuccessCount(ProcessResult result) =>
     pubRunTestJsonSuccessCount(result.stdout as String);
 
+/// Get failure count from test process result.
 @Deprecated('Use pubtest')
 int pubRunTestJsonProcessResultFailureCount(ProcessResult result) =>
     pubRunTestJsonFailureCount(result.stdout as String);

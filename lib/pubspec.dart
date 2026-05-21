@@ -17,6 +17,7 @@ import 'src/rpubpath.dart';
 //     source: hosted
 //     version: "0.3.0"
 
+/// Extract the package version from pubspec.lock based on package root path.
 Future<Version?> extractPubspecLockVersion(String packageRoot) async {
   // get the package name from the base directory
   // ~/.pub-cache/global_packages/pubglobalupdate/
@@ -24,6 +25,7 @@ Future<Version?> extractPubspecLockVersion(String packageRoot) async {
   return await extractPackagePubspecLockVersion(packageName, packageRoot);
 }
 
+/// Extract the version for a specific package from pubspec.lock.
 Future<Version?> extractPackagePubspecLockVersion(
   String packageName,
   String packageRoot,
@@ -41,6 +43,7 @@ Future<Version?> extractPackagePubspecLockVersion(
 }
 
 // in dev tree
+/// Extract the version from pubspec.yaml.
 Future<Version?> extractPubspecYamlVersion(String packageRoot) async {
   try {
     final pubspecYaml = (await getPackageYaml(packageRoot))!;
@@ -50,6 +53,7 @@ Future<Version?> extractPubspecYamlVersion(String packageRoot) async {
 }
 
 // in dev tree
+/// Extract the package name from pubspec.yaml synchronously.
 String? extractPubspecYamlNameSync(String packageRoot) {
   try {
     final pubspecYaml = getPackageYamlSync(packageRoot)!;
@@ -58,6 +62,7 @@ String? extractPubspecYamlNameSync(String packageRoot) {
   return null;
 }
 
+/// Extract the package version from lock file or yaml file.
 Future<Version?> extractPackageVersion(String packageRoot) async {
   var version =
       await extractPubspecLockVersion(packageRoot) ??
@@ -67,6 +72,7 @@ Future<Version?> extractPackageVersion(String packageRoot) async {
 }
 
 // return as package name
+/// Extract the dependencies listed in pubspec.yaml.
 Future<Iterable<String>?> extractPubspecDependencies(String packageRoot) async {
   final yaml = (await getPackageYaml(packageRoot))!;
   var list = pubspecYamlGetTestDependenciesPackageName(yaml);
@@ -75,6 +81,7 @@ Future<Iterable<String>?> extractPubspecDependencies(String packageRoot) async {
   return list;
 }
 
+/// Extract a specific package dependency.
 @Deprecated('No longer supported')
 Future<PubPackage?> extractPackage(
   String? packageName,

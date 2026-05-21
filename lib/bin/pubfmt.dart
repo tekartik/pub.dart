@@ -8,8 +8,12 @@ import 'package:dev_build/package.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 
+/// Options for the `pubfmt` command.
 class PubFmtOptions extends PubBinOptions {
+  /// Force recursive search even in a Dart project.
   bool? forceRecursive;
+
+  /// Whether to fix code formatting issues automatically.
   bool? fix;
 }
 
@@ -56,6 +60,7 @@ Future main(List<String> arguments) async {
   );
 }
 
+/// Run the pub format command on the given directories.
 Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
   final futures = <Future>[];
   final pkgPaths = await recursivePubPath(directories);

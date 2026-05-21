@@ -32,11 +32,14 @@ export 'src/pubutils_fs.dart'
 export 'src/rpubpath.dart' show recursivePubPath;
 // bool _DEBUG = false;
 
+/// A pub package representation using the physical file system (`dart:io`).
 class PubPackage extends common.PubPackage {
+  /// The underlying physical directory of the package.
   io.Directory get dir => unwrapIoDirectory(fsPubPackage.dir);
 
   PubPackage._(super.fsPubPackage);
 
+  /// Create a PubPackage from a directory path.
   PubPackage(String path) : this._(IoFsPubPackage(Directory(path)));
 
   @override
@@ -47,21 +50,27 @@ class PubPackage extends common.PubPackage {
     return super.name;
   }
 
+  /// Create a build_runner command (e.g. `dart run build_runner ...`).
   ProcessCmd pbrCmd(List<String> args) => _pbrCmd(args);
 
   /// When running
   ProcessCmd pubCmd(List<String> args) => _pubCmd(args);
 
+  /// Create a dart command with the given arguments.
   ProcessCmd dartCmd(List<String> args) => _dartCmd(args);
 
+  /// Get the pubspec yaml map asynchronously.
   Future<Map?> getPubspecYaml() => fsPubPackage.getPubspecYaml();
 
+  /// Get the pubspec yaml map as a typed Map.
   Future<Map<String, dynamic>?> getPubspecYamlMap() =>
       fsPubPackage.getPubspecYamlMap();
 
+  /// Extract the dependencies from the pubspec.
   Future<Iterable<String>?> extractPubspecDependencies() =>
       fsPubPackage.extractPubspecDependencies();
 
+  /// Extract a dependency package.
   Future<PubPackage?> extractPackage(String dependency) async {
     final fsDependencyPubPackage = await fsPubPackage.extractPackage(
       dependency,
@@ -72,6 +81,7 @@ class PubPackage extends common.PubPackage {
     return null;
   }
 
+  /// Upgrade command arguments.
   @Deprecated('Use dev_build')
   List<String> upgradeCmdArgs() {
     //args = new List.from(args);
@@ -79,6 +89,7 @@ class PubPackage extends common.PubPackage {
     return ['upgrade'];
   }
 
+  /// Create a test command with the given options.
   @Deprecated('Use dev_build')
   ProcessCmd testCmd(
     List<String> args, {
@@ -110,10 +121,12 @@ class PubPackage extends common.PubPackage {
     return cmd_run.DartCmd(args)..workingDirectory = path;
   }
 
+  /// Create a pub upgrade command.
   @Deprecated('Use dev_test')
   ProcessCmd upgradeCmd({bool? offline, bool? dryRun}) =>
       _pubCmd(pubUpgradeArgs(offline: offline, dryRun: dryRun));
 
+  /// Create a pub get command.
   @Deprecated('Use dev_test')
   ProcessCmd getCmd({bool? offline, bool? dryRun, bool? packagesDir}) =>
       _pubCmd(
@@ -141,4 +154,5 @@ class PubPackage extends common.PubPackage {
   }
 }
 
+/// Get the pubspec yaml map for a directory path.
 Future<Map?> getPubspecYaml(String dirPath) => pathGetPubspecYamlMap(dirPath);

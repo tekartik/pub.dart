@@ -8,11 +8,21 @@ import 'package:tekartik_pub/bin/src/pub_workspace_cache.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/io.dart';
 
+/// Options for the `pubget` command.
 class PubGetOptions extends PubBinOptions {
+  /// Force recursive search even in a Dart project.
   bool? forceRecursive;
+
+  /// Whether to run pub get offline.
   bool? offline;
+
+  /// Generates a packages directory.
   bool? packagesDir;
+
+  /// Enable verbose output.
   bool? verbose;
+
+  /// Ignore errors and continue processing all projects.
   bool? ignoreErrors;
 }
 
@@ -80,6 +90,7 @@ Future main(List<String> arguments) async {
   );
 }
 
+/// Run the pub get command on the given directories.
 Future pubGet(List<String> directories, PubGetOptions options) async {
   final pkgPaths = await recursivePubPath(directories);
 
