@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:args/args.dart';
 import 'package:dev_build/menu/menu_run_ci.dart';
+import 'package:path/path.dart';
 import 'package:process_run/stdio.dart';
 import 'package:tekartik_pub/bin/src/pub_workspace_cache.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
@@ -44,7 +45,7 @@ Future main(List<String> arguments) async {
 
   var help = argResults[argHelpFlag] as bool;
   if (help) {
-    print(parser.usage);
+    stdout.writeln(parser.usage);
     return;
   }
   if (parseCommonOptions(argResults)) {
@@ -83,7 +84,7 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
   final pkgPaths = await recursivePubPath(directories);
 
   if (options.verbose == true) {
-    print('found package(s): $pkgPaths');
+    stdout.writeln('found package(s): $pkgPaths');
   }
   var offline = options.offline ?? false;
   var futures = <Future>[];
@@ -102,6 +103,7 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
 
     var future = () async {
       await shellStdioLinesGrouper.runZoned(() async {
+        stdout.writeln('# ${normalize(absolute(pubIoPackage.path))}');
         try {
           await pubIoPackage.pubGet(offline: offline);
         } catch (e) {

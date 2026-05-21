@@ -1,6 +1,7 @@
 #!/usr/bin/env dart
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
@@ -27,8 +28,8 @@ Future main(List<String> arguments) async {
 
   final help = argResults[argHelpFlag] as bool;
   if (help) {
-    print('List recursively pub package');
-    print(parser.usage);
+    stdout.writeln('List recursively pub package');
+    stdout.writeln(parser.usage);
     return;
   }
   if (parseCommonOptions(argResults)) {
@@ -61,9 +62,9 @@ Future pubList(List<String> directories, PubListOptions options) async {
     final pkg = PubPackage(dir);
     var pubspecYaml = PubspecYaml.fromMap(await pkg.getPubspecYamlMap());
     try {
-      print(pubspecYaml);
+      stdout.writeln(pubspecYaml);
     } catch (e) {
-      print(pubspecYaml.name);
+      stdout.writeln(pubspecYaml.name);
     }
     /*
     ProcessCmd cmd;

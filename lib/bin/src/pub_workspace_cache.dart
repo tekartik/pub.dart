@@ -1,3 +1,5 @@
+import 'package:path/path.dart';
+
 enum PubWorkspaceCacheAction { get, upgrade, downgrade }
 
 /// Last action done on a workspace, invalide others.
@@ -6,7 +8,8 @@ class PubWorkspaceCache {
   final bool offline;
   final PubWorkspaceCacheAction action;
 
-  PubWorkspaceCache(this.workspaceRoot, this.action, this.offline);
+  PubWorkspaceCache(String workspaceRoot, this.action, this.offline)
+    : workspaceRoot = normalize(absolute(workspaceRoot));
 
   @override
   int get hashCode => workspaceRoot.hashCode;
@@ -36,16 +39,21 @@ class _PubWorkspacesCache implements PubWorkspacesCache {
 
   _PubWorkspacesCache();
 
+  String _fixRoot(String root) {
+    return normalize(absolute(root));
+  }
+
   @override
   PubWorkspaceCache? getWorkspaceCache(String workspaceRoot) {
-    return _map[workspaceRoot];
+    return _map[_fixRoot(workspaceRoot)];
   }
 
   @override
   bool cacheIfNeeded(PubWorkspaceCache cache) {
-    var existing = _map[cache.workspaceRoot];
+    var root = _fixRoot(cache.workspaceRoot);
+    var existing = _map[root];
     if (existing != cache) {
-      _map[cache.workspaceRoot] = cache;
+      _map[root] = cache;
       return true;
     }
     return false;

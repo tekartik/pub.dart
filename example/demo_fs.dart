@@ -11,5 +11,5 @@ Future main() async {
     pkg.pubCmd(pubRunTestArgs(reporter: RunTestReporter.expanded)),
     verbose: true,
   );
-  print('exitCode: ${result.exitCode}');
+  stdout.writeln('exitCode: ${result.exitCode}');
 }

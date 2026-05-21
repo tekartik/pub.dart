@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:args/args.dart';
 import 'package:dev_build/menu/menu_run_ci.dart';
+import 'package:path/path.dart';
 import 'package:process_run/stdio.dart';
 import 'package:tekartik_pub/bin/src/pub_workspace_cache.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
@@ -38,7 +39,7 @@ Future main(List<String> arguments) async {
 
   final help = argResults[argHelpFlag] as bool;
   if (help) {
-    print(parser.usage);
+    stdout.writeln(parser.usage);
     return;
   }
   if (parseCommonOptions(argResults)) {
@@ -91,6 +92,7 @@ Future pubUpgrade(List<String> directories, PubGetOptions options) async {
     }
     var future = () async {
       await shellStdioLinesGrouper.runZoned(() async {
+        stdout.writeln('# ${normalize(absolute(pubIoPackage.path))}');
         try {
           await pubIoPackage.pubUpgrade(offline: offline);
         } catch (e) {

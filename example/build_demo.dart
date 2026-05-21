@@ -14,5 +14,5 @@ Future main() async {
     pkg.pubCmd(pubBuildArgs(directories: [join('example_packages', 'simple')])),
     verbose: true,
   );
-  print('exitCode: ${result.exitCode}');
+  stdout.writeln('exitCode: ${result.exitCode}');
 }

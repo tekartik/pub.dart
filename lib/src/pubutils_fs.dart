@@ -130,7 +130,7 @@ int pubRunTestJsonFailureCount(String stdout) {
   for (final line in LineSplitter.split(stdout)) {
     try {
       var map = json.decode(line);
-      print(map);
+      // print(map);
       if (map is Map) {
         // {'testID':2,'result':'failure','hidden':false,'type':'testDone','time':346}
         if (map['testID'] != null) {

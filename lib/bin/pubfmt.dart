@@ -1,6 +1,7 @@
 #!/usr/bin/env dart
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:dev_build/package.dart';
@@ -30,7 +31,7 @@ Future main(List<String> arguments) async {
 
   final help = argResults[argHelpFlag] as bool;
   if (help) {
-    print(parser.usage);
+    stdout.writeln(parser.usage);
     return;
   }
   if (parseCommonOptions(argResults)) {
