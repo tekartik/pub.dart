@@ -95,6 +95,7 @@ Future<ProcessResult?> runCmd(ProcessCmd cmd, {PubBinOptions? options}) async {
     }
   } else {
     result = await cmd_run.runCmd(cmd);
+
     writeWorkingDirectory();
     stdout.writeln('\$ $cmd');
     stdout.write(result.stdout);

@@ -29,6 +29,7 @@ Future main(List<String> arguments) async {
     defaultsTo: true,
   );
   parser.addFlag(argFixFlag, abbr: 'x', help: 'Fix code', defaultsTo: true);
+
   addCommonOptions(parser);
 
   final argResults = parser.parse(arguments);
@@ -53,6 +54,7 @@ Future main(List<String> arguments) async {
   }
   await pubFmt(
     rest,
+
     PubFmtOptions()
       ..oneByOne = oneByOne
       ..forceRecursive = forceRecursive
@@ -89,6 +91,7 @@ Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
       await future;
     } else {
       futures.add(future);
+
       await limitConcurrentTasks(futures);
     }
   }

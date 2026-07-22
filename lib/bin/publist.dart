@@ -24,6 +24,7 @@ Future main(List<String> arguments) async {
     help: 'Force going recursive even in dart project',
     defaultsTo: true,
   );
+
   addCommonOptions(parser);
 
   final argResults = parser.parse(arguments);
@@ -50,6 +51,7 @@ Future main(List<String> arguments) async {
 
   await pubList(
     rest,
+
     PubListOptions()
       ..oneByOne = oneByOne
       ..forceRecursive = forceRecursive

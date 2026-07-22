@@ -22,6 +22,7 @@ Future<Version?> extractPubspecLockVersion(String packageRoot) async {
   // get the package name from the base directory
   // ~/.pub-cache/global_packages/pubglobalupdate/
   final packageName = basename(packageRoot);
+
   return await extractPackagePubspecLockVersion(packageName, packageRoot);
 }
 
@@ -57,6 +58,7 @@ Future<Version?> extractPubspecYamlVersion(String packageRoot) async {
 String? extractPubspecYamlNameSync(String packageRoot) {
   try {
     final pubspecYaml = getPackageYamlSync(packageRoot)!;
+
     return pubspecYamlGetPackageName(pubspecYaml);
   } catch (_) {}
   return null;

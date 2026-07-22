@@ -19,6 +19,7 @@ Map? getPackageYamlSync(String packageRoot) {
   final pubspecYaml = 'pubspec.yaml';
   final pubspecYamlPath = join(packageRoot, pubspecYaml);
   final content = File(pubspecYamlPath).readAsStringSync();
+
   return loadYaml(content) as Map?;
 }
 
@@ -29,6 +30,7 @@ Future<Map?> getPackageYaml(String packageRoot) =>
 Future<Map?> _getYaml(String packageRoot, String name) async {
   final yamlPath = join(packageRoot, name);
   final content = await File(yamlPath).readAsString();
+
   return loadYaml(content) as Map?;
 }
 

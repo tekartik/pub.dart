@@ -16,6 +16,7 @@ import 'pubget.dart';
 Future main(List<String> arguments) async {
   final parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
+
   addCommonOptions(parser);
   parser.addFlag(argOfflineFlag, help: 'offline get', negatable: false);
   parser.addFlag(
@@ -59,9 +60,11 @@ Future main(List<String> arguments) async {
   if (rest.isEmpty) {
     rest = ['.'];
   }
+
   initPubWorkspacesCache();
   await pubUpgrade(
     rest,
+
     PubGetOptions()
       ..oneByOne = oneByOne
       ..forceRecursive = forceRecursive
@@ -111,6 +114,7 @@ Future pubUpgrade(List<String> directories, PubGetOptions options) async {
       await future;
     } else {
       futures.add(future);
+
       await limitConcurrentTasks(futures);
     }
   }

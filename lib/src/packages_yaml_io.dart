@@ -63,5 +63,6 @@ Future<String> pubGetPackageFilePath(
     configMap,
     package,
   )!;
+
   return join(packagePath, 'lib', file);
 }

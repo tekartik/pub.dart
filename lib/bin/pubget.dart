@@ -49,6 +49,7 @@ Future main(List<String> arguments) async {
     help: 'generates packages dir',
     negatable: false,
   );
+
   addCommonOptions(parser);
 
   final argResults = parser.parse(arguments);
@@ -79,6 +80,7 @@ Future main(List<String> arguments) async {
   initPubWorkspacesCache();
   await pubGet(
     rest,
+
     PubGetOptions()
       ..oneByOne = oneByOne
       ..forceRecursive = forceRecursive
@@ -131,6 +133,7 @@ Future pubGet(List<String> directories, PubGetOptions options) async {
       await future;
     } else {
       futures.add(future);
+
       await limitConcurrentTasks(futures);
     }
   }

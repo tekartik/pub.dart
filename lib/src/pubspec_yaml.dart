@@ -23,6 +23,7 @@ class PubspecYamlImpl implements PubspecYaml {
     if (text == null) {
       return null;
     }
+
     return parseVersion(text);
   }
 
