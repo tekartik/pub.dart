@@ -14,7 +14,7 @@ void main() => defineTests();
 void defineTests() {
   //useVMConfiguration();
   group('src_pub_io', () {
-    Future testIsPubPackageRoot(String path, bool expected) async {
+    Future<void> testIsPubPackageRoot(String path, bool expected) async {
       expect(await isPubPackageRoot(path), expected, reason: path);
       expect(isPubPackageRootSync(path), expected, reason: path);
     }
@@ -38,10 +38,10 @@ void defineTests() {
         packageRoot,
       );
       expect(await getPubPackageRoot(packageRoot), packageRoot);
-      try {
-        await getPubPackageRoot(join('/', 'dummy', 'path'));
-        fail('no');
-      } catch (_) {}
+      await expectLater(
+        getPubPackageRoot(join('/', 'dummy', 'path')),
+        throwsA(anything),
+      );
     });
 
     group('pub_package', () {

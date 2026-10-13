@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:dev_build/build_support.dart';
 import 'package:path/path.dart';
 
@@ -19,27 +16,6 @@ Future<Map<String, String>> getDotPackagesYamlMap(String packageRoot) async {
     resultMap[package] = rootUri;
   }
   return resultMap;
-}
-
-// ignore: unused_element
-Future<Map<String, String>> _getDotPackagesYamlMapCompat(
-  String packageRoot,
-) async {
-  final yamlPath = join(packageRoot, '.packages');
-  final content = await File(yamlPath).readAsString();
-
-  final map = <String, String>{};
-  final lines = LineSplitter.split(content);
-  for (var line in lines) {
-    line = line.trim();
-    if (!line.startsWith('#')) {
-      final separator = line.indexOf(':');
-      if (separator != -1) {
-        map[line.substring(0, separator)] = line.substring(separator + 1);
-      }
-    }
-  }
-  return map;
 }
 
 /// Get the lib path for a given package

@@ -111,4 +111,24 @@ void main() {
       isTrue,
     );
   });
+
+  test('pubRunTestJsonFailureCount', () {
+    String done(int id, String result, {bool hidden = false}) => json.encode({
+      'testID': id,
+      'result': result,
+      'hidden': hidden,
+      'type': 'testDone',
+    });
+    var stdout = [
+      done(0, 'success', hidden: true),
+      done(1, 'success'),
+      // fail()
+      done(2, 'failure'),
+      // throw StateError()
+      done(3, 'error'),
+      'not json',
+    ].join('\n');
+    expect(pubRunTestJsonSuccessCount(stdout), 1);
+    expect(pubRunTestJsonFailureCount(stdout), 2);
+  });
 }

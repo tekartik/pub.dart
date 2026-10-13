@@ -15,7 +15,7 @@ String _pubspecDotPackagesPath(String packageRoot) =>
     join(packageRoot, '.packages');
 
 /// Get package pubspec yaml map synchronously.
-Map? getPackageYamlSync(String packageRoot) {
+Map<dynamic, dynamic>? getPackageYamlSync(String packageRoot) {
   final pubspecYaml = 'pubspec.yaml';
   final pubspecYamlPath = join(packageRoot, pubspecYaml);
   final content = File(pubspecYamlPath).readAsStringSync();
@@ -24,10 +24,10 @@ Map? getPackageYamlSync(String packageRoot) {
 }
 
 /// Get package pubspec yaml map.
-Future<Map?> getPackageYaml(String packageRoot) =>
+Future<Map<dynamic, dynamic>?> getPackageYaml(String packageRoot) =>
     _getYaml(packageRoot, 'pubspec.yaml');
 
-Future<Map?> _getYaml(String packageRoot, String name) async {
+Future<Map<dynamic, dynamic>?> _getYaml(String packageRoot, String name) async {
   final yamlPath = join(packageRoot, name);
   final content = await File(yamlPath).readAsString();
 
@@ -36,7 +36,7 @@ Future<Map?> _getYaml(String packageRoot, String name) async {
 
 /// Get `.packages` yaml map.
 @Deprecated('Use dev_build')
-Future<Map> getDotPackagesYaml(String packageRoot) =>
+Future<Map<dynamic, dynamic>> getDotPackagesYaml(String packageRoot) =>
     getDotPackagesMap(packageRoot);
 
 /// Read info from `.packages` file, key being the package, value being the path
@@ -59,17 +59,21 @@ Future<Map<String, String>> getDotPackagesMap(String packageRoot) async {
 }
 
 /// Get lib directory URI from `.packages` yaml.
-Uri dotPackagesGetLibUri(Map yaml, String? packageName) {
+Uri dotPackagesGetLibUri(Map<dynamic, dynamic> yaml, String? packageName) {
   return Uri.parse(yaml[packageName] as String);
 }
 
 /// Get dependencies package names from pubspec yaml.
-Iterable<String>? pubspecYamlGetDependenciesPackageName(Map yaml) {
+Iterable<String>? pubspecYamlGetDependenciesPackageName(
+  Map<dynamic, dynamic> yaml,
+) {
   return ((yaml['dependencies'] as Map?)?.keys)?.cast<String>();
 }
 
 /// Get test dependencies package names from pubspec yaml.
-Iterable<String>? pubspecYamlGetTestDependenciesPackageName(Map yaml) {
+Iterable<String>? pubspecYamlGetTestDependenciesPackageName(
+  Map<dynamic, dynamic> yaml,
+) {
   if (yaml.containsKey('test_dependencies')) {
     var list = (yaml['test_dependencies'] as Iterable?)?.cast<String>();
     list ??= [];
@@ -80,8 +84,10 @@ Iterable<String>? pubspecYamlGetTestDependenciesPackageName(Map yaml) {
 }
 
 /// Check if pubspec yaml has any of the specified dependencies.
-bool yamlHasAnyDependencies(Map yaml, List<String> dependencies) =>
-    pubspecYamlHasAnyDependencies(yaml, dependencies);
+bool yamlHasAnyDependencies(
+  Map<dynamic, dynamic> yaml,
+  List<String> dependencies,
+) => pubspecYamlHasAnyDependencies(yaml, dependencies);
 
 bool _isToBeIgnored(String baseName) {
   if (baseName == '.') {

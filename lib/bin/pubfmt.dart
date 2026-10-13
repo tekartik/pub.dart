@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:args/args.dart';
-import 'package:dev_build/package.dart';
+import 'package:tekartik_pub/bin/src/pub_action.dart';
 import 'package:tekartik_pub/bin/src/pubbin_utils.dart';
 import 'package:tekartik_pub/src/rpubpath.dart';
 
@@ -13,12 +13,12 @@ class PubFmtOptions extends PubBinOptions {
   /// Force recursive search even in a Dart project.
   bool? forceRecursive;
 
-  /// Whether to fix code formatting issues automatically.
+  /// Obsolete, ignored (`dart format` has no more `--fix`).
   bool? fix;
 }
 
 // chmod +x ...
-Future main(List<String> arguments) async {
+Future<void> main(List<String> arguments) async {
   final parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
 
@@ -28,7 +28,14 @@ Future main(List<String> arguments) async {
     help: 'Force going recursive even in dart project',
     defaultsTo: true,
   );
-  parser.addFlag(argFixFlag, abbr: 'x', help: 'Fix code', defaultsTo: true);
+  // Obsolete (`dart format` has no more `--fix`), still accepted.
+  parser.addFlag(
+    argFixFlag,
+    abbr: 'x',
+    help: 'Obsolete, ignored',
+    defaultsTo: true,
+    hide: true,
+  );
 
   addCommonOptions(parser);
 
@@ -62,31 +69,27 @@ Future main(List<String> arguments) async {
   );
 }
 
-/// Run the pub format command on the given directories.
+/// Run `dart format` on the dart directories of the packages found in
+/// [directories].
+///
+/// In dry run mode the commands are only printed. Returns the number of
+/// packages formatted.
 Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
-  final futures = <Future>[];
-  final pkgPaths = await recursivePubPath(directories);
-
+  final futures = <Future<void>>[];
+  final pkgPaths = await pubBinPackagePaths(
+    directories,
+    forceRecursive: options.forceRecursive,
+  );
+  var count = 0;
   for (final dir in pkgPaths) {
     // list of dir to check
     var targets = await findTargetDartDirectories(dir);
     if (targets.isEmpty) {
       continue;
     }
-    var args = ['-w'];
-    if (options.fix == true) {
-      args.add('--fix');
-    }
-    args.addAll(targets);
-    var future = packageRunCi(
-      dir,
-      options: PackageRunCiOptions(
-        noPubGet: true,
-        formatOnly: true,
-        recursive: false,
-        noOverride: true,
-      ),
-    );
+    count++;
+    var cmd = DartCmd(['format', ...targets])..workingDirectory = dir;
+    var future = runCmd(cmd, options: options);
     if (options.oneByOne == true) {
       await future;
     } else {
@@ -96,5 +99,5 @@ Future<int> pubFmt(List<String> directories, PubFmtOptions options) async {
     }
   }
   await Future.wait(futures);
-  return futures.length;
+  return count;
 }

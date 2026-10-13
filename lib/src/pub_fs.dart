@@ -60,10 +60,10 @@ class FsPubPackage extends Object implements PubPackageDir, PubPackageName {
 
   /// Get the package yaml.
   @Deprecated('Use dev_test')
-  Future<Map?> getPackageYaml() => pub.getPubspecYaml(dir);
+  Future<Map<dynamic, dynamic>?> getPackageYaml() => pub.getPubspecYaml(dir);
 
   /// Get the pubspec yaml file contents.
-  Future<Map?> getPubspecYaml() => pub.getPubspecYaml(dir);
+  Future<Map<dynamic, dynamic>?> getPubspecYaml() => pub.getPubspecYaml(dir);
 
   /// Get the pubspec as a map.
   Future<Map<String, dynamic>?> getPubspecYamlMap() =>

@@ -108,7 +108,7 @@ Future<ProcessResult?> runCmd(ProcessCmd cmd, {PubBinOptions? options}) async {
 }
 
 /// Limit to 10 concurrent tasks
-Future limitConcurrentTasks(List<Future> futures) async {
+Future<void> limitConcurrentTasks(List<Future<void>> futures) async {
   // limit to 10
   if (futures.length > 10) {
     await futures.removeAt(0);

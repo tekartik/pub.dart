@@ -36,11 +36,12 @@ Future<Map<String, Object?>> getDotPackagesYaml(Directory packageDir) async {
 
 /// Get the pubspec yaml file.
 @Deprecated('Use dev_test')
-Future<Map?> getPackageYaml(Directory packageDir) => getPubspecYaml(packageDir);
+Future<Map<dynamic, dynamic>?> getPackageYaml(Directory packageDir) =>
+    getPubspecYaml(packageDir);
 
 // @Deprecated('Use dev_test')
 /// Get the pubspec yaml file.
-Future<Map?> getPubspecYaml(Directory packageDir) =>
+Future<Map<dynamic, dynamic>?> getPubspecYaml(Directory packageDir) =>
     getPubspecYamlMap(packageDir);
 
 /// Get the pubspec yaml map.
@@ -56,16 +57,19 @@ Future<Map<String, dynamic>?> _getYaml(
 }
 
 /// Parse a dependency lib URI from a `.packages` file entry.
-Uri dotPackagesGetLibUri(Map yaml, String? packageName) {
+Uri dotPackagesGetLibUri(Map<dynamic, dynamic> yaml, String? packageName) {
   return Uri.parse(yaml[packageName] as String);
 }
 
 // in dev tree
 /// Get the package name from a pubspec yaml map.
-String? pubspecYamlGetPackageName(Map yaml) => yaml['name'] as String?;
+String? pubspecYamlGetPackageName(Map<dynamic, dynamic> yaml) =>
+    yaml['name'] as String?;
 
 /// Get the test dependencies package names from a pubspec yaml map.
-Iterable<String>? pubspecYamlGetTestDependenciesPackageName(Map yaml) {
+Iterable<String>? pubspecYamlGetTestDependenciesPackageName(
+  Map<dynamic, dynamic> yaml,
+) {
   if (yaml.containsKey('test_dependencies')) {
     final list =
         (yaml['test_dependencies'] as Iterable?)?.cast<String>() ?? <String>[];
@@ -76,14 +80,17 @@ Iterable<String>? pubspecYamlGetTestDependenciesPackageName(Map yaml) {
 }
 
 /// Get the dependencies package names from a pubspec yaml map.
-Iterable<String>? pubspecYamlGetDependenciesPackageName(Map yaml) {
+Iterable<String>? pubspecYamlGetDependenciesPackageName(
+  Map<dynamic, dynamic> yaml,
+) {
   return ((yaml['dependencies'] as Map?)?.keys)?.cast<String>();
 }
 
 /// Get the version of a package from pubspec.lock.
-Version pubspecLockGetVersion(Map yaml, String packageName) => Version.parse(
-  ((yaml['packages'] as Map)[packageName] as Map)['version'] as String,
-);
+Version pubspecLockGetVersion(Map<dynamic, dynamic> yaml, String packageName) =>
+    Version.parse(
+      ((yaml['packages'] as Map)[packageName] as Map)['version'] as String,
+    );
 
 /// result must be run with reporter:json
 bool? pubRunTestJsonIsSuccess(String stdout) {
@@ -96,28 +103,22 @@ bool? pubRunTestJsonIsSuccess(String stdout) {
 }
 
 /// Get success count from test runner json output.
-int pubRunTestJsonSuccessCount(String stdout) {
-  //int _warn;
-  //print('# ${processResultToDebugString(result)}');
+int pubRunTestJsonSuccessCount(String stdout) =>
+    _pubRunTestJsonDoneCount(stdout, const {'success'});
+
+/// Count the visible `testDone` events whose result is in [results].
+///
+/// Lines look like:
+/// {testID: 2, result: success, hidden: false, type: testDone, time: 251}
+/// hidden ones are the loading tests.
+int _pubRunTestJsonDoneCount(String stdout, Set<String> results) {
   var count = 0;
   for (final line in LineSplitter.split(stdout)) {
     try {
       var map = json.decode(line);
-      //print(map);
       if (map is Map) {
-        // {testID: 0, result: success, hidden: true, type: testDone, time: 199}
-        // {testID: 2, result: success, hidden: false, type: testDone, time: 251}
-        //
-        // {protocolVersion: 0.1.0, runnerVersion: 0.12.6+2, type: start, time: 0}
-        // {test: {id: 0, name: loading test/data/success_test_.dart, groupIDs: [], metadata: {skip: false, skipReason: null}}, type: testStart, time: 0}
-        // {testID: 0, result: success, hidden: true, type: testDone, time: 224}
-        // {group: {id: 1, parentID: null, name: null, metadata: {skip: false, skipReason: null}}, type: group, time: 227}
-        // {test: {id: 2, name: success, groupIDs: [1], metadata: {skip: false, skipReason: null}}, type: testStart, time: 227}
-        // {testID: 2, result: success, hidden: false, type: testDone, time: 251}
         if (map['testID'] != null) {
-          //print('1 $map');
-          if ((map['result'] == 'success') && (map['hidden'] != true)) {
-            //print('2 $map');
+          if (results.contains(map['result']) && (map['hidden'] != true)) {
             count++;
           }
         }
@@ -139,22 +140,8 @@ int pubRunTestJsonSuccessCount(String stdout) {
 {'success':false,'type':'done','time':348}
  */
 /// Get failure count from test runner json output.
-int pubRunTestJsonFailureCount(String stdout) {
-  var count = 0;
-  for (final line in LineSplitter.split(stdout)) {
-    try {
-      var map = json.decode(line);
-      // print(map);
-      if (map is Map) {
-        // {'testID':2,'result':'failure','hidden':false,'type':'testDone','time':346}
-        if (map['testID'] != null) {
-          if ((map['result'] == 'failure') && (map['hidden'] != true)) {
-            count++;
-          }
-        }
-      }
-    } catch (_) {}
-  }
-
-  return count;
-}
+///
+/// A test failing with an exception other than a `TestFailure` is reported
+/// with the `error` result, counted as a failure too.
+int pubRunTestJsonFailureCount(String stdout) =>
+    _pubRunTestJsonDoneCount(stdout, const {'failure', 'error'});

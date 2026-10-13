@@ -15,7 +15,7 @@ class PubListOptions extends PubBinOptions {
 }
 
 // chmod +x ...
-Future main(List<String> arguments) async {
+Future<void> main(List<String> arguments) async {
   final parser = ArgParser(allowTrailingOptions: true);
   parser.addFlag(argHelpFlag, abbr: 'h', help: 'Usage help', negatable: false);
   parser.addFlag(
@@ -60,7 +60,7 @@ Future main(List<String> arguments) async {
 }
 
 /// List pub packages in the given directories.
-Future pubList(List<String> directories, PubListOptions options) async {
+Future<void> pubList(List<String> directories, PubListOptions options) async {
   final pkgPaths = await recursivePubPath(directories);
 
   for (final dir in pkgPaths) {

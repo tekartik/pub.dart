@@ -61,7 +61,8 @@ class PubPackage extends common.PubPackage {
   ProcessCmd dartCmd(List<String> args) => _dartCmd(args);
 
   /// Get the pubspec yaml map asynchronously.
-  Future<Map?> getPubspecYaml() => fsPubPackage.getPubspecYaml();
+  Future<Map<dynamic, dynamic>?> getPubspecYaml() =>
+      fsPubPackage.getPubspecYaml();
 
   /// Get the pubspec yaml map as a typed Map.
   Future<Map<String, dynamic>?> getPubspecYamlMap() =>
@@ -156,4 +157,5 @@ class PubPackage extends common.PubPackage {
 }
 
 /// Get the pubspec yaml map for a directory path.
-Future<Map?> getPubspecYaml(String dirPath) => pathGetPubspecYamlMap(dirPath);
+Future<Map<dynamic, dynamic>?> getPubspecYaml(String dirPath) =>
+    pathGetPubspecYamlMap(dirPath);

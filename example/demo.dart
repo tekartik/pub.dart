@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/io.dart';
 
-Future main() async {
+Future<void> main() async {
   final pkg = PubPackage(Directory.current.path);
 
   // Run all tests

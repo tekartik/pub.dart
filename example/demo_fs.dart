@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_pub/src/pub_fs_io.dart';
 
-Future main() async {
+Future<void> main() async {
   final pkg = IoFsPubPackage(Directory.current);
 
   // Run all tests

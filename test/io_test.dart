@@ -30,7 +30,7 @@ void defineTests() {
       expect(pkg1, pkg2);
     });
 
-    Future testIsPubPackageRoot(String path, bool expected) async {
+    Future<void> testIsPubPackageRoot(String path, bool expected) async {
       expect(await isPubPackageRoot(path), expected);
       expect(isPubPackageRootSync(path), expected);
     }
@@ -39,10 +39,10 @@ void defineTests() {
       await testIsPubPackageRoot('test', false);
       await testIsPubPackageRoot('..', false);
       await testIsPubPackageRoot('.', true);
-      try {
-        await getPubPackageRoot(join('/', 'dummy', 'path'));
-        fail('no');
-      } catch (_) {}
+      await expectLater(
+        getPubPackageRoot(join('/', 'dummy', 'path')),
+        throwsA(anything),
+      );
     });
     // use pk.runCmd and then pkg.pubCmd
 
