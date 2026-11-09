@@ -65,13 +65,16 @@ them to every package of a tree. Everything runs on the Dart VM only.
   `pubGet(dirs, PubGetOptions()..oneByOne = false)`,
   `pubUpgrade(dirs, PubGetOptions()...)` (same options class),
   `pubFmt(dirs, PubFmtOptions()..forceRecursive = true)` (returns the number
-  of packages processed, formats through `dev_build`'s `packageRunCi` in
-  format-only mode), `pubList(dirs, PubListOptions()..oneByOne = true)`
-  (prints `<name> <version>` per package).
-* Always set `oneByOne` on `PubGetOptions` and `PubListOptions`: those two
-  read it with `!` and throw a null error when it is left unset. `oneByOne`
-  runs the packages sequentially (required on Windows), otherwise up to ten
-  run concurrently. `dryRun` prints the command instead of running it,
+  of packages formatted: `dart format` on the top-level folders of each
+  package that hold dart files and no sub package, the process exits on a
+  format error), `pubList(dirs, PubListOptions()..oneByOne = true)` (prints
+  `<name> <version>` per package, plus ` [flutter]` for a Flutter package;
+  its `forceRecursive` and `dryRun` are ignored).
+* Always set `oneByOne` on `PubListOptions`: `pubList` reads it with `!` and
+  throws a null error when it is left unset (`pubGet`, `pubUpgrade` and
+  `pubFmt` treat null as false). `oneByOne` runs the packages sequentially
+  (the command line default on Windows), otherwise up to ten run
+  concurrently. `dryRun` prints the command instead of running it,
   `ignoreErrors` keeps going after a failing package, `offline` adds
   `--offline`.
 * `pubGet`/`pubUpgrade` are workspace aware: when a package has
@@ -154,7 +157,7 @@ import 'package:tekartik_pub/bin/pubupgrade.dart' as pubupgrade;
 
 Future<void> main(List<String> args) async {
   var dirs = args.isEmpty ? ['.'] : args;
-  // oneByOne must be set: pubGet/pubUpgrade dereference it.
+  // false: up to 10 packages at once, true: one at a time.
   await pubGet(
     dirs,
     PubGetOptions()
@@ -195,8 +198,7 @@ Future<void> main(List<String> arguments) => pubget.main(arguments);
 
 ## Common mistakes
 
-* Leaving `oneByOne` null in `PubGetOptions` / `PubListOptions` - it is read
-  with `!`.
+* Leaving `oneByOne` null in `PubListOptions` - it is read with `!`.
 * Assuming `runCmd` throws on failure: it returns the `ProcessResult`, check
   `exitCode` yourself.
 * Using `pubBuildArgs` / `BuildMode` / `BuildFormat` - `pub build` no longer

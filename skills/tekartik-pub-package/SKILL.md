@@ -66,12 +66,15 @@ package used by build and CI scripts.
   when the file is missing or malformed, so check for `null`.
 * `PubspecYaml.fromMap(map)` wraps a pubspec map in an object with `name` and
   `version` (a `pub_semver` `Version?`); its `toString()` is
-  `'<name> <version>'`. Use `pubspecYamlGetVersion(map)` (throws when
+  `'<name> <version>'`, plus ` [flutter]` for a package depending on
+  Flutter. Use `pubspecYamlGetVersion(map)` (throws when
   absent) or `pubspecYamlHasAnyDependencies(map, ['flutter'])` for a raw map.
 * `await pkg.clone(targetDir, delete: true)` copies the package content to
   another directory, excluding `build`, `packages`, `.packages`, `.pub` and
   `pubspec.lock`, and returns the new `PubPackage`. This is the standard way
-  to run destructive tests on a sample package.
+  to run destructive tests on a sample package. `.dart_tool` is copied:
+  run `dart pub get` in the clone before using it (its relative path
+  dependencies point elsewhere).
 * `pubGetPackageFilePath(packageRoot, package, file)` resolves a file inside
   a *dependency*'s `lib/` through `.dart_tool/package_config.json`; the
   package must have been resolved (`dart pub get`) first.
